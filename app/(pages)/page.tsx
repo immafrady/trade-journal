@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
               app/page.tsx
             </code>
             .
+            <Link href="demo">去下页</Link>
           </li>
           <li className="tracking-[-.01em]">
             Save and see your changes instantly.
