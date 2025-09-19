@@ -1,3 +1,4 @@
+'use client'
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import Image from 'next/image'
 import React from 'react'
-import { createClient } from '@/lib/supabase/server-client'
+import { createClient } from '@/lib/supabase/browser-client'
 
 export function LoginForm({
   className,
@@ -25,18 +26,19 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={async () => {
-            const supabase = await createClient()
-            await supabase.auth.signInWithOAuth({
-              provider: 'github',
-              options: {
-                redirectTo: new URL('/api/auth/callback', location.origin).toString()
-              },
-            })
-          }}>
+          <form>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
-                <Button variant="outline" className="w-full" type={'submit'}>
+                <Button variant="outline" className="w-full" onClick={async(e) => {
+                  e.preventDefault()
+                  const supabase = createClient()
+                  await supabase.auth.signInWithOAuth({
+                    provider: 'github',
+                    options: {
+                      redirectTo: new URL('/api/auth/callback', location.origin).toString()
+                    },
+                  })
+                }}>
                   <Image
                     className="dark:invert"
                     src="/github.svg"
