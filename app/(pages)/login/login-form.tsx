@@ -1,5 +1,3 @@
-'use client'
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,8 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import Image from 'next/image'
-import { signIn } from 'next-auth/react'
 import React from 'react'
+import { createClient } from '@/lib/supabase/server-client'
+import { redirect } from 'next/navigation'
+import { headers } from "next/headers"
 
 export function LoginForm({
   className,
@@ -27,13 +27,24 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={async () => {
+            'use server'
+            const supabase = await createClient()
+            const headersList = await headers()
+            const { data, error } = await supabase.auth.signInWithOAuth({
+              provider: 'github',
+              options: {
+                redirectTo: new URL('/api/auth/callback', headersList.get('origin')!).toString()
+              },
+            })
+
+            if (data.url) {
+              redirect(data.url) // use the redirect API for your server framework
+            }
+          }}>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
-                <Button variant="outline" className="w-full" onClick={(e) => {
-                  e.preventDefault()
-                  signIn('github')
-                }}>
+                <Button variant="outline" className="w-full" type={'submit'}>
                   <Image
                     className="dark:invert"
                     src="/github.svg"
