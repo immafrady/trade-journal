@@ -10,8 +10,6 @@ import {
 import Image from 'next/image'
 import React from 'react'
 import { createClient } from '@/lib/supabase/server-client'
-import { redirect } from 'next/navigation'
-import { headers } from "next/headers"
 
 export function LoginForm({
   className,
@@ -28,19 +26,13 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <form action={async () => {
-            'use server'
             const supabase = await createClient()
-            const headersList = await headers()
-            const { data, error } = await supabase.auth.signInWithOAuth({
+            await supabase.auth.signInWithOAuth({
               provider: 'github',
               options: {
-                redirectTo: new URL('/api/auth/callback', headersList.get('origin')!).toString()
+                redirectTo: new URL('/api/auth/callback', location.origin).toString()
               },
             })
-
-            if (data.url) {
-              redirect(data.url) // use the redirect API for your server framework
-            }
           }}>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
