@@ -2,30 +2,23 @@
 import Logo from '@/components/ui/logo'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useUserMeta } from '@/hooks/use-user-meta'
 import { UserMetaContext } from '@/providers/user-meta'
 import React from 'react'
 
 export default function AppHeader() {
   const userMeta = React.useContext(UserMetaContext)
 
-  // const supabase = createClient()
-  // const user = use(supabase.auth.getUser())
-  // useEffect(() => {
-  //   console.log(user)
-  //
-  //   return () => {}
-  // }, [user])
   return (
-    <header className="bg-white">
+    <header className="bg-muted p-2">
       <nav className={'flex items-center justify-between'}>
-        <Link href="/">
+        <Link className={'flex align-center'} href="/">
           <Logo />
+          <span className={'pl-1 font-sans'}>Trade Journal</span>
         </Link>
-        <Link href="/blog">
+        <Link href="/me">
           <Avatar>
             <AvatarImage src={userMeta?.avatar}/>
-            <AvatarFallback>US</AvatarFallback>
+            <AvatarFallback>🤓</AvatarFallback>
           </Avatar>
         </Link>
       </nav>

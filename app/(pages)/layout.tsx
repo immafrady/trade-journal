@@ -5,9 +5,11 @@ import { UserMetaProvider } from '@/providers/user-meta'
 export default function BaseLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <UserMetaProvider>
-      <div className="bg-white mx-1 my-1 h-1.5">
+      <div>
         <AppHeader />
-        {children}
+        <main className={'p-4 overflow-x-hidden'}>
+          {children}
+        </main>
       </div>
     </UserMetaProvider>
   )
