@@ -12,6 +12,7 @@ export default function Page() {
   return (
     <div className={'flex flex-col items-center'}>
       <div className={'flex flex-col items-center p-5'}>
+        <div className={'fixed bg-muted top-0  w-full h-40 -z-50 rounded-b-4xl'}></div>
         <Avatar className={'size-28'}>
           <AvatarImage src={userMeta?.avatar}/>
           <AvatarFallback>{userMeta?.name}</AvatarFallback>
