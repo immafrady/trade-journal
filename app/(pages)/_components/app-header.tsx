@@ -18,7 +18,7 @@ export default function AppHeader() {
     <motion.header layoutId={'header-container'} className={clsx('bg-muted p-2', isMe && 'pb-0 mb-14 rounded-b-4xl')}>
       <nav className={clsx('flex items-center', isMe ? 'flex-col' : ' justify-between')}>
         <motion.div layoutId={'header-title'}>
-          <Link className={'flex align-center'} href="/demo">
+          <Link className={'flex align-center'} href="/">
             <Logo />
             <span className={'pl-1 font-sans'}>Trade Journal</span>
           </Link>
