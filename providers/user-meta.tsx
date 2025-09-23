@@ -16,11 +16,14 @@ export const UserMetaProvider = ({children}: {children: React.ReactNode}) => {
 
   React.useEffect(() => {
     const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(async ({ data }) => {
       if (data.user?.user_metadata) {
         const metadata = data.user?.user_metadata
+        const response = await fetch(metadata.avatar_url, { cache: 'no-store' })
+        const blob = await response.blob()
+        const blobUrl = URL.createObjectURL(blob)
         setUserMeta({
-          avatar: metadata.avatar_url,
+          avatar: blobUrl,
           email: metadata.email,
           name: metadata.name,
           username: metadata.user_name,
