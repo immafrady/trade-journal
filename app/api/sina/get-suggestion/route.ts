@@ -1,4 +1,4 @@
-import { type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 import iconv from 'iconv-lite'
 
 export async function GET(request: NextRequest) {
@@ -8,9 +8,9 @@ export async function GET(request: NextRequest) {
     return fetch(`https://suggest3.sinajs.cn/suggest/type=86,87&key=${key}`).then(async (res) => {
       const buffer = Buffer.from(await res.arrayBuffer()); // 获取原始字节流
       // 解码成字符串
-      return new Response(iconv.decode(buffer, 'gbk'));
+      return new NextResponse(iconv.decode(buffer, 'gbk'));
     })
   } else {
-    return new Response('No suggestions found')
+    return new NextResponse('No suggestions found')
   }
 }
