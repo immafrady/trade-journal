@@ -54,7 +54,7 @@ export function LoginForm({
         </CardContent>
       </Card>
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you don't have to agree anything.
+        By clicking continue, you do not have to agree anything.
       </div>
     </div>
   )
