@@ -9,9 +9,7 @@ export default function BaseLayout({
     <UserMetaProvider>
       <div className={"flex flex-col overflow-hidden h-svh"}>
         <AppHeader />
-        <main
-          className={"relative flex-1 p-4 overflow-x-hidden overflow-y-auto"}
-        >
+        <main className={"relative flex-1 overflow-y-auto overflow-x-hidden"}>
           {children}
         </main>
       </div>

@@ -9,7 +9,7 @@ export default function Page() {
   const { data, isLoading, mutate } = useHoldingList();
   return (
     <>
-      <div>
+      <div className={"p-layout"}>
         <pre>{JSON.stringify(data, null, 2)}</pre>
         <div>add one</div>
         <Button
