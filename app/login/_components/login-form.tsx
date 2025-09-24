@@ -1,16 +1,16 @@
-'use client'
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+"use client";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import Image from 'next/image'
-import React from 'react'
-import { createClient } from '@/lib/supabase/browser-client'
+} from "@/components/ui/card";
+import Image from "next/image";
+import React from "react";
+import { createClient } from "@/lib/supabase/browser-client";
 
 export function LoginForm({
   className,
@@ -21,24 +21,29 @@ export function LoginForm({
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">欢迎回来</CardTitle>
-          <CardDescription>
-            仅支持Github账号登录
-          </CardDescription>
+          <CardDescription>仅支持Github账号登录</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
-                <Button variant="outline" className="w-full" onClick={async(e) => {
-                  e.preventDefault()
-                  const supabase = createClient()
-                  await supabase.auth.signInWithOAuth({
-                    provider: 'github',
-                    options: {
-                      redirectTo: new URL('/api/auth/callback?next', location.origin).toString()
-                    },
-                  })
-                }}>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    const supabase = createClient();
+                    await supabase.auth.signInWithOAuth({
+                      provider: "github",
+                      options: {
+                        redirectTo: new URL(
+                          "/api/auth/callback?next",
+                          location.origin,
+                        ).toString(),
+                      },
+                    });
+                  }}
+                >
                   <Image
                     className="dark:invert"
                     src="/github.svg"
@@ -57,5 +62,5 @@ export function LoginForm({
         By clicking continue, you do not have to agree anything.
       </div>
     </div>
-  )
+  );
 }
