@@ -1,5 +1,5 @@
 'use client'
-import { LoginForm } from "./login-form"
+import { LoginForm } from "./_components/login-form"
 import { toast } from "sonner"
 import { use, useEffect } from 'react'
 import Logo from '@/components/ui/logo'
