@@ -15,7 +15,7 @@ export default function AppHeader() {
   const isMe = pathname.includes('/me')
 
   return (
-    <motion.header layoutId={'header-container'} className={clsx('bg-muted p-2', isMe && 'pb-0 mb-14 rounded-b-4xl')}>
+    <motion.header layoutId={'header-container'} className={clsx('sticky top-0 bg-muted p-2', isMe && 'pb-0 mb-14 rounded-b-4xl')}>
       <nav className={clsx('flex items-center', isMe ? 'flex-col' : ' justify-between')}>
         <motion.div layoutId={'header-title'}>
           <Link className={'flex align-center'} href="/">
