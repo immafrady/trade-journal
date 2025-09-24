@@ -1,5 +1,5 @@
 import React from 'react'
-import AppHeader from '@/app/(pages)/_components/app-header'
+import AppHeader from '@/app/(home)/_components/app-header'
 import { UserMetaProvider } from '@/providers/user-meta'
 
 export default function BaseLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { UserMetaContext } from '@/providers/user-meta'
-import ListItem from '@/app/(pages)/me/_components/list-item'
+import ListItem from '@/app/(home)/me/_components/list-item'
 import { MailIcon, User2Icon} from 'lucide-react'
 
 export default function Page() {
