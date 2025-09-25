@@ -1,6 +1,7 @@
 import { ChartCandlestick, ChevronRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function StartGuidance() {
   return (
@@ -18,11 +19,13 @@ export default function StartGuidance() {
           <h2 className={"font-sans font-light text-xl "}>
             Start all by one click.
           </h2>
-          <Button className={"translate-y-4"} size={"lg"}>
-            <ChartCandlestick />
-            立刻开始
-            <ChevronRightIcon />
-          </Button>
+          <Link href={"/holdings/add"}>
+            <Button className={"translate-y-4"} size={"lg"}>
+              <ChartCandlestick />
+              立刻开始
+              <ChevronRightIcon />
+            </Button>
+          </Link>
         </div>
       </div>
     </>
