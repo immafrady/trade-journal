@@ -3,15 +3,17 @@
 import React from "react";
 import { UserMetaContext } from "@/providers/user-meta";
 import ListItem from "@/app/(home)/me/_components/list-item";
-import { MailIcon, User2Icon } from "lucide-react";
+import { LogOut, MailIcon, User2Icon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/browser-client";
 
 export default function Page() {
   const userMeta = React.useContext(UserMetaContext);
 
   return (
-    <div className={"p-layout flex flex-col items-center"}>
+    <div className={"p-layout flex flex-col items-center h-[100%]"}>
       <div className={"font-bold font-serif"}>{userMeta?.name}</div>
-      <ul className={"self-stretch"}>
+      <ul className={"flex-1 self-stretch"}>
         <ListItem
           icon={<User2Icon />}
           label={"用户名"}
@@ -23,6 +25,16 @@ export default function Page() {
           value={userMeta?.email ?? ""}
         />
       </ul>
+      <Button
+        onClick={async () => {
+          const supabase = createClient();
+          await supabase.auth.signOut();
+          window.location.reload();
+        }}
+      >
+        <LogOut />
+        退出登录
+      </Button>
     </div>
   );
 }
