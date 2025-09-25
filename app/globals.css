@@ -122,6 +122,8 @@
   }
 }
 
-.p-layout {
+@layer components {
+  .p-layout {
     @apply p-4;
+  }
 }
