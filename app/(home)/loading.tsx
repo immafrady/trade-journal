@@ -1,7 +1,7 @@
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { motion } from "motion/react";
-import { clsx } from "clsx";
 import { TargetAndTransition } from "motion";
+import { cn } from "@/lib/utils";
 
 export default function Loading(props: { isLoading: boolean }) {
   const config: TargetAndTransition = {
@@ -9,7 +9,7 @@ export default function Loading(props: { isLoading: boolean }) {
   };
   return (
     <motion.div
-      className={clsx(
+      className={cn(
         "fixed inset-0 grid place-items-center overflow-hidden bg-muted",
       )}
       initial={config}

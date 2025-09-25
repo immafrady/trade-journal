@@ -5,8 +5,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserMetaContext } from "@/providers/user-meta";
 import React from "react";
 import { usePathname } from "next/navigation";
-import { clsx } from "clsx";
 import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
 
 export default function AppHeader() {
   const userMeta = React.useContext(UserMetaContext);
@@ -17,10 +17,10 @@ export default function AppHeader() {
   return (
     <motion.header
       layoutId={"header-container"}
-      className={clsx("bg-muted p-2", isMe && "pb-0 mb-14 rounded-b-4xl")}
+      className={cn("bg-muted p-2", isMe && "pb-0 mb-14 rounded-b-4xl")}
     >
       <nav
-        className={clsx(
+        className={cn(
           "flex items-center",
           isMe ? "flex-col" : " justify-between",
         )}
@@ -33,10 +33,10 @@ export default function AppHeader() {
         </motion.div>
         <motion.div
           layoutId={"user-avatar"}
-          className={clsx(isMe && "translate-y-1/2")}
+          className={cn(isMe && "translate-y-1/2")}
         >
           <Link href="/me">
-            <Avatar className={clsx(isMe && "size-28")}>
+            <Avatar className={cn(isMe && "size-28")}>
               <AvatarImage src={userMeta?.avatar} />
               <AvatarFallback>🤓</AvatarFallback>
             </Avatar>
