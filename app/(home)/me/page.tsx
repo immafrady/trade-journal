@@ -26,6 +26,7 @@ export default function Page() {
         />
       </ul>
       <Button
+        variant={"destructive"}
         onClick={async () => {
           const supabase = createClient();
           await supabase.auth.signOut();
