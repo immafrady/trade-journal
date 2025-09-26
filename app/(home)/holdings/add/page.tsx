@@ -2,6 +2,7 @@
 import React from "react";
 import {
   parseSinaSuggestion,
+  SinaSuggestion,
   useSuggestion,
 } from "@/lib/services/sina/use-suggestion";
 import { getSinaStockTypeLabel } from "@/lib/enums/sina-stock-type";
@@ -23,19 +24,28 @@ export default function Page() {
   const [searchKey, setSearchKey] = React.useState<string>("");
   const { data, isLoading } = useSuggestion(searchKey);
   const [value, setValue] = React.useState("");
+  const valueAsOption = React.useMemo(() => {
+    return parseSinaSuggestion(value);
+  }, [value]);
   const options = React.useMemo(() => {
-    if (value) {
-      const options = searchKey
-        ? data.filter((option) => option.raw !== value)
-        : [];
-      console.log([parseSinaSuggestion(value), ...options]);
-      return [parseSinaSuggestion(value), ...options];
-    } else if (searchKey) {
-      return data;
-    } else {
-      return [];
-    }
+    return searchKey ? data.filter((option) => option.raw !== value) : [];
   }, [searchKey, value, data]);
+
+  const genChoiceboxItem = (option: SinaSuggestion, onClick?: () => void) => {
+    return (
+      <ChoiceboxItem key={option.raw} value={option.raw} onClick={onClick}>
+        <ChoiceboxItemHeader>
+          <ChoiceboxItemTitle>
+            【{getSinaStockTypeLabel(option.type)}】{option.label}
+            <ChoiceboxItemSubtitle>({option.rawCode})</ChoiceboxItemSubtitle>
+          </ChoiceboxItemTitle>
+        </ChoiceboxItemHeader>
+        <ChoiceboxItemContent>
+          <ChoiceboxItemIndicator />
+        </ChoiceboxItemContent>
+      </ChoiceboxItem>
+    );
+  };
 
   return (
     <div
@@ -50,35 +60,26 @@ export default function Page() {
         placeholder={"请输入查询条件"}
         autoFocus
       />
+      {value && (
+        <Choicebox className={"mt-5"} value={value}>
+          {genChoiceboxItem(valueAsOption, () => setValue(""))}
+        </Choicebox>
+      )}
       <div
         className={
           "flex-1 overflow-y-auto my-5 flex flex-col w-[100%] items-center overflow-x-hidden"
         }
       >
-        {options.length === 0 ? (
-          <div>查无数据</div>
-        ) : isLoading ? (
+        {isLoading ? (
           <Spinner
             variant={"bars"}
             className={"justify-center justify-self-center"}
           />
+        ) : options.length === 0 && !value ? (
+          <div>查无数据</div>
         ) : (
           <Choicebox value={value} onValueChange={setValue}>
-            {options.map((option) => (
-              <ChoiceboxItem key={option.raw} value={option.raw}>
-                <ChoiceboxItemHeader>
-                  <ChoiceboxItemTitle>
-                    【{getSinaStockTypeLabel(option.type)}】{option.label}
-                    <ChoiceboxItemSubtitle>
-                      ({option.rawCode})
-                    </ChoiceboxItemSubtitle>
-                  </ChoiceboxItemTitle>
-                </ChoiceboxItemHeader>
-                <ChoiceboxItemContent>
-                  <ChoiceboxItemIndicator />
-                </ChoiceboxItemContent>
-              </ChoiceboxItem>
-            ))}
+            {options.map((option) => genChoiceboxItem(option))}
           </Choicebox>
         )}
       </div>
