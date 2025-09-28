@@ -1,10 +1,6 @@
 "use client";
 import React from "react";
-import {
-  parseSinaSuggestion,
-  SinaSuggestion,
-  useSuggestion,
-} from "@/lib/services/sina/use-suggestion";
+import { useSuggestion } from "@/lib/services/sina/use-suggestion";
 import { getSinaStockTypeLabel } from "@/lib/enums/sina-stock-type";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
@@ -19,25 +15,26 @@ import {
   ChoiceboxItemTitle,
 } from "@/components/ui/shadcn-io/choicebox";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
+import { SinaTicker } from "@/lib/services/sina/ticker";
 
 export default function Page() {
   const [searchKey, setSearchKey] = React.useState<string>("");
   const { data, isLoading } = useSuggestion(searchKey);
   const [value, setValue] = React.useState("");
   const valueAsOption = React.useMemo(() => {
-    return parseSinaSuggestion(value);
+    return value ? SinaTicker.fromKey(value) : null;
   }, [value]);
   const options = React.useMemo(() => {
-    return searchKey ? data.filter((option) => option.raw !== value) : [];
+    return searchKey ? data.filter((option) => option.key !== value) : [];
   }, [searchKey, value, data]);
 
-  const genChoiceboxItem = (option: SinaSuggestion, onClick?: () => void) => {
+  const genChoiceboxItem = (option: SinaTicker, onClick?: () => void) => {
     return (
-      <ChoiceboxItem key={option.raw} value={option.raw} onClick={onClick}>
+      <ChoiceboxItem key={option.key} value={option.key} onClick={onClick}>
         <ChoiceboxItemHeader>
           <ChoiceboxItemTitle>
             【{getSinaStockTypeLabel(option.type)}】{option.label}
-            <ChoiceboxItemSubtitle>({option.rawCode})</ChoiceboxItemSubtitle>
+            <ChoiceboxItemSubtitle>({option.code})</ChoiceboxItemSubtitle>
           </ChoiceboxItemTitle>
         </ChoiceboxItemHeader>
         <ChoiceboxItemContent>
@@ -62,7 +59,7 @@ export default function Page() {
       />
       {value && (
         <Choicebox className={"mt-5"} value={value}>
-          {genChoiceboxItem(valueAsOption, () => setValue(""))}
+          {genChoiceboxItem(valueAsOption!, () => setValue(""))}
         </Choicebox>
       )}
       <div
