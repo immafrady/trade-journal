@@ -19,8 +19,10 @@ import { SinaTicker } from "@/lib/services/sina/ticker";
 import { addHolding } from "@/lib/services/holdings/add-holding";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [searchKey, setSearchKey] = React.useState<string>("");
   const { data, isLoading } = useSuggestion(searchKey);
@@ -98,6 +100,7 @@ export default function Page() {
             toast.success("添加成功", {
               position: "top-center",
             });
+            router.replace("/");
           } else {
             const { error } = await resp.json();
             toast.error(error, {
