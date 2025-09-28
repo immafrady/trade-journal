@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/shadcn-io/choicebox";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { SinaTicker } from "@/lib/services/sina/ticker";
+import { addHolding } from "@/lib/services/holdings/add-holding";
+import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 
 export default function Page() {
   const [searchKey, setSearchKey] = React.useState<string>("");
@@ -27,6 +29,7 @@ export default function Page() {
   const options = React.useMemo(() => {
     return searchKey ? data.filter((option) => option.key !== value) : [];
   }, [searchKey, value, data]);
+  const { mutate } = useHoldingList();
 
   const genChoiceboxItem = (option: SinaTicker, onClick?: () => void) => {
     return (
@@ -80,7 +83,14 @@ export default function Page() {
           </Choicebox>
         )}
       </div>
-      <Button className={"bottom-safe-offset-2"}>
+      <Button
+        className={"bottom-safe-offset-2"}
+        disabled={!value}
+        onClick={async () => {
+          await addHolding(valueAsOption!);
+          await mutate();
+        }}
+      >
         <Check />
         确认选择
       </Button>

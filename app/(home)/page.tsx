@@ -2,9 +2,9 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/browser-client";
 import { Button } from "@/components/ui/button";
-import { useHoldingList } from "@/lib/services/user-holdings";
 import Loading from "./loading";
 import StartGuidance from "@/app/(home)/_components/start-guidance";
+import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 
 export default function Page() {
   const { data, isLoading, mutate } = useHoldingList();
