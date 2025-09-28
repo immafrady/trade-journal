@@ -8,7 +8,7 @@ export function useSuggestion(key: string) {
     key,
     async (key) => {
       const response = await fetch(
-        `/api/sina/get-suggestion?key=${encodeURIComponent(key)}`,
+        `/api/sina/suggestion?key=${encodeURIComponent(key)}`,
       );
       const text = await response.text();
       const match = text.match(/"([^"]*)"/);

@@ -14,6 +14,13 @@ export async function GET(request: NextRequest) {
       return new NextResponse(iconv.decode(buffer, "gbk"));
     });
   } else {
-    return new NextResponse("No suggestions found");
+    return NextResponse.json(
+      {
+        error: "No suggestions found",
+      },
+      {
+        status: 400,
+      },
+    );
   }
 }
