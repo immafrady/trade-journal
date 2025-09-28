@@ -8,6 +8,20 @@ export const POST = async (request: NextRequest) => {
   // const user = await supabase.auth.getUser();
   // user.data.user?.id;
   const { code, type, label } = body as SinaTicker;
+  const { count } = await supabase
+    .from("user_holdings")
+    .select("*", { count: "exact", head: true })
+    .eq("code", code);
+  if (count && count > 0) {
+    return NextResponse.json(
+      {
+        error: "重复的插入",
+      },
+      {
+        status: 400,
+      },
+    );
+  }
   const { data, error } = await supabase
     .from("user_holdings")
     .upsert({

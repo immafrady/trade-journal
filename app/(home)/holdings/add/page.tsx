@@ -1,8 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useSuggestion } from "@/lib/services/sina/use-suggestion";
 import { getSinaStockTypeLabel } from "@/lib/enums/sina-stock-type";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,8 +18,10 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { SinaTicker } from "@/lib/services/sina/ticker";
 import { addHolding } from "@/lib/services/holdings/add-holding";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
+import { toast } from "sonner";
 
 export default function Page() {
+  const [loading, setLoading] = useState(false);
   const [searchKey, setSearchKey] = React.useState<string>("");
   const { data, isLoading } = useSuggestion(searchKey);
   const [value, setValue] = React.useState("");
@@ -83,17 +85,30 @@ export default function Page() {
           </Choicebox>
         )}
       </div>
-      <Button
+      <LoadingButton
         className={"bottom-safe-offset-2"}
+        loading={loading}
+        icon={<Check />}
         disabled={!value}
         onClick={async () => {
-          await addHolding(valueAsOption!);
-          await mutate();
+          setLoading(true);
+          const resp = await addHolding(valueAsOption!);
+          if (resp.status === 200) {
+            await mutate();
+            toast.success("添加成功", {
+              position: "top-center",
+            });
+          } else {
+            const { error } = await resp.json();
+            toast.error(error, {
+              position: "top-center",
+            });
+          }
+          setLoading(false);
         }}
       >
-        <Check />
         确认选择
-      </Button>
+      </LoadingButton>
     </div>
   );
 }
