@@ -12,7 +12,7 @@ export class SinaTicker {
       this.fundSymbol = "";
       this.searchCode = this.code;
     } else {
-      this.stockSymbol = this.code.startsWith("5") ? "sh" : "sz" + this.code;
+      this.stockSymbol = (this.code.startsWith("5") ? "sh" : "sz") + this.code;
       this.fundSymbol = "of" + this.code;
       this.searchCode = `${this.stockSymbol},${this.fundSymbol}`;
     }
