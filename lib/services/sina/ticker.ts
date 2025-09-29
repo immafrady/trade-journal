@@ -8,14 +8,18 @@ export class SinaTicker {
   ) {
     this.key = `${type},${label},${code}`;
     if (this.type === SinaStockType.AShare) {
+      this.stockSymbol = this.code;
+      this.fundSymbol = "";
       this.searchCode = this.code;
     } else {
-      this.searchCode = ["of", this.code.startsWith("5") ? "sh" : "sz"]
-        .map((prefix) => prefix + this.code)
-        .join(",");
+      this.stockSymbol = this.code.startsWith("5") ? "sh" : "sz" + this.code;
+      this.fundSymbol = "of" + this.code;
+      this.searchCode = `${this.stockSymbol},${this.fundSymbol}`;
     }
   }
 
+  public readonly stockSymbol: string;
+  public readonly fundSymbol: string;
   public readonly searchCode: string;
 
   public readonly key: string;
