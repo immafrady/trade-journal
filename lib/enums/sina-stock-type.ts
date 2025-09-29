@@ -22,3 +22,14 @@ export const getSinaStockTypeLabel = (type: SinaStockType) => {
       return "LOF";
   }
 };
+
+export const getSinaStockTypeColor = (type: SinaStockType) => {
+  switch (type) {
+    case SinaStockType.AShare:
+      return "";
+    case SinaStockType.ETF:
+      return "bg-blue-500";
+    case SinaStockType.LOF:
+      return "bg-red-500";
+  }
+};

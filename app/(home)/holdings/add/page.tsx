@@ -1,7 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { useSuggestion } from "@/lib/services/sina/use-suggestion";
-import { getSinaStockTypeLabel } from "@/lib/enums/sina-stock-type";
+import {
+  getSinaStockTypeColor,
+  getSinaStockTypeLabel,
+} from "@/lib/enums/sina-stock-type";
 import { LoadingButton } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -20,6 +23,7 @@ import { addHolding } from "@/lib/services/holdings/add-holding";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 export default function Page() {
   const router = useRouter();
@@ -39,8 +43,11 @@ export default function Page() {
     return (
       <ChoiceboxItem key={option.key} value={option.key} onClick={onClick}>
         <ChoiceboxItemHeader>
-          <ChoiceboxItemTitle>
-            【{getSinaStockTypeLabel(option.type)}】{option.label}
+          <ChoiceboxItemTitle className={"flex items-center gap-1"}>
+            <Badge className={getSinaStockTypeColor(option.type)}>
+              {getSinaStockTypeLabel(option.type)}
+            </Badge>
+            {option.label}
             <ChoiceboxItemSubtitle>({option.code})</ChoiceboxItemSubtitle>
           </ChoiceboxItemTitle>
         </ChoiceboxItemHeader>
