@@ -28,6 +28,7 @@ export default function StartGuidance() {
           </Link>
         </div>
       </div>
+      <div className={"pt-20"}>todo: 放点主板的信息</div>
     </>
   );
 }
