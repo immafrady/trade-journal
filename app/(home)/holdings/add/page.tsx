@@ -61,7 +61,7 @@ export default function Page() {
   return (
     <div
       className={
-        "p-layout flex flex-col items-center justify-center text-secondary h-[100%]"
+        "p-layout flex flex-col items-center justify-center text-secondary-foreground h-[100%]"
       }
     >
       <h1 className={"text-2xl font-bold p-10"}>选择要记录的标的</h1>
