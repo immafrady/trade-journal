@@ -26,9 +26,11 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const TickerCard = ({
+  id,
   ticker,
   quote,
 }: {
+  id: string;
   ticker: SinaTicker;
   quote?: SinaQuote;
 }) => {
@@ -67,7 +69,7 @@ export const TickerCard = ({
             {ticker.label}
           </div>
           <Button asChild variant={"ghost"}>
-            <Link href={"/"}>
+            <Link href={`/holdings/${id}`}>
               <ArrowRight />
             </Link>
           </Button>
