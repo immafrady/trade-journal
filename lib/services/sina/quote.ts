@@ -28,10 +28,6 @@ export class SinaQuote {
   parseStock(text: string) {
     const match = text.match(/"([^"]*)"/);
     const raw = match ? match[1] : "";
-    const parser =
-      this.ticker.type === SinaStockType.AShare
-        ? (v: string) => (+v).toFixed(2)
-        : (v: string) => v;
     if (raw) {
       const list = raw.split(",");
       this.time = `${list[30]} ${list[31]}`;

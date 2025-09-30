@@ -24,7 +24,6 @@ export function useRealtimeQuotes(tickers: SinaTicker[]) {
         }
         result.set(ticker, quote);
       }
-      console.log("before", result);
       return result;
     },
   );

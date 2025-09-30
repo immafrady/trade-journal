@@ -1,7 +1,7 @@
 export const formatMoney = (num: number) => {
-  const formatted = Math.abs(num).toLocaleString("en-US", {
+  const formatted = Math.abs(num).toLocaleString("zh-CN", {
     style: "currency",
-    currency: "USD",
+    currency: "CNY",
   });
   return num < 0 ? `(${formatted})` : formatted;
 };
