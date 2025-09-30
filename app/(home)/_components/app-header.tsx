@@ -1,5 +1,5 @@
 "use client";
-import Logo from "@/components/ui/logo";
+import Logo from "@/components/ui/my/logo";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserMetaContext } from "@/providers/user-meta";
@@ -10,14 +10,13 @@ import { cn } from "@/lib/utils";
 
 export default function AppHeader() {
   const userMeta = React.useContext(UserMetaContext);
-  console.log(userMeta);
   const pathname = usePathname();
   const isMe = pathname.includes("/me");
 
   return (
     <motion.header
       layoutId={"header-container"}
-      className={cn("bg-muted p-2 z-50", isMe && "pb-0 mb-14 rounded-b-4xl")}
+      className={cn("bg-primary p-2 z-50", isMe && "pb-0 mb-14 rounded-b-4xl")}
     >
       <nav
         className={cn(
@@ -28,7 +27,9 @@ export default function AppHeader() {
         <motion.div layoutId={"header-title"}>
           <Link className={"flex align-center"} href="/">
             <Logo />
-            <span className={"pl-1 font-sans"}>Trade Journal</span>
+            <span className={" pl-1 font-sans text-primary-foreground"}>
+              Trade Journal
+            </span>
           </Link>
         </motion.div>
         <motion.div

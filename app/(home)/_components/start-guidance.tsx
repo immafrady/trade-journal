@@ -10,7 +10,7 @@ export default function StartGuidance() {
         <div
           className={cn(
             "pt-50 flex flex-col items-center gap-2 -z-50",
-            "bg-gradient-to-b from-muted to-muted-foreground/80",
+            "bg-gradient-to-b from-primary to-primary-foreground/80",
           )}
         >
           <h1 className={"font-sans font-bold text-3xl "}>

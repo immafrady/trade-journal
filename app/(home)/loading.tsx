@@ -11,7 +11,7 @@ export default function Loading(props: { isLoading: boolean }) {
   return (
     <motion.div
       className={cn(
-        "fixed inset-0 grid place-items-center overflow-hidden bg-muted",
+        "fixed inset-0 grid place-items-center overflow-hidden bg-primary",
       )}
       initial={config}
       animate={config}
@@ -23,8 +23,11 @@ export default function Loading(props: { isLoading: boolean }) {
         }
       >
         <div className="flex flex-col items-center justify-center text-primary">
-          <Spinner variant={"bars"} className={"text-9xl"} />
-          <div className={"c-muted-foreground mt-2 text-xl font-mono"}>
+          <Spinner
+            variant={"bars"}
+            className={"text-9xl text-primary-foreground"}
+          />
+          <div className={"text-primary-foreground mt-2 text-xl font-mono"}>
             Data Loading
           </div>
         </div>
