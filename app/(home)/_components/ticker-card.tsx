@@ -1,4 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   getSinaStockTypeColor,
@@ -15,6 +21,9 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { formatPercent, getTickerChangeColorClass } from "@/lib/market-utils";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const TickerCard = ({
   ticker,
@@ -48,13 +57,20 @@ export const TickerCard = ({
     }
   }
   return (
-    <Card key={ticker.key} className={"gap-2 py-4"}>
+    <Card key={ticker.key} className={"gap-3 py-3"}>
       <CardHeader>
-        <CardTitle className={"flex items-center gap-1"}>
-          <Badge className={getSinaStockTypeColor(ticker.type)}>
-            {getSinaStockTypeLabel(ticker.type)}
-          </Badge>
-          {ticker.label}
+        <CardTitle className={"flex items-center justify-between"}>
+          <div className={"flex items-center gap-1"}>
+            <Badge className={getSinaStockTypeColor(ticker.type)}>
+              {getSinaStockTypeLabel(ticker.type)}
+            </Badge>
+            {ticker.label}
+          </div>
+          <Button asChild variant={"ghost"}>
+            <Link href={"/"}>
+              <ArrowRight />
+            </Link>
+          </Button>
         </CardTitle>
       </CardHeader>
       {quote && (
