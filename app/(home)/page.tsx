@@ -3,24 +3,28 @@ import React from "react";
 import Loading from "./loading";
 import StartGuidance from "@/app/(home)/_components/start-guidance";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
-import { useRealtimeQuotes } from "@/lib/services/sina/use-realtime-quotes";
 import { TickerCard } from "@/app/(home)/_components/ticker-card";
 import { NavigateToHoldingsAdd } from "@/app/(home)/_components/navigate-to-holdings-add";
+import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 
 export default function Page() {
-  const { data: tickers, isLoading, mutate } = useHoldingList();
-  const { data: quoteMap } = useRealtimeQuotes(tickers ?? []);
+  const { isLoading } = useHoldingList();
+  const list = useHoldingsWithQuote();
 
   return (
     <>
       <div>
-        {tickers?.length ? (
+        {list?.length ? (
           <>
             <div className={"p-layout flex flex-col gap-2"}>
-              {tickers?.map((ticker) => {
-                const quote = quoteMap?.get(ticker);
+              {list?.map(({ id, ticker, quote }) => {
                 return (
-                  <TickerCard key={ticker.key} ticker={ticker} quote={quote} />
+                  <TickerCard
+                    key={ticker.key}
+                    id={id}
+                    ticker={ticker}
+                    quote={quote}
+                  />
                 );
               })}
             </div>
