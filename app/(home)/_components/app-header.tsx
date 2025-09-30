@@ -17,7 +17,7 @@ export default function AppHeader() {
   return (
     <motion.header
       layoutId={"header-container"}
-      className={cn("bg-muted p-2", isMe && "pb-0 mb-14 rounded-b-4xl")}
+      className={cn("bg-muted p-2 z-50", isMe && "pb-0 mb-14 rounded-b-4xl")}
     >
       <nav
         className={cn(
