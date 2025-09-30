@@ -16,7 +16,10 @@ export default function AppHeader() {
   return (
     <motion.header
       layoutId={"header-container"}
-      className={cn("bg-primary p-2 z-50", isMe && "pb-0 mb-14 rounded-b-4xl")}
+      className={cn(
+        "bg-secondary p-2 z-50",
+        isMe && "pb-0 mb-14 rounded-b-4xl",
+      )}
     >
       <nav
         className={cn(
@@ -27,7 +30,7 @@ export default function AppHeader() {
         <motion.div layoutId={"header-title"}>
           <Link className={"flex align-center"} href="/">
             <Logo />
-            <span className={" pl-1 font-sans text-primary-foreground"}>
+            <span className={" pl-1 font-sans text-secondary-foreground"}>
               Trade Journal
             </span>
           </Link>
