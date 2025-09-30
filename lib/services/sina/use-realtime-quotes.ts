@@ -26,5 +26,8 @@ export function useRealtimeQuotes(tickers: SinaTicker[]) {
       }
       return result;
     },
+    {
+      refreshInterval: 5000,
+    },
   );
 }
