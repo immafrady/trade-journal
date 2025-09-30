@@ -5,6 +5,7 @@ import StartGuidance from "@/app/(home)/_components/start-guidance";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { useRealtimeQuotes } from "@/lib/services/sina/use-realtime-quotes";
 import { TickerCard } from "@/app/(home)/_components/ticker-card";
+import { NavigateToHoldingsAdd } from "@/app/(home)/_components/navigate-to-holdings-add";
 
 export default function Page() {
   const { data: tickers, isLoading, mutate } = useHoldingList();
@@ -23,6 +24,7 @@ export default function Page() {
                 );
               })}
             </div>
+            <NavigateToHoldingsAdd />
           </>
         ) : (
           <StartGuidance />
