@@ -1,3 +1,4 @@
+"use client";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { motion } from "motion/react";
 import { TargetAndTransition } from "motion";
