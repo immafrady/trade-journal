@@ -15,7 +15,7 @@ export default function Page() {
   const router = useRouter();
 
   React.useEffect(() => {
-    if (list && !data) {
+    if (list.length && !data) {
       router.replace("/");
       toast.error("查无此数据", { position: "top-center" });
     }
