@@ -3,6 +3,7 @@ import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import { toast } from "sonner";
+import { BaseInfo } from "@/app/(home)/holdings/[id]/_components/base-info";
 
 export default function Page() {
   const { id } = useParams();
@@ -21,5 +22,13 @@ export default function Page() {
     return () => {};
   }, [list, data, router]);
 
-  return <div className={"p-layout"}>{id}</div>;
+  return (
+    <div className={"p-layout"}>
+      {data && (
+        <>
+          <BaseInfo data={data} />
+        </>
+      )}
+    </div>
+  );
 }

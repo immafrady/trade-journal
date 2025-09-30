@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useSuggestion } from "@/lib/services/sina/use-suggestion";
 import {
   getSinaStockTypeColor,
@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/shadcn-io/choicebox";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import { SinaTicker } from "@/lib/services/sina/ticker";
-import { addHolding } from "@/lib/services/holdings/add-holding";
+import { addHolding } from "@/lib/services/holdings/holding-apis";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -27,7 +27,7 @@ import { Badge } from "@/components/ui/badge";
 
 export default function Page() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [searchKey, setSearchKey] = React.useState<string>("");
   const { data, isLoading } = useSuggestion(searchKey);
   const [value, setValue] = React.useState("");
