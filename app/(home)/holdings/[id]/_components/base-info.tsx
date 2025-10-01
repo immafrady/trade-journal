@@ -30,6 +30,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 export const BaseInfo = ({
   data,
   expanded,
@@ -95,9 +96,7 @@ export const BaseInfo = ({
       <CardHeader>
         <CardTitle className={"flex items-center justify-between"}>
           <div className={"flex items-center gap-1"}>
-            <Badge className={getSinaStockTypeColor(ticker.type)}>
-              {getSinaStockTypeLabel(ticker.type)}
-            </Badge>
+            <SinaStockTypeBadge type={ticker.type} />
             {ticker.label}
           </div>
           <MyAlertDialog

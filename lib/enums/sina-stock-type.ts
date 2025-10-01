@@ -30,6 +30,6 @@ export const getSinaStockTypeColor = (type: SinaStockType) => {
     case SinaStockType.ETF:
       return "bg-blue-500";
     case SinaStockType.LOF:
-      return "bg-red-500";
+      return "bg-purple-500";
   }
 };

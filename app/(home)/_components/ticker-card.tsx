@@ -19,6 +19,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SimpleDisplay } from "@/components/ui/my/quote-display";
+import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 
 export const TickerCard = ({
   id,
@@ -62,9 +63,7 @@ export const TickerCard = ({
       <CardHeader>
         <CardTitle className={"flex items-center justify-between"}>
           <div className={"flex items-center gap-1"}>
-            <Badge className={getSinaStockTypeColor(ticker.type)}>
-              {getSinaStockTypeLabel(ticker.type)}
-            </Badge>
+            <SinaStockTypeBadge type={ticker.type} />
             {ticker.label}
           </div>
           <Button asChild variant={"ghost"}>
