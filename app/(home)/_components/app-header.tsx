@@ -76,7 +76,7 @@ export const AppHeaderProvider = ({
             </Link>
           </motion.div>
         </nav>
-        {extra && <div>{extra}</div>}
+        {extra}
       </motion.header>
       {children}
     </AppHeaderContext.Provider>
