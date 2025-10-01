@@ -4,6 +4,7 @@ import React from "react";
 import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import { toast } from "sonner";
 import { BaseInfo } from "@/app/(home)/holdings/[id]/_components/base-info";
+import { AppHeaderPortal } from "@/app/(home)/_components/app-header-portal";
 
 export default function Page() {
   const { id } = useParams();
@@ -23,12 +24,14 @@ export default function Page() {
   }, [list, data, router]);
 
   return (
-    <div className={"p-layout"}>
-      {data && (
-        <>
-          <BaseInfo data={data} />
-        </>
-      )}
-    </div>
+    <>
+      <div className={"p-layout"}>
+        {data && (
+          <AppHeaderPortal>
+            <BaseInfo data={data} />
+          </AppHeaderPortal>
+        )}
+      </div>
+    </>
   );
 }

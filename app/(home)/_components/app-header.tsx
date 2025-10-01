@@ -7,13 +7,12 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { HEADER_EXTRA_ID } from "@/app/(home)/_components/app-header-portal";
 
 const AppHeaderContext = React.createContext<{
-  setExtra: (node: React.ReactNode) => void;
   setHeaderClassName: (className: string) => void;
   restore: () => void;
 }>({
-  setExtra: () => {},
   setHeaderClassName: () => {},
   restore: () => {},
 });
@@ -25,7 +24,6 @@ export const AppHeaderProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [extra, setExtra] = React.useState<React.ReactNode>(null);
   const [headerClassName, setHeaderClassName] = React.useState<string>("");
   const userMeta = React.useContext(UserMetaContext);
   const pathname = usePathname();
@@ -34,10 +32,8 @@ export const AppHeaderProvider = ({
   return (
     <AppHeaderContext.Provider
       value={{
-        setExtra,
         setHeaderClassName,
         restore: () => {
-          setExtra(null);
           setHeaderClassName("");
         },
       }}
@@ -76,7 +72,7 @@ export const AppHeaderProvider = ({
             </Link>
           </motion.div>
         </nav>
-        {extra}
+        <div id={HEADER_EXTRA_ID}></div>
       </motion.header>
       {children}
     </AppHeaderContext.Provider>
