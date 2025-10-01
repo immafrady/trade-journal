@@ -41,14 +41,14 @@ export const AppHeaderProvider = ({
       <motion.header
         layoutId={"header-container"}
         className={cn(
-          "bg-secondary p-2",
+          "bg-secondary",
           isMe && "pb-0 mb-14 rounded-b-4xl",
           headerClassName,
         )}
       >
         <nav
           className={cn(
-            "flex items-center",
+            "p-2 flex items-center",
             isMe ? "flex-col" : " justify-between",
           )}
         >
