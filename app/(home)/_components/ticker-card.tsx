@@ -18,6 +18,7 @@ import { formatPercent, getTickerChangeColorClass } from "@/lib/market-utils";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SimpleDisplay } from "@/components/ui/my/quote-display";
 
 export const TickerCard = ({
   id,
@@ -32,23 +33,27 @@ export const TickerCard = ({
   const carouselList = [];
   if (quote) {
     carouselList.push(
-      <DisplayItem
-        key={0}
-        title={isAShare ? "市场价格" : "场内价格"}
-        value={quote.formatter(quote.current!)}
-        change={formatPercent(quote.pct!)}
-        colorClass={getTickerChangeColorClass(quote.pct!)}
-      />,
+      <CarouselItem>
+        <SimpleDisplay
+          key={0}
+          title={isAShare ? "市场价格" : "场内价格"}
+          value={quote.formatter(quote.current!)}
+          change={formatPercent(quote.pct!)}
+          colorClass={getTickerChangeColorClass(quote.pct!)}
+        />
+      </CarouselItem>,
     );
     if (!isAShare) {
       carouselList.push(
-        <DisplayItem
-          key={1}
-          title={"场外价格"}
-          value={quote.formatter(quote.fundNav!)}
-          change={formatPercent(quote.fundNavPct!)}
-          colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
-        />,
+        <CarouselItem>
+          <SimpleDisplay
+            key={1}
+            title={"场外价格"}
+            value={quote.formatter(quote.fundNav!)}
+            change={formatPercent(quote.fundNavPct!)}
+            colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
+          />
+        </CarouselItem>,
       );
     }
   }
@@ -85,26 +90,3 @@ export const TickerCard = ({
     </Card>
   );
 };
-
-function DisplayItem({
-  title,
-  value,
-  change,
-  colorClass,
-}: {
-  title: string;
-  value: string;
-  change: string;
-  colorClass: string;
-}) {
-  return (
-    <CarouselItem>
-      <div className={"flex items-center justify-between"}>
-        <div className={"text-muted-foreground"}>{title}</div>
-        <div className={colorClass}>
-          {value}({change})
-        </div>
-      </div>
-    </CarouselItem>
-  );
-}
