@@ -8,45 +8,77 @@ import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
-export default function AppHeader() {
+const AppHeaderContext = React.createContext<{
+  setExtra: (node: React.ReactNode) => void;
+  setHeaderClassName: (className: string) => void;
+  restore: () => void;
+}>({
+  setExtra: () => {},
+  setHeaderClassName: () => {},
+  restore: () => {},
+});
+
+export const useAppHeader = () => React.useContext(AppHeaderContext);
+
+export const AppHeaderProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [extra, setExtra] = React.useState<React.ReactNode>(null);
+  const [headerClassName, setHeaderClassName] = React.useState<string>("");
   const userMeta = React.useContext(UserMetaContext);
   const pathname = usePathname();
   const isMe = pathname.includes("/me");
 
   return (
-    <motion.header
-      layoutId={"header-container"}
-      className={cn(
-        "bg-secondary p-2 z-50",
-        isMe && "pb-0 mb-14 rounded-b-4xl",
-      )}
+    <AppHeaderContext.Provider
+      value={{
+        setExtra,
+        setHeaderClassName,
+        restore: () => {
+          setExtra(null);
+          setHeaderClassName("");
+        },
+      }}
     >
-      <nav
+      <motion.header
+        layoutId={"header-container"}
         className={cn(
-          "flex items-center",
-          isMe ? "flex-col" : " justify-between",
+          "bg-secondary p-2",
+          isMe && "pb-0 mb-14 rounded-b-4xl",
+          headerClassName,
         )}
       >
-        <motion.div layoutId={"header-title"}>
-          <Link className={"flex align-center"} href="/">
-            <Logo />
-            <span className={" pl-1 font-sans text-secondary-foreground"}>
-              Trade Journal
-            </span>
-          </Link>
-        </motion.div>
-        <motion.div
-          layoutId={"user-avatar"}
-          className={cn(isMe && "translate-y-1/2")}
+        <nav
+          className={cn(
+            "flex items-center",
+            isMe ? "flex-col" : " justify-between",
+          )}
         >
-          <Link href="/me">
-            <Avatar className={cn(isMe && "size-28")}>
-              <AvatarImage src={userMeta?.avatar} />
-              <AvatarFallback>🤓</AvatarFallback>
-            </Avatar>
-          </Link>
-        </motion.div>
-      </nav>
-    </motion.header>
+          <motion.div layoutId={"header-title"}>
+            <Link className={"flex align-center"} href="/">
+              <Logo />
+              <span className={" pl-1 font-sans text-secondary-foreground"}>
+                Trade Journal
+              </span>
+            </Link>
+          </motion.div>
+          <motion.div
+            layoutId={"user-avatar"}
+            className={cn(isMe && "translate-y-1/2")}
+          >
+            <Link href="/me">
+              <Avatar className={cn(isMe && "size-28")}>
+                <AvatarImage src={userMeta?.avatar} />
+                <AvatarFallback>🤓</AvatarFallback>
+              </Avatar>
+            </Link>
+          </motion.div>
+        </nav>
+        {extra && <div>{extra}</div>}
+      </motion.header>
+      {children}
+    </AppHeaderContext.Provider>
   );
-}
+};

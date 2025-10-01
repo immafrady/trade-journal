@@ -1,5 +1,6 @@
+"use client";
 import React from "react";
-import AppHeader from "@/app/(home)/_components/app-header";
+import { AppHeaderProvider } from "@/app/(home)/_components/app-header";
 import { UserMetaProvider } from "@/providers/user-meta";
 
 export default function BaseLayout({
@@ -8,10 +9,11 @@ export default function BaseLayout({
   return (
     <UserMetaProvider>
       <div className={"flex flex-col overflow-hidden h-svh"}>
-        <AppHeader />
-        <main className={"relative flex-1 overflow-y-auto overflow-x-hidden"}>
-          {children}
-        </main>
+        <AppHeaderProvider>
+          <main className={"relative flex-1 overflow-y-auto overflow-x-hidden"}>
+            {children}
+          </main>
+        </AppHeaderProvider>
       </div>
     </UserMetaProvider>
   );
