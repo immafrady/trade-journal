@@ -14,17 +14,22 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { SimpleDisplay } from "@/components/ui/my/quote-display";
-import { formatPercent, getTickerChangeColorClass } from "@/lib/market-utils";
-import Autoplay from "embla-carousel-autoplay";
+import {
+  formatFund,
+  formatPercent,
+  getTickerChangeColorClass,
+} from "@/lib/market-utils";
 import { motion } from "motion/react";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import { TargetAndTransition } from "motion";
 
 export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
   const route = useRouter();
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(true);
   const toggleExpanded = () => setExpanded(!expanded);
   const { mutate } = useHoldingList();
   const { id, ticker, quote } = data;
@@ -45,11 +50,15 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
           />
         }
         detail={
-          <>
-            <div>more more</div>
-            <div>more more</div>
-            <div>more more</div>
-          </>
+          <div className={"grid grid-cols-2"}>
+            <div className={"col-span-full"}>时间：{quote.time}</div>
+            <div>涨幅：{quote.formatter(quote.diff!)}</div>
+            <div>百分比：{formatPercent(quote.pct)}</div>
+            <div>最高：{quote.formatter(quote.high!)}</div>
+            <div>最低：{quote.formatter(quote.low!)}</div>
+            <div>今开：{quote.formatter(quote.open!)}</div>
+            <div>昨收：{quote.formatter(quote.prevClose!)}</div>
+          </div>
         }
       />,
     );
@@ -68,9 +77,12 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
           }
           detail={
             <>
-              <div>more more</div>
-              <div>more more</div>
-              <div>more more</div>
+              <div>净值日期： {quote.fundDate}</div>
+              <div>前一日净值： {formatFund(quote.preFundNav)}</div>
+              <div>
+                净值变化：
+                {formatPercent(quote.fundNavPct)}
+              </div>
             </>
           }
         />,
@@ -83,7 +95,7 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
   };
 
   return (
-    <Card onClick={toggleExpanded}>
+    <Card className={quote ? "pb-0" : ""}>
       <CardHeader>
         <CardTitle className={"flex items-center justify-between"}>
           <div className={"flex items-center gap-1"}>
@@ -113,28 +125,36 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
           />
         </CardTitle>
         {quote && (
-          <CardContent className={"px-0 pt-2 w-full flex items-center gap-1"}>
+          <CardContent className={"px-0 pt-2 w-full"}>
             <Carousel
-              plugins={[Autoplay({ delay: 2500 })]}
               opts={{
                 loop: true,
                 align: "center",
               }}
               className={"flex-1"}
             >
-              <CarouselContent onClick={toggleExpanded}>
+              <CarouselContent>
                 {carouselList.map((item, idx) => (
                   <CarouselItem key={idx}>{item}</CarouselItem>
                 ))}
               </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
             </Carousel>
-            <motion.div
-              initial={config}
-              animate={config}
-              transition={{ duration: 0.3, ease: "easeOut" }}
+
+            <Button
+              variant={"ghost"}
+              className={"w-full"}
+              onClick={toggleExpanded}
             >
-              <ChevronUp className={"size-5 text-gray-500"} />
-            </motion.div>
+              <motion.div
+                initial={config}
+                animate={config}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                <ChevronUp className={"size-5 text-gray-500"} />
+              </motion.div>
+            </Button>
           </CardContent>
         )}
       </CardHeader>
