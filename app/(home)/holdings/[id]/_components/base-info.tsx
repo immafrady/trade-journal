@@ -1,14 +1,9 @@
 "use client";
 import { HoldingWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  getSinaStockTypeColor,
-  getSinaStockTypeLabel,
-  SinaStockType,
-} from "@/lib/enums/sina-stock-type";
+import { SinaStockType } from "@/lib/enums/sina-stock-type";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { ChevronUp, Trash } from "lucide-react";
 import React from "react";
 import { deleteHolding } from "@/lib/services/holdings/holding-apis";
 import { toast } from "sonner";
@@ -24,21 +19,13 @@ import { SimpleDisplay } from "@/components/ui/my/quote-display";
 import { formatPercent, getTickerChangeColorClass } from "@/lib/market-utils";
 import Autoplay from "embla-carousel-autoplay";
 import { motion } from "motion/react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
-export const BaseInfo = ({
-  data,
-  expanded,
-}: {
-  data: HoldingWithQuote;
-  expanded: boolean;
-}) => {
+import { TargetAndTransition } from "motion";
+
+export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
   const route = useRouter();
+  const [expanded, setExpanded] = React.useState(false);
+  const toggleExpanded = () => setExpanded(!expanded);
   const { mutate } = useHoldingList();
   const { id, ticker, quote } = data;
 
@@ -46,31 +33,31 @@ export const BaseInfo = ({
   const carouselList = [];
   if (quote) {
     carouselList.push(
-      <>
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>
-              <SimpleDisplay
-                key={0}
-                title={isAShare ? "市场价格" : "场内价格"}
-                value={quote.formatter(quote.current!)}
-                change={formatPercent(quote.pct!)}
-                colorClass={getTickerChangeColorClass(quote.pct!)}
-              />
-            </AccordionTrigger>
-            <AccordionContent>
-              <div>more more</div>
-              <div>more more</div>
-              <div>more more</div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </>,
+      <DetailDisplay
+        expanded={expanded}
+        title={
+          <SimpleDisplay
+            key={1}
+            title={isAShare ? "市场价格" : "场内价格"}
+            value={quote.formatter(quote.fundNav!)}
+            change={formatPercent(quote.fundNavPct!)}
+            colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
+          />
+        }
+        detail={
+          <>
+            <div>more more</div>
+            <div>more more</div>
+            <div>more more</div>
+          </>
+        }
+      />,
     );
     if (!isAShare) {
       carouselList.push(
-        <>
-          <motion.div animate={{ height: "auto" }}>
+        <DetailDisplay
+          expanded={expanded}
+          title={
             <SimpleDisplay
               key={1}
               title={"场外价格"}
@@ -78,21 +65,25 @@ export const BaseInfo = ({
               change={formatPercent(quote.fundNavPct!)}
               colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
             />
-            {expanded && (
-              <>
-                <div>more more</div>
-                <div>more more</div>
-                <div>more more</div>
-              </>
-            )}
-          </motion.div>
-        </>,
+          }
+          detail={
+            <>
+              <div>more more</div>
+              <div>more more</div>
+              <div>more more</div>
+            </>
+          }
+        />,
       );
     }
   }
 
+  const config: TargetAndTransition = {
+    rotateZ: expanded ? 180 : 0,
+  };
+
   return (
-    <Card>
+    <Card onClick={toggleExpanded}>
       <CardHeader>
         <CardTitle className={"flex items-center justify-between"}>
           <div className={"flex items-center gap-1"}>
@@ -122,23 +113,58 @@ export const BaseInfo = ({
           />
         </CardTitle>
         {quote && (
-          <CardContent className={"px-0 pt-2"}>
+          <CardContent className={"px-0 pt-2 w-full flex items-center gap-1"}>
             <Carousel
               plugins={[Autoplay({ delay: 2500 })]}
               opts={{
                 loop: true,
                 align: "center",
               }}
+              className={"flex-1"}
             >
-              <CarouselContent>
+              <CarouselContent onClick={toggleExpanded}>
                 {carouselList.map((item, idx) => (
                   <CarouselItem key={idx}>{item}</CarouselItem>
                 ))}
               </CarouselContent>
             </Carousel>
+            <motion.div
+              initial={config}
+              animate={config}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
+              <ChevronUp className={"size-5 text-gray-500"} />
+            </motion.div>
           </CardContent>
         )}
       </CardHeader>
     </Card>
   );
 };
+
+function DetailDisplay({
+  expanded,
+  title,
+  detail,
+}: {
+  expanded: boolean;
+  title: React.ReactNode;
+  detail: React.ReactNode;
+}) {
+  const config: TargetAndTransition = {
+    height: expanded ? "auto" : 0,
+  };
+
+  return (
+    <>
+      {title}
+      <motion.div
+        initial={config}
+        animate={config}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
+        {detail}
+      </motion.div>
+    </>
+  );
+}
