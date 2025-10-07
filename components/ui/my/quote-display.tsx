@@ -8,14 +8,15 @@ export const SimpleDisplay = ({
 }: {
   title: string;
   value: string;
-  change: string;
+  change?: string;
   colorClass: string;
 }) => {
   return (
     <div className={"flex items-center justify-between"}>
       <div className={"text-muted-foreground"}>{title}</div>
       <div className={colorClass}>
-        {value}({change})
+        {value}
+        {change && `(${change})`}
       </div>
     </div>
   );

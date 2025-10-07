@@ -39,21 +39,20 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
   if (quote) {
     carouselList.push(
       <DetailDisplay
+        key={1}
         expanded={expanded}
         title={
           <SimpleDisplay
-            key={1}
             title={isAShare ? "市场价格" : "场内价格"}
-            value={quote.formatter(quote.fundNav!)}
-            change={formatPercent(quote.fundNavPct!)}
-            colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
+            value={quote.formatter(quote.current!)}
+            colorClass={getTickerChangeColorClass(quote.pct!)}
           />
         }
         detail={
           <div className={"grid grid-cols-2"}>
             <div className={"col-span-full"}>时间：{quote.time}</div>
-            <div>涨幅：{quote.formatter(quote.diff!)}</div>
-            <div>百分比：{formatPercent(quote.pct)}</div>
+            <div>涨跌：{quote.formatter(quote.diff!)}</div>
+            <div>涨幅：{formatPercent(quote.pct)}</div>
             <div>最高：{quote.formatter(quote.high!)}</div>
             <div>最低：{quote.formatter(quote.low!)}</div>
             <div>今开：{quote.formatter(quote.open!)}</div>
@@ -65,10 +64,10 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
     if (!isAShare) {
       carouselList.push(
         <DetailDisplay
+          key={2}
           expanded={expanded}
           title={
             <SimpleDisplay
-              key={1}
               title={"场外价格"}
               value={quote.formatter(quote.fundNav!)}
               change={formatPercent(quote.fundNavPct!)}
@@ -131,14 +130,14 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
                 loop: true,
                 align: "center",
               }}
-              className={"flex-1"}
+              className={"flex-1 mx-8"}
             >
               <CarouselContent>
                 {carouselList.map((item, idx) => (
                   <CarouselItem key={idx}>{item}</CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious />
+              <CarouselPrevious size={"sm"} />
               <CarouselNext />
             </Carousel>
 
