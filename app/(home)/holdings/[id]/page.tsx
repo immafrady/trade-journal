@@ -37,8 +37,6 @@ export default function Page() {
             </div>
           </AppHeaderPortal>
         )}
-        <div className={"pt-10"}>点我???</div>
-        <div></div>
       </div>
     </>
   );
