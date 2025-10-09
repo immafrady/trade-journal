@@ -34,27 +34,21 @@ export const TickerCard = ({
   const carouselList = [];
   if (quote) {
     carouselList.push(
-      <CarouselItem>
-        <SimpleDisplay
-          key={0}
-          title={isAShare ? "市场价格" : "场内价格"}
-          value={quote.formatter(quote.current!)}
-          change={formatPercent(quote.pct!)}
-          colorClass={getTickerChangeColorClass(quote.pct!)}
-        />
-      </CarouselItem>,
+      <SimpleDisplay
+        title={isAShare ? "市场价格" : "场内价格"}
+        value={quote.formatter(quote.current!)}
+        change={formatPercent(quote.pct!)}
+        colorClass={getTickerChangeColorClass(quote.pct!)}
+      />,
     );
     if (!isAShare) {
       carouselList.push(
-        <CarouselItem>
-          <SimpleDisplay
-            key={1}
-            title={"场外价格"}
-            value={quote.formatter(quote.fundNav!)}
-            change={formatPercent(quote.fundNavPct!)}
-            colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
-          />
-        </CarouselItem>,
+        <SimpleDisplay
+          title={"场外价格"}
+          value={quote.formatter(quote.fundNav!)}
+          change={formatPercent(quote.fundNavPct!)}
+          colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
+        />,
       );
     }
   }
@@ -82,7 +76,11 @@ export const TickerCard = ({
               align: "center",
             }}
           >
-            <CarouselContent>{carouselList}</CarouselContent>
+            <CarouselContent>
+              {carouselList.map((item, idx) => (
+                <CarouselItem key={idx}>{item}</CarouselItem>
+              ))}
+            </CarouselContent>
           </Carousel>
         </CardContent>
       )}
