@@ -2,7 +2,7 @@
 import { LoginForm } from "./_components/login-form";
 import { toast } from "sonner";
 import { use, useEffect } from "react";
-import Logo from "@/components/ui/logo";
+import Logo from "@/components/ui/my/logo";
 
 export default function LoginPage(props: PageProps<"/login">) {
   const searchParams = use(props.searchParams);
