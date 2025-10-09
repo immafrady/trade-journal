@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { TypographyH3, TypographyH4 } from "@/components/ui/typography";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export const BlankPage = () => {
+  const pathname = usePathname(); // 例如 /holdings/10
   return (
     <div
       className={
@@ -12,8 +15,12 @@ export const BlankPage = () => {
         <TypographyH3>(｡•̀ᴗ-)✧ 没有任何持仓记录～</TypographyH3>
         <TypographyH4>快来录入第一笔交易吧！</TypographyH4>
       </div>
-      <Button>新增一条</Button>
-      <Button variant={"outline"}>导入CSV</Button>
+      <Button asChild>
+        <Link href={`${pathname}/add`}>新增一条</Link>
+      </Button>
+      <Button variant={"outline"} asChild>
+        <Link href={`${pathname}/import`}>导入CSV</Link>
+      </Button>
     </div>
   );
 };
