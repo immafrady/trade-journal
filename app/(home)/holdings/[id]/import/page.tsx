@@ -1,6 +1,7 @@
 "use client";
 import { AppHeaderPortal } from "@/app/(home)/_components/app-header-portal";
 import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
+import { Step1 } from "@/app/(home)/holdings/[id]/import/_components/step-1";
 
 export default function Page() {
   const { id, data } = useHoldingInfo();
@@ -13,7 +14,9 @@ export default function Page() {
           )}
         </AppHeaderPortal>
       }
-      <div className={"common-layout"}>导入</div>
+      <div className={"common-layout"}>
+        <Step1 />
+      </div>
     </>
   );
 }
