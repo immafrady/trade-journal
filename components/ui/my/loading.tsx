@@ -5,24 +5,25 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 
 export default function Loading({
   isLoading,
-  height = "100svh",
+  fullScreen = true,
   text = "Data Loading",
   foregroundClassName = "text-secondary-foreground",
   backgroundClassName = "bg-secondary",
 }: {
   isLoading: boolean;
-  height?: string;
+  fullScreen?: boolean;
   text?: string;
   foregroundClassName?: string;
   backgroundClassName?: string;
 }) {
   const config: TargetAndTransition = {
-    height: isLoading ? height : "0",
+    height: isLoading ? (fullScreen ? "100svh" : "100%") : "0",
   };
   return (
     <motion.div
       className={cn(
-        "fixed inset-0 grid place-items-center overflow-hidden",
+        "inset-0 grid place-items-center overflow-hidden",
+        fullScreen ? "fixed" : "absolute",
         backgroundClassName,
       )}
       initial={config}
