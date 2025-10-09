@@ -41,10 +41,13 @@ export const AppHeaderProvider = ({
       <motion.header
         layoutId={"header-container"}
         className={cn(
-          "bg-secondary",
+          "bg-secondary z-50",
           isMe && "pb-0 mb-14 rounded-b-4xl",
           headerClassName,
         )}
+        transition={{
+          duration: 0.5,
+        }}
       >
         <nav
           className={cn(
@@ -72,7 +75,7 @@ export const AppHeaderProvider = ({
             </Link>
           </motion.div>
         </nav>
-        <div id={HEADER_EXTRA_ID}></div>
+        <motion.div id={HEADER_EXTRA_ID}></motion.div>
       </motion.header>
       {children}
     </AppHeaderContext.Provider>

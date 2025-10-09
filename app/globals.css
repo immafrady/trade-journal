@@ -127,6 +127,6 @@
     @apply p-4 relative;
   }
   .app-header-title {
-    @apply p-2 pt-0 font-medium;
+    @apply p-2 pt-0 font-medium leading-none;
   }
 }
