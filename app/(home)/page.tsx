@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import Loading from "./loading";
 import StartGuidance from "@/app/(home)/_components/start-guidance";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { TickerCard } from "@/app/(home)/_components/ticker-card";
 import { NavigateToHoldingsAdd } from "@/app/(home)/_components/navigate-to-holdings-add";
 import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
+import Loading from "@/components/ui/my/loading";
 
 export default function Page() {
   const { isLoading } = useHoldingList();
