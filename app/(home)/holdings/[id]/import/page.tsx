@@ -1,7 +1,6 @@
 "use client";
 import { AppHeaderPortal } from "@/app/(home)/_components/app-header-portal";
 import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
-import { TypographyH4 } from "@/components/ui/typography";
 
 export default function Page() {
   const { id, data } = useHoldingInfo();
