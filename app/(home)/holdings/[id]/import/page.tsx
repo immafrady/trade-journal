@@ -1,3 +1,20 @@
+"use client";
+import { AppHeaderPortal } from "@/app/(home)/_components/app-header-portal";
+import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
+import { TypographyH4 } from "@/components/ui/typography";
+
 export default function Page() {
-  return <div>导入</div>;
+  const { id, data } = useHoldingInfo();
+  return (
+    <>
+      {
+        <AppHeaderPortal>
+          {data?.ticker.label && (
+            <h1 className={"app-header-title"}>{data?.ticker.label} · 导入</h1>
+          )}
+        </AppHeaderPortal>
+      }
+      <div className={"common-layout"}>导入</div>
+    </>
+  );
 }
