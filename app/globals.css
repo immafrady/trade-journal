@@ -123,7 +123,7 @@
 }
 
 @layer components {
-  .p-layout {
+  .common-layout {
     @apply p-4 relative;
   }
 }

@@ -11,7 +11,7 @@ export default function Page() {
   const userMeta = React.useContext(UserMetaContext);
 
   return (
-    <div className={"p-layout flex flex-col items-center h-[100%]"}>
+    <div className={"common-layout flex flex-col items-center h-[100%]"}>
       <div className={"font-bold font-serif"}>{userMeta?.name}</div>
       <ul className={"flex-1 self-stretch"}>
         <ListItem
