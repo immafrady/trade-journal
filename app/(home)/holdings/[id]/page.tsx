@@ -5,10 +5,12 @@ import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-
 import { toast } from "sonner";
 import { BaseInfo } from "@/app/(home)/holdings/[id]/_components/base-info";
 import { AppHeaderPortal } from "@/app/(home)/_components/app-header-portal";
+import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 
 export default function Page() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const list = useHoldingsWithQuote();
+  const d = useTradeRecordList(id);
   const data = React.useMemo(
     () => list?.find((item) => item.id === id),
     [list, id],
