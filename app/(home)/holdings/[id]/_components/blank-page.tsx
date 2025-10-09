@@ -1,26 +1,37 @@
 import { Button } from "@/components/ui/button";
-import { TypographyH3, TypographyH4 } from "@/components/ui/typography";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import { BookOpen } from "lucide-react";
 
 export const BlankPage = () => {
   const pathname = usePathname(); // 例如 /holdings/10
   return (
-    <div
-      className={
-        "h-full flex flex-col items-center justify-center gap-5 bg-muted"
-      }
-    >
-      <div className={"flex flex-col gap-2 items-center justify-center"}>
-        <TypographyH3>(｡•̀ᴗ-)✧ 没有任何持仓记录～</TypographyH3>
-        <TypographyH4>快来录入第一笔交易吧！</TypographyH4>
-      </div>
-      <Button asChild>
-        <Link href={`${pathname}/add`}>新增一条</Link>
-      </Button>
-      <Button variant={"outline"} asChild>
-        <Link href={`${pathname}/import`}>导入CSV</Link>
-      </Button>
-    </div>
+    <Empty className={"mt-20"}>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <BookOpen />
+        </EmptyMedia>
+        <EmptyTitle>(｡•̀ᴗ-)✧ 没有任何持仓记录～</EmptyTitle>
+        <EmptyDescription>快来录入第一笔交易吧！</EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <div className="flex gap-2">
+          <Button asChild>
+            <Link href={`${pathname}/add`}>新增一条</Link>
+          </Button>
+          <Button variant={"outline"} asChild>
+            <Link href={`${pathname}/import`}>导入CSV</Link>
+          </Button>
+        </div>
+      </EmptyContent>
+    </Empty>
   );
 };
