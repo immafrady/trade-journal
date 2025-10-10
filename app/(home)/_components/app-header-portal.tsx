@@ -26,7 +26,7 @@ export const AppHeaderPortal = ({
       <motion.div
         initial={skipAnimation ? false : { opacity: 0 }}
         animate={skipAnimation ? undefined : { opacity: 1 }}
-        transition={skipAnimation ? undefined : { delay: 0.5 }}
+        transition={skipAnimation ? undefined : { delay: 0.35 }}
       >
         {children}
       </motion.div>
