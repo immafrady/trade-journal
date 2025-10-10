@@ -95,7 +95,7 @@ export default function Page() {
         )}
       </div>
       <LoadingButton
-        className={"bottom-safe-offset-2"}
+        className={"mb-safe-offset-4"}
         loading={loading}
         icon={<Check />}
         disabled={!value}

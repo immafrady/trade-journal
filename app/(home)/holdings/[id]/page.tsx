@@ -17,7 +17,7 @@ export default function Page() {
         <AppHeaderPortal>
           <div
             className={
-              "px-2 -mt-5 translate-y-10 relative z-50 pointer-events-auto"
+              "px-2 -mt-5 translate-y-6 relative z-50 pointer-events-auto"
             }
           >
             <BaseInfo data={data} />
