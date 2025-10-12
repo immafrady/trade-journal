@@ -53,4 +53,8 @@ export class TradeRecordType {
   static parseFromValue(value?: number) {
     return this.values.find((record) => record.value === value);
   }
+
+  equal(other: TradeRecordType) {
+    return other.value === this.value;
+  }
 }
