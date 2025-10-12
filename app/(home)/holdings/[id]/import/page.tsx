@@ -30,7 +30,15 @@ export default function Page() {
             }}
           />
         )}
-        {currentStep === 1 && <StepParseError />}
+        {currentStep === 1 && (
+          <StepParseError
+            errors={errors}
+            onRedo={() => {
+              setCurrentStep(0);
+              setErrors([]);
+            }}
+          />
+        )}
       </div>
     </>
   );

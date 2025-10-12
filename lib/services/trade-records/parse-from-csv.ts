@@ -111,7 +111,7 @@ class TradeRecordCsvParseError extends Error {
     super();
   }
   get message() {
-    return this.messages.join(";\n");
+    return `第${this.index + 1}条：\n${this.messages.join(";\n")}`;
   }
   public messages: string[] = [];
 

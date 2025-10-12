@@ -1,8 +1,5 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
-import { parseFromCsv } from "@/lib/services/trade-records/parse-from-csv";
-import { Button } from "@/components/ui/button";
-import { FileSpreadsheet } from "lucide-react";
 
 export function FragmentTemplate({
   title,
@@ -10,8 +7,8 @@ export function FragmentTemplate({
   actions,
   children,
 }: {
-  title: string;
-  description?: string;
+  title: React.ReactNode;
+  description?: React.ReactNode;
   actions?: React.ReactNode;
   children: React.ReactNode;
 }) {
