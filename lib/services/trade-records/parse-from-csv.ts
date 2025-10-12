@@ -15,7 +15,7 @@ export function parseFromCsv(
           reject([new Error("表格内容为空")]);
         }
         const list: TradeRecord[] = [];
-        const errors: TradeRecordCsvParseError[] = [];
+        const errors: Error[] = [];
 
         (results.data as Record<string, string | undefined>[]).forEach(
           (item, idx) => {
@@ -37,50 +37,54 @@ export function parseFromCsv(
             }
             // 系数
             const factor = item[TradeRecordConstants.Factor];
-            if (!(isEmpty(factor) || isInteger(factor))) {
+            if (!(Utils.isEmpty(factor) || Utils.isInteger(factor))) {
               e.add(TradeRecordConstants.Factor, "可不填，但若填写必须为整数");
             }
             // 份额
             const shares = item[TradeRecordConstants.Shares];
-            if (isNumber(shares)) {
+            if (!Utils.isNumber(shares)) {
               e.add(TradeRecordConstants.Shares, "必须为数字");
             }
 
             // 价格
             const price = item[TradeRecordConstants.Price];
-            if (isNumber(price)) {
-              e.add(TradeRecordConstants.Price, "必须为数字");
+            if (!Utils.isNumber(price)) {
+              e.add(TradeRecordConstants.Price, "可不填，但若填写必须为数字");
             }
 
             // 金额
             const amount = item[TradeRecordConstants.Amount];
-            if (!(isEmpty(amount) || isNumber(amount))) {
+            if (!(Utils.isEmpty(amount) || Utils.isNumber(amount))) {
               e.add(TradeRecordConstants.Amount, "可不填，但若填写必须为数字");
             }
 
             // 费用
             const fee = item[TradeRecordConstants.Fee];
-            if (!(isEmpty(fee) || isNumber(fee))) {
+            if (!(Utils.isEmpty(fee) || Utils.isNumber(fee))) {
               e.add(TradeRecordConstants.Fee, "可不填，但若填写必须为数字");
             }
 
             // 备注
-            if (e.message) {
+            if (e.hasError) {
               errors.push(e);
             } else {
-              list.push(
-                new TradeRecord({
-                  holdingId,
-                  type: type!,
-                  factor: toOptionalNumber(factor),
-                  shares: +shares!,
-                  price: +price!,
-                  amount: toOptionalNumber(amount),
-                  fee: toOptionalNumber(fee),
-                  comment: item[TradeRecordConstants.Comment],
-                  tradedAt,
-                }),
-              );
+              try {
+                list.push(
+                  new TradeRecord({
+                    holdingId,
+                    type: type!,
+                    factor: Utils.toOptionalNumber(factor),
+                    shares: +shares!,
+                    price: Utils.toOptionalNumber(price),
+                    amount: Utils.toOptionalNumber(amount),
+                    fee: Utils.toOptionalNumber(fee),
+                    comment: item[TradeRecordConstants.Comment],
+                    tradedAt,
+                  }),
+                );
+              } catch (err: any) {
+                errors.push(err);
+              }
             }
           },
         );
@@ -98,10 +102,12 @@ export function parseFromCsv(
   });
 }
 
-const isEmpty = (v: any) => v === undefined || v === null || v === "";
-const isNumber = (v: any) => !Number.isNaN(+v);
-const isInteger = (v: any) => Number.isInteger(+v);
-const toOptionalNumber = (v: any) => (v ? +v : undefined);
+const Utils = {
+  isEmpty: (v: any) => v === undefined || v === null || v === "",
+  isNumber: (v: any) => !Number.isNaN(+v),
+  isInteger: (v: any) => Number.isInteger(+v),
+  toOptionalNumber: (v: any) => (v ? +v : undefined),
+};
 
 class TradeRecordCsvParseError extends Error {
   constructor(
@@ -112,6 +118,9 @@ class TradeRecordCsvParseError extends Error {
   }
   get message() {
     return `第${this.index + 1}条：\n${this.messages.join(";\n")}`;
+  }
+  get hasError() {
+    return !!this.messages.length;
   }
   public messages: string[] = [];
 

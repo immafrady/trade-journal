@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FileSpreadsheet } from "lucide-react";
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
-import { Separator } from "@/components/ui/separator";
 import { useRef } from "react";
 import { parseFromCsv } from "@/lib/services/trade-records/parse-from-csv";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
@@ -23,11 +22,6 @@ const schema = [
       .join("、")}`,
   },
   {
-    label: TradeRecordConstants.Factor,
-    required: false,
-    description: "默认为1，用于合并多个相同交易",
-  },
-  {
     label: TradeRecordConstants.Shares,
     required: true,
     description:
@@ -35,20 +29,27 @@ const schema = [
   },
   {
     label: TradeRecordConstants.Price,
-    required: true,
-    description: "交易发生的价格\n“分红”、“拆股”、“合股”填0",
+    description: `
+      交易发生的价格
+      “分红”、“拆股”、“合股”填0
+      * 与“${TradeRecordConstants.Amount}”二选一进行填写
+    `,
   },
   {
     label: TradeRecordConstants.Amount,
     required: false,
-    description:
-      "包含手续费的金额\n默认通过“成交份额x成交价格+交易费用”推导出来",
+    description: `包含手续费的金额\n默认通过“成交份额x成交价格+交易费用”推导出来\n* 与“${TradeRecordConstants.Price}”二选一进行填写`,
   },
   {
     label: TradeRecordConstants.Fee,
     required: false,
     description:
       "交易发生的各种费用，默认为0\n可通过“成交金额-成交份额x成交价格”推导出来",
+  },
+  {
+    label: TradeRecordConstants.Factor,
+    required: false,
+    description: "默认为1，用于合并多个相同交易",
   },
   {
     label: TradeRecordConstants.Comment,
@@ -84,7 +85,6 @@ export function StepChooseFile({
                 try {
                   const data = await parseFromCsv(file, +id);
                   onPick(data);
-                  console.log(data);
                 } catch (e: any) {
                   onErrors(e);
                 }

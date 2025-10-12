@@ -1,11 +1,12 @@
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
+import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 
 interface TradeRecordProps {
   holdingId: number;
   type: TradeRecordType;
   factor?: number;
   shares: number;
-  price: number;
+  price?: number;
   amount?: number;
   fee?: number;
   comment?: string;
@@ -17,7 +18,17 @@ export class TradeRecord {
   constructor(public props: TradeRecordProps) {
     this.props.factor ??= 1;
     this.props.amount ??= 0;
+    this.props.price ??= 0;
     this.props.fee ??= 0;
+    if (!(this.props.amount && this.props.price) && !this.props.price) {
+      throw new Error(
+        `
+        “${TradeRecordConstants.Price}”或“${TradeRecordConstants.Amount}“必须有值
+        - ${TradeRecordConstants.Price}: ${this.props.price}
+        - ${TradeRecordConstants.Amount}: ${this.props.amount}
+        `,
+      );
+    }
     this.props.comment ??= "";
   }
 
