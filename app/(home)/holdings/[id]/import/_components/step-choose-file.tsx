@@ -7,6 +7,7 @@ import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
 import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { FragmentTemplate } from "@/app/(home)/holdings/[id]/import/_components/fragment-template";
+import { motion } from "motion/react";
 
 const schema = [
   {
@@ -92,10 +93,12 @@ export function StepChooseFile({
             }}
             ref={fileRef}
           />
-          <Button type={"button"} onClick={() => fileRef.current?.click()}>
-            <FileSpreadsheet />
-            选取文件
-          </Button>
+          <motion.div layoutId={"primary-button"}>
+            <Button type={"button"} onClick={() => fileRef.current?.click()}>
+              <FileSpreadsheet />
+              选取文件
+            </Button>
+          </motion.div>
         </>
       }
     >

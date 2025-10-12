@@ -9,7 +9,6 @@ import { StepPreviewData } from "@/app/(home)/holdings/[id]/import/_components/s
 
 export default function Page() {
   const { id, data } = useHoldingInfo();
-  const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState<Error[]>([]);
   const [records, setRecords] = useState<TradeRecord[]>([]);
   return (
@@ -22,28 +21,25 @@ export default function Page() {
         </AppHeaderPortal>
       }
       <div className={"common-layout"}>
-        {currentStep === 0 && (
-          <StepChooseFile
-            onPick={(r) => {
-              setRecords(r);
-              setCurrentStep(2);
-            }}
-            onErrors={(e) => {
-              setErrors(e);
-              setCurrentStep(1);
-            }}
-          />
-        )}
-        {currentStep === 1 && (
+        {records.length ? (
+          <StepPreviewData records={records} onRedo={() => setRecords([])} />
+        ) : errors.length ? (
           <StepParseError
             errors={errors}
             onRedo={() => {
-              setCurrentStep(0);
               setErrors([]);
             }}
           />
+        ) : (
+          <StepChooseFile
+            onPick={(r) => {
+              setRecords(r);
+            }}
+            onErrors={(e) => {
+              setErrors(e);
+            }}
+          />
         )}
-        {currentStep === 2 && <StepPreviewData records={records} />}
       </div>
     </>
   );
