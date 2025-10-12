@@ -1,5 +1,6 @@
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+import dayjs from "dayjs";
 
 interface TradeRecordProps {
   holdingId: number;
@@ -30,7 +31,10 @@ export class TradeRecord {
       );
     }
     this.props.comment ??= "";
+    this.tradedAt = dayjs(this.props.tradedAt).format("YYYY-MM-DD");
   }
+
+  public tradedAt: string;
 
   /**
    * 数据库解析
