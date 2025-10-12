@@ -6,6 +6,8 @@ import { useRef } from "react";
 import { parseFromCsv } from "@/lib/services/trade-records/parse-from-csv";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
+import { TradeRecord } from "@/lib/services/trade-records/trade-record";
+import { FragmentTemplate } from "@/app/(home)/holdings/[id]/import/_components/fragment-template";
 
 const schema = [
   {
@@ -55,68 +57,65 @@ const schema = [
   },
 ];
 
-export function Step1() {
+export function StepChooseFile({
+  onPick,
+  onErrors,
+}: {
+  onPick: (records: TradeRecord[]) => void;
+  onErrors: (errors: Error[]) => void;
+}) {
   const fileRef = useRef<HTMLInputElement | null>(null);
   const { id } = useHoldingInfo();
 
   return (
-    <div
-      className={
-        "flex flex-col items-center px-safe-offset-4 md:px-safe-offset-10"
+    <FragmentTemplate
+      title={"第一步：上传 CSV 文件"}
+      description={"请确保文件内包含以下表头信息，并按照所需的数据类型填写表格"}
+      actions={
+        <>
+          <input
+            type="file"
+            id="csvFile"
+            className="hidden"
+            accept={"text/csv"}
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                try {
+                  const data = await parseFromCsv(file, +id);
+                  onPick(data);
+                  console.log(data);
+                } catch (e: any) {
+                  onErrors(e);
+                }
+              }
+            }}
+            ref={fileRef}
+          />
+          <Button type={"button"} onClick={() => fileRef.current?.click()}>
+            <FileSpreadsheet />
+            选取文件
+          </Button>
+        </>
       }
     >
-      <div className={"w-full max-w-xl "}>
-        <h1 className={"font-medium text-base py-2"}>第一步：上传 CSV 文件</h1>
-        <h2 className={"text-sm text-muted-foreground"}>
-          请确保文件内包含以下表头信息，并按照所需的数据类型填写表格
-        </h2>
-        <Separator className={"my-2"} />
-        <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
-          {schema.map((item, idx) => (
-            <div key={idx}>
-              <h3 className={"font-medium text-base"}>
-                {item.label}
-                <span className={"text-sm"}>
-                  {item.required ? "（必填项）" : ""}
-                </span>
-              </h3>
-              <div className={"text-muted-foreground text-justify"}>
-                {item.description.split("\n").map((line, idx) => (
-                  <p key={idx}>{line}</p>
-                ))}
-              </div>
+      <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
+        {schema.map((item, idx) => (
+          <div key={idx}>
+            <h3 className={"font-medium text-base"}>
+              {idx + 1}. {item.label}
+              <span className={"text-sm"}>
+                {item.required ? "（必填项）" : ""}
+              </span>
+            </h3>
+            <div className={"text-muted-foreground text-justify"}>
+              {item.description.split("\n").map((line, idx) => (
+                <p key={idx}>{line}</p>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-      <div
-        className={
-          "fixed left-0 right-0 bottom-0 flex justify-center bg-secondary py-safe-offset-2"
-        }
-      >
-        <input
-          type="file"
-          id="csvFile"
-          className="hidden"
-          accept={"text/csv"}
-          onChange={async (e) => {
-            const file = e.target.files?.[0];
-            if (file) {
-              try {
-                const data = await parseFromCsv(file, +id);
-                console.log(data);
-              } catch (e) {
-                console.dir(e);
-              }
-            }
-          }}
-          ref={fileRef}
-        />
-        <Button type={"button"} onClick={() => fileRef.current?.click()}>
-          <FileSpreadsheet />
-          选取文件
-        </Button>
-      </div>
-    </div>
+    </FragmentTemplate>
   );
 }

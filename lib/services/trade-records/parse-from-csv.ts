@@ -10,18 +10,16 @@ export function parseFromCsv(
   return new Promise((resolve, reject) => {
     Papa.parse(file, {
       header: true, // 第一行作为表头
-      skipEmptyLines: true,
       complete: (results) => {
         if (!results.data.length) {
           reject([new Error("表格内容为空")]);
         }
-        console.log("解析结果：", results.data);
         const list: TradeRecord[] = [];
         const errors: TradeRecordCsvParseError[] = [];
 
         (results.data as Record<string, string | undefined>[]).forEach(
-          (item) => {
-            const e = new TradeRecordCsvParseError(item);
+          (item, idx) => {
+            const e = new TradeRecordCsvParseError(item, idx);
             // 开始解析
             // 交易日期
             const tradedAt = new Date(
@@ -106,7 +104,10 @@ const isInteger = (v: any) => Number.isInteger(+v);
 const toOptionalNumber = (v: any) => (v ? +v : undefined);
 
 class TradeRecordCsvParseError extends Error {
-  constructor(public data: Record<string, string | undefined>) {
+  constructor(
+    public data: Record<string, string | undefined>,
+    public index: number,
+  ) {
     super();
   }
   get message() {
