@@ -20,7 +20,7 @@ export class TradeRecord {
     this.props.amount ??= 0;
     this.props.price ??= 0;
     this.props.fee ??= 0;
-    if (!(this.props.amount && this.props.price) && !this.props.price) {
+    if (!this.props.amount && !this.props.price) {
       throw new Error(
         `
         “${TradeRecordConstants.Price}”或“${TradeRecordConstants.Amount}“必须有值

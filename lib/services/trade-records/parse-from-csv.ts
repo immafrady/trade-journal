@@ -83,7 +83,8 @@ export function parseFromCsv(
                   }),
                 );
               } catch (err: any) {
-                errors.push(err);
+                e.addError(err);
+                errors.push(e);
               }
             }
           },
@@ -126,5 +127,8 @@ class TradeRecordCsvParseError extends Error {
 
   add(label: string, reason: string) {
     this.messages.push(`[${label}] “${this.data[label]}” - ${reason}`);
+  }
+  addError(e: Error) {
+    this.messages.push(e.message);
   }
 }
