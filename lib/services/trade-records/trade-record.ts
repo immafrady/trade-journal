@@ -1,41 +1,53 @@
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
 
+interface TradeRecordProps {
+  holdingId: number;
+  type: TradeRecordType;
+  factor?: number;
+  shares: number;
+  price: number;
+  amount?: number;
+  fee?: number;
+  comment?: string;
+  tradedAt: Date;
+  id?: number;
+}
+
 export class TradeRecord {
-  private constructor(
-    public holdingId: number,
-    public type: TradeRecordType,
-    public factor: number,
-    public price: number,
-    public amount: number,
-    public fee: number,
-    public comment: string,
-    public tradedAt: Date,
-    public id?: number,
-  ) {}
+  constructor(public props: TradeRecordProps) {
+    this.props.factor ??= 1;
+    this.props.amount ??= 0;
+    this.props.fee ??= 0;
+    this.props.comment ??= "";
+  }
 
   /**
    * 数据库解析
    * @param model
    */
   static fromDatabase(model: TradeRecordModel) {
-    return new TradeRecord(
-      model.holding_id,
-      model.type,
-      model.factor,
-      model.price,
-      model.amount,
-      model.fee,
-      model.comment,
-      new Date(model.traded_at),
-      model.id,
-    );
+    const type = TradeRecordType.parseFromValue(model.type);
+    if (!type) {
+      throw new Error("无法解析交易类型");
+    }
+    return new TradeRecord({
+      holdingId: model.holding_id,
+      type,
+      factor: model.factor,
+      shares: model.shares,
+      price: model.price,
+      fee: model.fee,
+      comment: model.comment,
+      tradedAt: new Date(model.traded_at),
+      id: model.id,
+    });
   }
 }
 
 export interface TradeRecordModel {
   id?: number;
   holding_id: number;
-  type: TradeRecordType;
+  type: number;
   factor: number;
   shares: number;
   price: number;
@@ -44,5 +56,3 @@ export interface TradeRecordModel {
   comment: string;
   traded_at: string;
 }
-
-interface TradeRecordForm {}
