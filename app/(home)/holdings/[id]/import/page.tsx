@@ -4,11 +4,14 @@ import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-in
 import { StepChooseFile } from "@/app/(home)/holdings/[id]/import/_components/step-choose-file";
 import { useState } from "react";
 import { StepParseError } from "@/app/(home)/holdings/[id]/import/_components/step-parse-error";
+import { TradeRecord } from "@/lib/services/trade-records/trade-record";
+import { StepPreviewData } from "@/app/(home)/holdings/[id]/import/_components/step-preview-data";
 
 export default function Page() {
   const { id, data } = useHoldingInfo();
   const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState<Error[]>([]);
+  const [records, setRecords] = useState<TradeRecord[]>([]);
   return (
     <>
       {
@@ -21,7 +24,8 @@ export default function Page() {
       <div className={"common-layout"}>
         {currentStep === 0 && (
           <StepChooseFile
-            onPick={() => {
+            onPick={(r) => {
+              setRecords(r);
               setCurrentStep(2);
             }}
             onErrors={(e) => {
@@ -39,6 +43,7 @@ export default function Page() {
             }}
           />
         )}
+        {currentStep === 2 && <StepPreviewData records={records} />}
       </div>
     </>
   );
