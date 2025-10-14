@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/carousel";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -20,6 +21,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import React from "react";
+import { Badge } from "@/components/ui/badge";
+import { InlineDisplay } from "@/components/ui/my/inline-display";
+import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 
 export function StepPreviewData({
   records,
@@ -71,10 +75,38 @@ export function StepPreviewData({
                 <Card className={"m-4"}>
                   <CardHeader>
                     <CardTitle>{record.tradedAt}</CardTitle>
-                    <CardDescription>{record.props.type.label}</CardDescription>
+                    <CardDescription>
+                      {TradeRecordConstants.Factor}：{record.props.factor}倍
+                    </CardDescription>
+                    <CardAction>
+                      <Badge>{record.props.type.label}</Badge>
+                    </CardAction>
                   </CardHeader>
                   <CardContent>
-                    <p>Card Content</p>
+                    <InlineDisplay
+                      list={[
+                        {
+                          title: TradeRecordConstants.Shares,
+                          content: 1,
+                        },
+                        {
+                          title: TradeRecordConstants.Price,
+                          content: 2,
+                        },
+                        {
+                          title: TradeRecordConstants.Amount,
+                          content: 3,
+                        },
+                        {
+                          title: TradeRecordConstants.Fee,
+                          content: 4,
+                        },
+                        {
+                          title: TradeRecordConstants.Comment,
+                          content: record.props.comment || "-",
+                        },
+                      ]}
+                    />
                   </CardContent>
                   <CardFooter>
                     <p>Card Footer</p>
