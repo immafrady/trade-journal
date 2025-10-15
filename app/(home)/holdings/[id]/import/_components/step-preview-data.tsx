@@ -74,12 +74,12 @@ export function StepPreviewData({
               <CarouselItem key={i}>
                 <Card className={"m-4"}>
                   <CardHeader>
-                    <CardTitle>{record.tradedAt}</CardTitle>
+                    <CardTitle>{record.display.tradedAt}</CardTitle>
                     <CardDescription>
                       {TradeRecordConstants.Factor}：{record.props.factor}倍
                     </CardDescription>
                     <CardAction>
-                      <Badge>{record.props.type.label}</Badge>
+                      <Badge>{record.display.type}</Badge>
                     </CardAction>
                   </CardHeader>
                   <CardContent>
@@ -87,19 +87,19 @@ export function StepPreviewData({
                       list={[
                         {
                           title: TradeRecordConstants.Shares,
-                          content: 1,
+                          content: record.props.shares,
                         },
                         {
                           title: TradeRecordConstants.Price,
-                          content: 2,
+                          content: record.calculated.price,
                         },
                         {
                           title: TradeRecordConstants.Amount,
-                          content: 3,
+                          content: record.calculated.amount,
                         },
                         {
                           title: TradeRecordConstants.Fee,
-                          content: 4,
+                          content: record.calculated.fee,
                         },
                         {
                           title: TradeRecordConstants.Comment,

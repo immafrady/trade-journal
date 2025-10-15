@@ -31,10 +31,28 @@ export class TradeRecord {
       );
     }
     this.props.comment ??= "";
-    this.tradedAt = dayjs(this.props.tradedAt).format("YYYY-MM-DD");
+    this.display = {
+      tradedAt: dayjs(this.props.tradedAt).format("YYYY-MM-DD"),
+      type: this.props.type.label,
+    };
+    const { price, shares, amount, fee } = this.props;
+    this.calculated = {
+      price: price || (amount && fee && shares ? (amount - fee) / shares : 0),
+      amount: amount || (price && fee && shares ? price * shares + fee : 0),
+      fee: fee || (price && amount && shares ? amount - price * shares : 0),
+    };
   }
 
-  public tradedAt: string;
+  public display: {
+    tradedAt: string;
+    type: string;
+  };
+
+  public calculated: {
+    price: number;
+    amount: number;
+    fee: number;
+  };
 
   /**
    * 数据库解析
