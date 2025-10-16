@@ -37,8 +37,8 @@ export class TradeRecord {
     };
     const { price, shares, amount, fee } = this.props;
     this.calculated = {
-      price: price || (amount && fee && shares ? (amount - fee) / shares : 0),
-      amount: amount || (price && fee && shares ? price * shares + fee : 0),
+      price: price || (amount && shares ? (amount - fee) / shares : 0),
+      amount: amount || (price && shares ? price * shares + fee : 0),
       fee: fee || (price && amount && shares ? amount - price * shares : 0),
     };
   }
