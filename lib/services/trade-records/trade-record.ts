@@ -3,7 +3,7 @@ import {
   TradeRecordTypeValue,
 } from "@/lib/enums/trade-record-type";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 export class TradeRecord {
   constructor(public props: TradeRecordProps) {
@@ -66,7 +66,7 @@ export class TradeRecord {
       amount: model.amount,
       fee: model.fee,
       comment: model.comment,
-      tradedAt: new Date(model.traded_at),
+      tradedAt: dayjs(model.traded_at),
       id: model.id,
     });
   }
@@ -97,7 +97,7 @@ interface TradeRecordProps {
   amount?: number;
   fee?: number;
   comment?: string;
-  tradedAt: Date;
+  tradedAt: Dayjs;
   id?: number;
 }
 

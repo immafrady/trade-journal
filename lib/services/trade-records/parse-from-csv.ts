@@ -2,6 +2,7 @@ import Papa from "papaparse";
 import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
+import dayjs from "dayjs";
 
 export function parseFromCsv(
   file: any,
@@ -22,10 +23,8 @@ export function parseFromCsv(
             const e = new TradeRecordCsvParseError(item, idx);
             // 开始解析
             // 交易日期
-            const tradedAt = new Date(
-              item[TradeRecordConstants.TradedAt] ?? "null", // 防报错
-            );
-            if (isNaN(tradedAt.getTime())) {
+            const tradedAt = dayjs(item[TradeRecordConstants.TradedAt]);
+            if (!tradedAt.isValid()) {
               e.add(TradeRecordConstants.TradedAt, "日期格式无效");
             }
             // 交易类型

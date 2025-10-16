@@ -12,7 +12,8 @@ export const GET = async (request: NextRequest) => {
         .eq("holding_id", holdingId)
         .order("traded_at", {
           ascending: false,
-        }),
+        })
+        .order("id", { ascending: false }),
     );
   } else {
     // todo 处理异常流
