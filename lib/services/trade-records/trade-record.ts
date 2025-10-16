@@ -1,19 +1,9 @@
-import { TradeRecordType } from "@/lib/enums/trade-record-type";
+import {
+  TradeRecordType,
+  TradeRecordTypeValue,
+} from "@/lib/enums/trade-record-type";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import dayjs from "dayjs";
-
-interface TradeRecordProps {
-  holdingId: number;
-  type: TradeRecordType;
-  factor?: number;
-  shares: number;
-  price?: number;
-  amount?: number;
-  fee?: number;
-  comment?: string;
-  tradedAt: Date;
-  id?: number;
-}
 
 export class TradeRecord {
   constructor(public props: TradeRecordProps) {
@@ -21,6 +11,7 @@ export class TradeRecord {
     this.props.amount ??= 0;
     this.props.price ??= 0;
     this.props.fee ??= 0;
+    this.props.comment ??= "";
     if (!this.props.amount && !this.props.price) {
       throw new Error(
         `
@@ -75,12 +66,40 @@ export class TradeRecord {
       id: model.id,
     });
   }
+
+  toDataJson(): TradeRecordModel {
+    return {
+      amount: this.props.amount!,
+      comment: this.props.comment!,
+      factor: this.props.factor!,
+      fee: this.props.fee!,
+      holding_id: this.props.holdingId,
+      price: this.props.price!,
+      shares: this.props.shares,
+      traded_at: this.display.tradedAt,
+      type: this.props.type.value,
+      id: this.props.id,
+    };
+  }
+}
+
+interface TradeRecordProps {
+  holdingId: number;
+  type: TradeRecordType;
+  factor?: number;
+  shares: number;
+  price?: number;
+  amount?: number;
+  fee?: number;
+  comment?: string;
+  tradedAt: Date;
+  id?: number;
 }
 
 export interface TradeRecordModel {
   id?: number;
   holding_id: number;
-  type: number;
+  type: TradeRecordTypeValue;
   factor: number;
   shares: number;
   price: number;
