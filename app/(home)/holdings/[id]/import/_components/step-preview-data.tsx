@@ -24,6 +24,8 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
+import { formatMoney } from "@/lib/market-utils";
 
 export function StepPreviewData({
   records,
@@ -32,6 +34,9 @@ export function StepPreviewData({
   records: TradeRecord[];
   onRedo: () => void;
 }) {
+  const { data } = useHoldingInfo();
+  const quote = data!.quote!;
+
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
@@ -91,15 +96,15 @@ export function StepPreviewData({
                         },
                         {
                           title: TradeRecordConstants.Price,
-                          content: record.calculated.price,
+                          content: quote.formatter(record.calculated.price),
                         },
                         {
                           title: TradeRecordConstants.Amount,
-                          content: record.calculated.amount,
+                          content: formatMoney(record.calculated.amount),
                         },
                         {
                           title: TradeRecordConstants.Fee,
-                          content: record.calculated.fee,
+                          content: formatMoney(record.calculated.fee),
                         },
                         {
                           title: TradeRecordConstants.Comment,
