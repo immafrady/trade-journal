@@ -16,7 +16,6 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -26,13 +25,16 @@ import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
 import { formatMoney } from "@/lib/market-utils";
+import { Separator } from "@/components/ui/separator";
 
 export function StepPreviewData({
   records,
   onRedo,
+  onSubmit,
 }: {
   records: TradeRecord[];
   onRedo: () => void;
+  onSubmit: () => void;
 }) {
   const { data } = useHoldingInfo();
   const quote = data!.quote!;
@@ -61,7 +63,7 @@ export function StepPreviewData({
       actions={
         <div className={"flex gap-2"}>
           <motion.div layoutId={"primary-button"}>
-            <Button>
+            <Button onClick={onSubmit}>
               <Upload />
               提交数据
             </Button>
@@ -112,10 +114,8 @@ export function StepPreviewData({
                         },
                       ]}
                     />
+                    <Separator className={"my-2"} />
                   </CardContent>
-                  <CardFooter>
-                    <p>Card Footer</p>
-                  </CardFooter>
                 </Card>
               </CarouselItem>
             ))}

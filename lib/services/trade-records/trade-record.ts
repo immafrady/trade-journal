@@ -18,6 +18,9 @@ export class TradeRecord {
         “${TradeRecordConstants.Price}”或“${TradeRecordConstants.Amount}“必须有值
         - ${TradeRecordConstants.Price}: ${this.props.price}
         - ${TradeRecordConstants.Amount}: ${this.props.amount}
+        
+        原始数据：
+        ${JSON.stringify(this.props)}
         `,
       );
     }
@@ -60,6 +63,7 @@ export class TradeRecord {
       factor: model.factor,
       shares: model.shares,
       price: model.price,
+      amount: model.amount,
       fee: model.fee,
       comment: model.comment,
       tradedAt: new Date(model.traded_at),
@@ -67,7 +71,8 @@ export class TradeRecord {
     });
   }
 
-  toDataJson(): TradeRecordModel {
+  // 转化为json，默认使用数据库格式
+  toJSON(): TradeRecordModel {
     return {
       amount: this.props.amount!,
       comment: this.props.comment!,
