@@ -104,15 +104,11 @@ export default function Page() {
           const resp = await addHolding(valueAsOption!);
           if (resp.status === 200) {
             await mutate();
-            toast.success("添加成功", {
-              position: "top-center",
-            });
+            toast.success("添加成功");
             router.replace("/");
           } else {
             const { error } = await resp.json();
-            toast.error(error, {
-              position: "top-center",
-            });
+            toast.error(error);
           }
           setLoading(false);
         }}

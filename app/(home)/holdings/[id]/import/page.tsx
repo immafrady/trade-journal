@@ -37,7 +37,7 @@ export default function Page() {
               const response = await addTradeRecords(records);
               const { data, error } = await response.json();
               if (error && error.message) {
-                toast.error(error?.message, { position: "top-center" });
+                toast.error(error.message);
               } else {
                 const newRecords = data.map((d: TradeRecordModel) =>
                   TradeRecord.fromDatabase(d),
@@ -57,9 +57,7 @@ export default function Page() {
                   ),
                   false,
                 );
-                toast.success(`成功插入${newRecords.length}条数据`, {
-                  position: "top-center",
-                });
+                toast.success(`成功插入${newRecords.length}条数据`);
                 router.replace(`/holdings/${id}`);
               }
             }}

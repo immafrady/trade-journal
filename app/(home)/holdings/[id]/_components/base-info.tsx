@@ -114,10 +114,10 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
               const response = await deleteHolding(id);
               const { message, error } = await response.json();
               if (error) {
-                toast.error(error, { position: "top-center" });
+                toast.error(error);
               } else {
                 await mutate();
-                toast.success(message, { position: "top-center" });
+                toast.success(message);
                 route.replace("/");
               }
             }}

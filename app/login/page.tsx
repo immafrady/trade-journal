@@ -10,7 +10,6 @@ export default function LoginPage(props: PageProps<"/login">) {
     if (searchParams.error) {
       toast.error(searchParams.error, {
         description: searchParams.error_description,
-        position: "top-center",
       });
     }
     return () => {};

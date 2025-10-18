@@ -15,7 +15,7 @@ export const useHoldingInfo = () => {
   React.useEffect(() => {
     if (list.length && !data) {
       router.replace("/");
-      toast.error("查无此数据", { position: "top-center" });
+      toast.error("查无此数据");
     }
     return () => {};
   }, [list, data, router]);
