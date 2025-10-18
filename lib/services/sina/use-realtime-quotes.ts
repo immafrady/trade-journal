@@ -12,7 +12,7 @@ export function useRealtimeQuotes(tickers: SinaTicker[]) {
     key,
     async (list) => {
       const response = await fetch(`/api/sina/quotes?list=${list}`);
-      const result = new Map<SinaTicker, SinaQuote>();
+      const result: Record<string, SinaQuote> = {};
       const text = await response.text();
       const lines = text.split("\n").filter(Boolean);
       for (let i = 0, j = 0; i < lines.length; i++, j++) {
@@ -25,7 +25,7 @@ export function useRealtimeQuotes(tickers: SinaTicker[]) {
           i++;
           quote.parseFundNav(lines[i]);
         }
-        result.set(ticker, quote);
+        result[ticker.searchCode] = quote;
       }
       return result;
     },

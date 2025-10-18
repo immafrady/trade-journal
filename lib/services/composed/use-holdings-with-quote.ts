@@ -17,7 +17,7 @@ export const useHoldingsWithQuote = (): HoldingWithQuote[] => {
   return (
     holdings?.map((holding) => ({
       ...holding,
-      quote: quoteMap?.get(holding.ticker),
+      quote: quoteMap ? quoteMap[holding.ticker.searchCode] : undefined,
     })) ?? []
   );
 };

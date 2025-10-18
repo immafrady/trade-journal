@@ -7,6 +7,7 @@ import Loading from "@/components/ui/my/loading";
 import { BlankPage } from "@/app/(home)/holdings/[id]/_components/blank-page";
 import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
 import { DataPage } from "@/app/(home)/holdings/[id]/_components/data-page";
+import { cn } from "@/lib/utils";
 
 export default function Page() {
   const { id, data } = useHoldingInfo();
@@ -32,7 +33,7 @@ export default function Page() {
           </h1>
         </AppHeaderPortal>
       )}
-      <div className={"h-full common-layout pt-10"}>
+      <div className={cn("h-full common-layout", moreInfo && "pt-10")}>
         {records?.length ? (
           <DataPage onTabChange={setMoreInfo} />
         ) : (
