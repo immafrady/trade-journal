@@ -12,12 +12,14 @@ import { StepPreviewData } from "@/app/(home)/holdings/[id]/import/_components/s
 import { addTradeRecords } from "@/lib/services/trade-records/trade-record-apis";
 import { toast } from "sonner";
 import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const { id, data } = useHoldingInfo();
   const [errors, setErrors] = useState<Error[]>([]);
   const [records, setRecords] = useState<TradeRecord[]>([]);
   const { data: list, mutate } = useTradeRecordList(id);
+  const router = useRouter();
   return (
     <>
       {
@@ -55,6 +57,10 @@ export default function Page() {
                   ),
                   false,
                 );
+                toast.success(`成功插入${newRecords.length}条数据`, {
+                  position: "top-center",
+                });
+                router.replace(`/holdings/${id}`);
               }
             }}
             onRedo={() => setRecords([])}
