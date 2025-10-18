@@ -24,7 +24,7 @@ export default function Page() {
           </div>
         </AppHeaderPortal>
       )}
-      <div className={"h-full"}>
+      <div className={"h-full common-layout pt-10"}>
         {records?.length ? <div>data</div> : <BlankPage />}
         <Loading isLoading={isLoading} fullScreen={true} />
       </div>

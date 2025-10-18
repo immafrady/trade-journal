@@ -5,8 +5,11 @@ import { SinaQuote } from "@/lib/services/sina/quote";
 import { SinaStockType } from "@/lib/enums/sina-stock-type";
 
 export function useRealtimeQuotes(tickers: SinaTicker[]) {
+  const key = tickers.length
+    ? tickers.map((ticker) => ticker.searchCode).join(",")
+    : null;
   return useSWR(
-    tickers.map((ticker) => ticker.searchCode).join(","),
+    key,
     async (list) => {
       const response = await fetch(`/api/sina/quotes?list=${list}`);
       const result = new Map<SinaTicker, SinaQuote>();
