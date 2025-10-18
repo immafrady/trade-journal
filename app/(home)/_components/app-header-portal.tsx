@@ -1,6 +1,6 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 export const HEADER_EXTRA_ID = "app-header-extra";
 

@@ -39,6 +39,7 @@ export const AppHeaderProvider = ({
       }}
     >
       <motion.header
+        layout
         layoutId={"header-container"}
         className={cn(
           "bg-secondary z-50",
