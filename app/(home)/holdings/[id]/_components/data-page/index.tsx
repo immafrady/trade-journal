@@ -1,5 +1,6 @@
 import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabSummary } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary";
 
 export const DataPage = ({
   onTabChange,
@@ -16,13 +17,13 @@ export const DataPage = ({
     >
       <div className={"flex justify-center"}>
         <TabsList>
-          <TabsTrigger value={TabKey.Summary}>Account</TabsTrigger>
+          <TabsTrigger value={TabKey.Summary}>基本信息</TabsTrigger>
           <TabsTrigger value={TabKey.Table}>Password</TabsTrigger>
         </TabsList>
       </div>
 
       <TabsContent value={TabKey.Summary}>
-        Make changes to your account here.
+        <TabSummary />
       </TabsContent>
       <TabsContent value={TabKey.Table}>Change your password here.</TabsContent>
     </Tabs>
