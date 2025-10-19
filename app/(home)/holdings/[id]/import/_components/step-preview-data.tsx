@@ -1,6 +1,6 @@
 import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { FragmentTemplate } from "@/app/(home)/holdings/[id]/import/_components/fragment-template";
-import { Button } from "@/components/ui/button";
+import { Button, LoadingButton } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { motion } from "motion/react";
 import {
@@ -34,7 +34,7 @@ export function StepPreviewData({
 }: {
   records: TradeRecord[];
   onRedo: () => void;
-  onSubmit: () => void;
+  onSubmit: () => Promise<void>;
 }) {
   const { data } = useHoldingInfo();
   const quote = data!.quote!;
@@ -42,6 +42,7 @@ export function StepPreviewData({
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
     if (!api) {
@@ -63,10 +64,20 @@ export function StepPreviewData({
       actions={
         <div className={"flex gap-2"}>
           <motion.div layoutId={"primary-button"}>
-            <Button onClick={onSubmit}>
-              <Upload />
+            <LoadingButton
+              loading={isLoading}
+              icon={<Upload />}
+              onClick={async () => {
+                setIsLoading(true);
+                try {
+                  await onSubmit();
+                } finally {
+                  setIsLoading(false);
+                }
+              }}
+            >
               提交数据
-            </Button>
+            </LoadingButton>
           </motion.div>
           <Button variant={"ghost"} onClick={onRedo}>
             我再想想
