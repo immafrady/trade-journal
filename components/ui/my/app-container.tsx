@@ -1,6 +1,6 @@
 import React from "react";
 import { UserMetaContext } from "@/providers/user-meta";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Logo from "@/components/ui/my/logo";
@@ -69,10 +69,29 @@ export const AppBar = ({
 export const AppBarExtra = ({ children }: { children: React.ReactNode }) => {
   return (
     <motion.div layout layoutId={"app-bar-extra"}>
-      <motion.div layout={"position"}>{children}</motion.div>
+      <AnimatePresence>{children}</AnimatePresence>
     </motion.div>
   );
 };
+
+export const AppBarExtraContent = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <motion.div
+      layout={"preserve-aspect"}
+      className={className}
+      layoutId={"app-bar-extra-content"}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
 export const AppBarSlogan = () => {
   return (
     <motion.div layoutId={"app-bar-slogan"}>
@@ -110,11 +129,8 @@ export const AppBarAvatar = ({
 
 export const AppBarTitle = ({ children }: { children: React.ReactNode }) => {
   return (
-    <motion.h1
-      layoutId={"app-bar-title"}
-      className={"p-2 pt-0 font-medium leading-none"}
-    >
+    <AppBarExtraContent className={"p-2 pt-0 font-medium leading-none"}>
       {children}
-    </motion.h1>
+    </AppBarExtraContent>
   );
 };
