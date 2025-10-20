@@ -12,7 +12,16 @@ export default function Page() {
   const userMeta = React.useContext(UserMetaContext);
 
   return (
-    <AppContainer appBar={<AppBar isLargeAvatar />}>
+    <AppContainer
+      appBar={
+        <AppBar
+          className={
+            "bg-gradient-to-b from-secondary to-secondary-foreground/80"
+          }
+          isLargeAvatar
+        />
+      }
+    >
       <div className={"common-layout flex flex-col items-center h-[100%]"}>
         <div className={"font-bold font-serif"}>{userMeta?.name}</div>
         <ul className={"flex-1 self-stretch"}>

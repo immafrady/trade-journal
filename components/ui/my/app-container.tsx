@@ -107,3 +107,14 @@ export const AppBarAvatar = ({
     </motion.div>
   );
 };
+
+export const AppBarTitle = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <motion.h1
+      layoutId={"app-bar-title"}
+      className={"p-2 pt-0 font-medium leading-none"}
+    >
+      {children}
+    </motion.h1>
+  );
+};

@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import {
   AppBar,
   AppBarExtra,
+  AppBarTitle,
   AppContainer,
 } from "@/components/ui/my/app-container";
 
@@ -30,9 +31,7 @@ export default function Page() {
         <AppBar>
           {data?.ticker.label && (
             <AppBarExtra>
-              <h1 className={"app-header-title"}>
-                {data?.ticker.label} · 导入
-              </h1>
+              <AppBarTitle>{data.ticker.label} · 导入</AppBarTitle>
             </AppBarExtra>
           )}
         </AppBar>

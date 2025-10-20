@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import {
   AppBar,
   AppBarExtra,
+  AppBarTitle,
   AppContainer,
 } from "@/components/ui/my/app-container";
 
@@ -23,21 +24,14 @@ export default function Page() {
       appBar={
         <AppBar>
           <AppBarExtra>
-            {data && (
-              <h1
-                className={
-                  moreInfo
-                    ? "px-2 -mt-5 translate-y-6 relative z-50 pointer-events-auto"
-                    : "app-header-title"
-                }
-              >
-                {moreInfo ? (
+            {data &&
+              (moreInfo ? (
+                <div className={"px-2 -mb-6 relative z-50 pointer-events-auto"}>
                   <BaseInfo data={data} />
-                ) : (
-                  <div>{data.ticker.label} · 详情</div>
-                )}
-              </h1>
-            )}
+                </div>
+              ) : (
+                <AppBarTitle>{data.ticker.label} · 详情</AppBarTitle>
+              ))}
           </AppBarExtra>
         </AppBar>
       }
