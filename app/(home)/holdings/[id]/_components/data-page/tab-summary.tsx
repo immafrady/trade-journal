@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 export const TabSummary = () => {
   const pathname = usePathname(); // 例如 /holdings/10
@@ -10,15 +11,19 @@ export const TabSummary = () => {
       dkflsjdlfk
       <div
         className={
-          "fixed bottom-safe-offset-4 left-0 right-0 flex justify-center gap-4"
+          "fixed bottom-0 left-0 right-0 p-safe-offset-2 flex justify-center gap-4 bg-muted"
         }
       >
-        <Button asChild>
-          <Link href={`${pathname}/add`}>新增一条</Link>
-        </Button>
-        <Button variant={"outline"} asChild>
-          <Link href={`${pathname}/import`}>导入CSV</Link>
-        </Button>
+        <ButtonGroup>
+          <ButtonGroup>
+            <Button asChild>
+              <Link href={`${pathname}/add`}>新增一条</Link>
+            </Button>
+            <Button variant={"outline"} asChild>
+              <Link href={`${pathname}/import`}>导入CSV</Link>
+            </Button>
+          </ButtonGroup>
+        </ButtonGroup>
         <Button variant={"outline"} asChild>
           <Link href={`${pathname}/import`}>导出CSV</Link>
         </Button>
