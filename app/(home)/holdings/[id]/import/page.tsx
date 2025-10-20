@@ -1,7 +1,6 @@
 "use client";
-import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
 import { StepChooseFile } from "@/app/(home)/holdings/[id]/import/_components/step-choose-file";
-import { useState } from "react";
+import React from "react";
 import { StepParseError } from "@/app/(home)/holdings/[id]/import/_components/step-parse-error";
 import {
   TradeRecord,
@@ -18,11 +17,12 @@ import {
   AppBarTitle,
   AppContainer,
 } from "@/components/ui/my/app-container";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 
 export default function Page() {
-  const { id, data } = useHoldingInfo();
-  const [errors, setErrors] = useState<Error[]>([]);
-  const [records, setRecords] = useState<TradeRecord[]>([]);
+  const { id, data } = React.useContext(HoldingInfoContext);
+  const [errors, setErrors] = React.useState<Error[]>([]);
+  const [records, setRecords] = React.useState<TradeRecord[]>([]);
   const { data: list, mutate } = useTradeRecordList(id);
   const router = useRouter();
   return (

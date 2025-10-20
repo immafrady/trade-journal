@@ -1,17 +1,17 @@
-import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabSummary } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import React from "react";
 
 export const DataPage = ({
   onTabChange,
 }: {
   onTabChange: (isSummary: boolean) => void;
 }) => {
-  const { id, data } = useHoldingInfo();
+  // const { id, data } = React.useContext(HoldingInfoContext)!;
   const pathname = usePathname(); // 例如 /holdings/10
 
   return (

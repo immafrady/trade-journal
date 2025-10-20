@@ -23,9 +23,9 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
-import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
 import { formatMoney } from "@/lib/market-utils";
 import { Separator } from "@/components/ui/separator";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 
 export function StepPreviewData({
   records,
@@ -36,7 +36,7 @@ export function StepPreviewData({
   onRedo: () => void;
   onSubmit: () => Promise<void>;
 }) {
-  const { data } = useHoldingInfo();
+  const { data } = React.useContext(HoldingInfoContext);
   const quote = data!.quote!;
 
   const [api, setApi] = React.useState<CarouselApi>();

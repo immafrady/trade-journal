@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { FileSpreadsheet } from "lucide-react";
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
-import { useRef } from "react";
+import React from "react";
 import { parseFromCsv } from "@/lib/services/trade-records/parse-from-csv";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
-import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
 import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { FragmentTemplate } from "@/app/(home)/holdings/[id]/import/_components/fragment-template";
 import { motion } from "motion/react";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 
 const schema = [
   {
@@ -66,8 +66,8 @@ export function StepChooseFile({
   onPick: (records: TradeRecord[]) => void;
   onErrors: (errors: Error[]) => void;
 }) {
-  const fileRef = useRef<HTMLInputElement | null>(null);
-  const { id } = useHoldingInfo();
+  const fileRef = React.useRef<HTMLInputElement | null>(null);
+  const { id } = React.useContext(HoldingInfoContext);
 
   return (
     <FragmentTemplate
