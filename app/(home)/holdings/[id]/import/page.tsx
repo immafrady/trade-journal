@@ -1,5 +1,4 @@
 "use client";
-import { AppHeaderPortal } from "@/app/(home)/_components/app-header-portal";
 import { useHoldingInfo } from "@/app/(home)/holdings/[id]/_hooks/use-holding-info";
 import { StepChooseFile } from "@/app/(home)/holdings/[id]/import/_components/step-choose-file";
 import { useState } from "react";
@@ -13,6 +12,11 @@ import { addTradeRecords } from "@/lib/services/trade-records/trade-record-apis"
 import { toast } from "sonner";
 import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 import { useRouter } from "next/navigation";
+import {
+  AppBar,
+  AppBarExtra,
+  AppContainer,
+} from "@/components/ui/my/app-container";
 
 export default function Page() {
   const { id, data } = useHoldingInfo();
@@ -21,14 +25,19 @@ export default function Page() {
   const { data: list, mutate } = useTradeRecordList(id);
   const router = useRouter();
   return (
-    <>
-      {
-        <AppHeaderPortal>
+    <AppContainer
+      appBar={
+        <AppBar>
           {data?.ticker.label && (
-            <h1 className={"app-header-title"}>{data?.ticker.label} · 导入</h1>
+            <AppBarExtra>
+              <h1 className={"app-header-title"}>
+                {data?.ticker.label} · 导入
+              </h1>
+            </AppBarExtra>
           )}
-        </AppHeaderPortal>
+        </AppBar>
       }
+    >
       <div className={"common-layout"}>
         {records.length ? (
           <StepPreviewData
@@ -81,6 +90,6 @@ export default function Page() {
           />
         )}
       </div>
-    </>
+    </AppContainer>
   );
 }

@@ -24,6 +24,7 @@ import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { AppBar, AppContainer } from "@/components/ui/my/app-container";
 
 export default function Page() {
   const router = useRouter();
@@ -59,62 +60,64 @@ export default function Page() {
   };
 
   return (
-    <div
-      className={
-        "common-layout flex flex-col items-center justify-center text-secondary-foreground h-[100%]"
-      }
-    >
-      <h1 className={"text-2xl font-bold p-10"}>选择要记录的标的</h1>
-      <Input
-        value={searchKey}
-        onChange={(e) => setSearchKey(e.target.value)}
-        placeholder={"请输入查询条件"}
-        autoFocus
-      />
-      {value && (
-        <Choicebox className={"mt-5"} value={value}>
-          {genChoiceboxItem(valueAsOption!, () => setValue(""))}
-        </Choicebox>
-      )}
+    <AppContainer appBar={<AppBar />}>
       <div
         className={
-          "flex-1 overflow-y-auto my-5 flex flex-col w-[100%] items-center overflow-x-hidden"
+          "common-layout flex flex-col items-center justify-center text-secondary-foreground h-[100%]"
         }
       >
-        {isLoading ? (
-          <Spinner
-            variant={"bars"}
-            className={"justify-center justify-self-center"}
-          />
-        ) : options.length === 0 && !value ? (
-          <div>查无数据</div>
-        ) : (
-          <Choicebox value={value} onValueChange={setValue}>
-            {options.map((option) => genChoiceboxItem(option))}
+        <h1 className={"text-2xl font-bold p-10"}>选择要记录的标的</h1>
+        <Input
+          value={searchKey}
+          onChange={(e) => setSearchKey(e.target.value)}
+          placeholder={"请输入查询条件"}
+          autoFocus
+        />
+        {value && (
+          <Choicebox className={"mt-5"} value={value}>
+            {genChoiceboxItem(valueAsOption!, () => setValue(""))}
           </Choicebox>
         )}
-      </div>
-      <LoadingButton
-        className={"mb-safe-offset-4"}
-        loading={loading}
-        icon={<Check />}
-        disabled={!value}
-        onClick={async () => {
-          setLoading(true);
-          const resp = await addHolding(valueAsOption!);
-          if (resp.status === 200) {
-            await mutate();
-            toast.success("添加成功");
-            router.replace("/");
-          } else {
-            const { error } = await resp.json();
-            toast.error(error);
+        <div
+          className={
+            "flex-1 overflow-y-auto my-5 flex flex-col w-[100%] items-center overflow-x-hidden"
           }
-          setLoading(false);
-        }}
-      >
-        确认选择
-      </LoadingButton>
-    </div>
+        >
+          {isLoading ? (
+            <Spinner
+              variant={"bars"}
+              className={"justify-center justify-self-center"}
+            />
+          ) : options.length === 0 && !value ? (
+            <div>查无数据</div>
+          ) : (
+            <Choicebox value={value} onValueChange={setValue}>
+              {options.map((option) => genChoiceboxItem(option))}
+            </Choicebox>
+          )}
+        </div>
+        <LoadingButton
+          className={"mb-safe-offset-4"}
+          loading={loading}
+          icon={<Check />}
+          disabled={!value}
+          onClick={async () => {
+            setLoading(true);
+            const resp = await addHolding(valueAsOption!);
+            if (resp.status === 200) {
+              await mutate();
+              toast.success("添加成功");
+              router.replace("/");
+            } else {
+              const { error } = await resp.json();
+              toast.error(error);
+            }
+            setLoading(false);
+          }}
+        >
+          确认选择
+        </LoadingButton>
+      </div>
+    </AppContainer>
   );
 }
