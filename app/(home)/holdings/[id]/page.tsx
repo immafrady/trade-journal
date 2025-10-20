@@ -23,7 +23,7 @@ export default function Page() {
   return (
     <AppContainer
       appBar={
-        <AppBar>
+        <AppBar bgGradient={moreInfo}>
           <AppBarExtra>
             {data &&
               (moreInfo ? (

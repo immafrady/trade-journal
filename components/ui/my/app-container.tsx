@@ -34,10 +34,12 @@ export const AppBar = ({
   children,
   isLargeAvatar,
   className,
+  bgGradient,
 }: {
   children?: React.ReactNode;
   isLargeAvatar?: boolean;
   className?: string;
+  bgGradient?: boolean;
 }) => {
   return (
     <motion.header
@@ -46,6 +48,8 @@ export const AppBar = ({
       className={cn(
         "bg-secondary z-50",
         isLargeAvatar && "pb-0 mb-14 rounded-b-4xl",
+        bgGradient &&
+          "bg-gradient-to-b from-secondary to-secondary-foreground/80",
         className,
       )}
       transition={{

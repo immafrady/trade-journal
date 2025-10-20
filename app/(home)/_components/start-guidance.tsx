@@ -14,11 +14,7 @@ export default function StartGuidance() {
   return (
     <AppContainer
       appBar={
-        <AppBar
-          className={
-            "bg-gradient-to-b from-secondary to-secondary-foreground/80"
-          }
-        >
+        <AppBar bgGradient>
           <AppBarExtra>
             <div
               className={cn(
