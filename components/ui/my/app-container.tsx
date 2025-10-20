@@ -18,14 +18,16 @@ export const AppContainer = ({
   return (
     <div className={"flex flex-col overflow-hidden h-svh"}>
       {appBar}
-      <main
+      <motion.main
+        layout={"preserve-aspect"}
+        layoutId={"app-container-main"}
         className={cn(
           "relative flex-1 overflow-y-auto overflow-x-hidden",
           className,
         )}
       >
         {children}
-      </main>
+      </motion.main>
     </div>
   );
 };
@@ -52,9 +54,6 @@ export const AppBar = ({
           "bg-gradient-to-b from-secondary to-secondary-foreground/80",
         className,
       )}
-      transition={{
-        duration: 0.5,
-      }}
     >
       <nav
         className={cn(
