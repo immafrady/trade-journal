@@ -9,9 +9,9 @@ export function useRealtimeQuotes(tickers: SinaTicker[]) {
     ? tickers.map((ticker) => ticker.searchCode).join(",")
     : null;
   return useSWR(
-    key,
-    async (list) => {
-      const response = await fetch(`/api/sina/quotes?list=${list}`);
+    `/api/sina/quotes?list=${key}`,
+    async (api) => {
+      const response = await fetch(api);
       const result: Record<string, SinaQuote> = {};
       const text = await response.text();
       const lines = text.split("\n").filter(Boolean);
