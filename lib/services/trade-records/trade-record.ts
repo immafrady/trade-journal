@@ -30,14 +30,14 @@ export class TradeRecord {
       type: this.props.type.label,
     };
     const { price, shares, amount, fee, factor } = this.props;
-    this.adjust = {
+    this.derived = {
       price: price || (amount && shares ? (amount - fee) / shares : 0),
       amount: amount || (price && shares ? price * shares + fee : 0),
       fee: fee || (price && amount && shares ? amount - price * shares : 0),
     };
-    this.total = {
-      amount: this.adjust.amount * factor,
-      fee: this.adjust.fee * factor,
+    this.adjusted = {
+      amount: this.derived.amount * factor,
+      fee: this.derived.fee * factor,
       shares: shares * factor,
     };
   }
@@ -49,14 +49,14 @@ export class TradeRecord {
   };
 
   // 调整后（怕参数不全）
-  public adjust: {
+  public derived: {
     price: number;
     amount: number;
     fee: number;
   };
 
   // 算上系数
-  public total: {
+  public adjusted: {
     amount: number;
     fee: number;
     shares: number;

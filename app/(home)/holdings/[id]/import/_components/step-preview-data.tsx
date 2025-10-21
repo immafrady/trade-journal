@@ -109,15 +109,15 @@ export function StepPreviewData({
                         },
                         {
                           title: TradeRecordConstants.Price,
-                          content: quote.formatter(record.adjust.price),
+                          content: quote.formatter(record.derived.price),
                         },
                         {
                           title: TradeRecordConstants.Amount,
-                          content: formatMoney(record.adjust.amount),
+                          content: formatMoney(record.derived.amount),
                         },
                         {
                           title: TradeRecordConstants.Fee,
-                          content: formatMoney(record.adjust.fee),
+                          content: formatMoney(record.derived.fee),
                         },
                         {
                           title: TradeRecordConstants.Comment,
