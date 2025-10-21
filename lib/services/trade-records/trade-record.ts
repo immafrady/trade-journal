@@ -29,23 +29,37 @@ export class TradeRecord {
       tradedAt: dayjs(this.props.tradedAt).format("YYYY-MM-DD"),
       type: this.props.type.label,
     };
-    const { price, shares, amount, fee } = this.props;
-    this.calculated = {
+    const { price, shares, amount, fee, factor } = this.props;
+    this.adjust = {
       price: price || (amount && shares ? (amount - fee) / shares : 0),
       amount: amount || (price && shares ? price * shares + fee : 0),
       fee: fee || (price && amount && shares ? amount - price * shares : 0),
     };
+    this.total = {
+      amount: this.adjust.amount * factor,
+      fee: this.adjust.fee * factor,
+      shares: shares * factor,
+    };
   }
 
+  // 展示
   public display: {
     tradedAt: string;
     type: string;
   };
 
-  public calculated: {
+  // 调整后（怕参数不全）
+  public adjust: {
     price: number;
     amount: number;
     fee: number;
+  };
+
+  // 算上系数
+  public total: {
+    amount: number;
+    fee: number;
+    shares: number;
   };
 
   /**
