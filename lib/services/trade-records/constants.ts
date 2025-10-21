@@ -7,4 +7,7 @@ export const TradeRecordConstants = {
   Amount: "成交金额",
   Fee: "交易费用",
   Comment: "备注",
+  AdjustedAmount: "加权成交金额",
+  AdjustedShares: "加权成交份额",
+  AdjustedFee: "加权交易费用",
 } as const;

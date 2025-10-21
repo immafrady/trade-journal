@@ -94,7 +94,7 @@ export function StepPreviewData({
                   <CardHeader>
                     <CardTitle>{record.display.tradedAt}</CardTitle>
                     <CardDescription>
-                      {TradeRecordConstants.Factor}：{record.props.factor}倍
+                      {TradeRecordConstants.Factor}：{record.props.factor}
                     </CardDescription>
                     <CardAction>
                       <Badge>{record.display.type}</Badge>
@@ -126,6 +126,22 @@ export function StepPreviewData({
                       ]}
                     />
                     <Separator className={"my-2"} />
+                    <InlineDisplay
+                      list={[
+                        {
+                          title: TradeRecordConstants.AdjustedShares,
+                          content: record.adjusted.shares,
+                        },
+                        {
+                          title: TradeRecordConstants.AdjustedAmount,
+                          content: formatMoney(record.adjusted.amount),
+                        },
+                        {
+                          title: TradeRecordConstants.AdjustedFee,
+                          content: formatMoney(record.adjusted.fee),
+                        },
+                      ]}
+                    />
                   </CardContent>
                 </Card>
               </CarouselItem>
