@@ -6,6 +6,8 @@ export const formatMoney = (num: number) => {
   return num < 0 ? `(${formatted})` : formatted;
 };
 
+export const formatShares = (num?: number) => num?.toFixed(2) ?? "--";
+
 export const formatFund = (num?: number) => num?.toFixed(4) ?? "--";
 
 export const formatPercent = (num?: number) => (num?.toFixed(2) ?? "--") + "%";

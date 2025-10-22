@@ -21,3 +21,18 @@ export const SimpleDisplay = ({
     </div>
   );
 };
+
+export const SimpleDisplayVertical = ({
+  title,
+  content,
+}: {
+  title: React.ReactNode;
+  content: React.ReactNode;
+}) => (
+  <div className={"flex flex-col items-center"}>
+    <div className={"font-light text-sm text-secondary-foreground"}>
+      {title}
+    </div>
+    <div className={"font-bold text-xl"}>{content}</div>
+  </div>
+);

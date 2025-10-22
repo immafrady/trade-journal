@@ -1,17 +1,27 @@
-import { useTradeRecordExtendList } from "@/lib/services/trade-records/use-trade-record-extend-list";
+import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 
 export const useTradeRecordSummary = (holdingId: string) => {
-  const list = useTradeRecordExtendList(holdingId);
+  const { data: list = [] } = useTradeRecordList(holdingId);
   // 汇总操作次数、金额合计
   let totalFee = 0;
-  for (const item of list) {
-    totalFee += item.record.adjusted.fee;
+  let totalAmount = 0;
+  let totalShares = 0;
+  for (const record of list) {
+    totalFee += record.adjusted.fee;
+    totalAmount += record.adjusted.amount;
+    totalShares += record.adjusted.shares;
   }
   return {
     totalFee,
+    totalAmount,
+    totalShares,
+    avgPrice: totalAmount / totalShares,
   } as TradeRecordSummary;
 };
 
 export interface TradeRecordSummary {
-  totalFee: number;
+  totalFee: number; // 总交易费用
+  totalAmount: number; // 总支出金额
+  totalShares: number; // 总份额
+  avgPrice: number; // 当前成本
 }
