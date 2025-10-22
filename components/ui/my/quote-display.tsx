@@ -24,15 +24,15 @@ export const SimpleDisplay = ({
 
 export const SimpleDisplayVertical = ({
   title,
-  content,
+  children,
 }: {
   title: React.ReactNode;
-  content: React.ReactNode;
+  children: React.ReactNode;
 }) => (
   <div className={"flex flex-col items-center"}>
     <div className={"font-light text-sm text-secondary-foreground"}>
       {title}
     </div>
-    <div className={"font-bold text-xl"}>{content}</div>
+    <div className={"font-bold text-xl"}>{children}</div>
   </div>
 );

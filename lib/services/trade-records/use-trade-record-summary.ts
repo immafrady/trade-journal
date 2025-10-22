@@ -15,7 +15,8 @@ export const useTradeRecordSummary = (holdingId: string) => {
     totalFee,
     totalAmount,
     totalShares,
-    avgPrice: totalAmount / totalShares,
+    costPrice: totalAmount / totalShares,
+    count: list.length,
   } as TradeRecordSummary;
 };
 
@@ -23,5 +24,6 @@ export interface TradeRecordSummary {
   totalFee: number; // 总交易费用
   totalAmount: number; // 总支出金额
   totalShares: number; // 总份额
-  avgPrice: number; // 当前成本
+  costPrice: number; // 当前成本
+  count: number;
 }
