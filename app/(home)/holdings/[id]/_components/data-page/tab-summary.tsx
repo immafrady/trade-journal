@@ -12,10 +12,10 @@ import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
 import { Separator } from "@/components/ui/separator";
 import { AnimatePresence, motion } from "motion/react";
 import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 
 export const TabSummary = () => {
   const { id, data } = React.useContext(HoldingInfoContext)!;
-  if (!data) return null;
   const summary = useTradeRecordSummary(id);
   const [count, setCount] = React.useState(0);
   React.useEffect(() => {
@@ -29,7 +29,7 @@ export const TabSummary = () => {
   return (
     <div className={"relative common-layout flex flex-col items-center"}>
       <div className={"w-full max-w-md"}>
-        <div
+        <section
           className={
             "grid justify-center place-items-center gap-2 grid-cols-2 md:grid-cols-4"
           }
@@ -46,15 +46,14 @@ export const TabSummary = () => {
           <SimpleDisplayVertical title={"交易次数"}>
             {summary.count}
           </SimpleDisplayVertical>
-        </div>
+        </section>
         <Separator className={"my-2 md:my-4"} />
-        {data.quote && (
+        {data?.quote && (
           <div>
             {data.ticker.type === SinaStockType.AShare ? (
               <PriceCalculationBlock
                 key={0}
                 title={"收益计算"}
-                shares={summary.totalShares}
                 costPrice={summary.costPrice}
                 currentPrice={data.quote.current!}
                 formatter={data.quote.formatter}
@@ -65,7 +64,6 @@ export const TabSummary = () => {
                   <PriceCalculationBlock
                     key={1}
                     title={"收益计算（场内计价）"}
-                    shares={summary.totalShares}
                     costPrice={summary.costPrice}
                     currentPrice={data.quote.current!}
                     formatter={data.quote.formatter}
@@ -74,7 +72,6 @@ export const TabSummary = () => {
                   <PriceCalculationBlock
                     key={2}
                     title={"收益计算（场外计价）"}
-                    shares={summary.totalShares}
                     costPrice={summary.costPrice}
                     currentPrice={data.quote.fundNav!}
                     formatter={data.quote.formatter}
@@ -84,20 +81,65 @@ export const TabSummary = () => {
             )}
           </div>
         )}
+        <Separator className={"my-2 md:my-4"} />
+        {}
+        <AnimatePresence mode={"wait"}>
+          {count % 2 === 0 ? (
+            <DataPeakDisplayBlock
+              key={4}
+              title={TradeRecordConstants.Amount}
+              value={formatMoney(summary.totalAmount)}
+              maxValue={formatMoney(summary.maxTotalAmount)}
+              valuePct={summary.totalAmountPct}
+              valueTradeAt={summary.maxTotalAmountTradedAt ?? ""}
+            />
+          ) : (
+            <DataPeakDisplayBlock
+              key={5}
+              title={TradeRecordConstants.Shares}
+              value={formatShares(summary.totalShares)}
+              maxValue={formatShares(summary.maxTotalShares)}
+              valuePct={summary.totalSharesPct}
+              valueTradeAt={summary.maxTotalSharesTradedAt ?? ""}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
 };
 
+const MotionBlock = ({
+  title,
+  config,
+}: {
+  title: string;
+  config: { title: string; content: React.ReactNode }[];
+}) => (
+  <motion.section
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.5 }}
+  >
+    <h5 className={"text-center my-2"}>{title}</h5>
+    <div className="grid justify-center place-items-center gap-2 grid-cols-2 md:grid-cols-4">
+      {config.map((item, i) => (
+        <SimpleDisplayVertical key={i} title={item.title}>
+          {item.content}
+        </SimpleDisplayVertical>
+      ))}
+    </div>
+  </motion.section>
+);
+
 const PriceCalculationBlock = ({
   title,
-  shares,
   currentPrice,
   costPrice,
   formatter,
 }: {
   title: string;
-  shares: number;
   currentPrice: number;
   costPrice: number;
   formatter: (num: number) => string;
@@ -115,27 +157,65 @@ const PriceCalculationBlock = ({
     [diff],
   );
   return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <h5 className={"text-center my-2"}>{title}</h5>
-      <div className="grid justify-center place-items-center gap-2 grid-cols-2 md:grid-cols-4">
-        <SimpleDisplayVertical title={"当前成本"}>
-          {formatter(costPrice)}
-        </SimpleDisplayVertical>
-        <SimpleDisplayVertical title={"市场价格"}>
-          {formatter(currentPrice)}
-        </SimpleDisplayVertical>
-        <SimpleDisplayVertical title={"价差"}>
-          <span className={changeColorClassName}>{formatter(diff)}</span>
-        </SimpleDisplayVertical>
-        <SimpleDisplayVertical title={"收益率"}>
-          <span className={changeColorClassName}>{pct}</span>
-        </SimpleDisplayVertical>
-      </div>
-    </motion.section>
+    <MotionBlock
+      title={title}
+      config={[
+        {
+          title: "当前成本",
+          content: formatter(costPrice),
+        },
+        {
+          title: "市场价格",
+          content: formatter(currentPrice),
+        },
+        {
+          title: "价差",
+          content: (
+            <span className={changeColorClassName}>{formatter(diff)}</span>
+          ),
+        },
+        {
+          title: "收益率",
+          content: <span className={changeColorClassName}>{pct}</span>,
+        },
+      ]}
+    />
   );
 };
+
+const DataPeakDisplayBlock = ({
+  title,
+  value,
+  maxValue,
+  valuePct,
+  valueTradeAt,
+}: {
+  title: string;
+  value: string;
+  maxValue: string;
+  valuePct: number;
+  valueTradeAt: string;
+}) => (
+  <MotionBlock
+    key={3}
+    title={title}
+    config={[
+      {
+        title: "当前",
+        content: value,
+      },
+      {
+        title: "历史最高",
+        content: maxValue,
+      },
+      {
+        title: "百分位",
+        content: formatPercent(valuePct * 100),
+      },
+      {
+        title: "历史最高日",
+        content: valueTradeAt,
+      },
+    ]}
+  />
+);

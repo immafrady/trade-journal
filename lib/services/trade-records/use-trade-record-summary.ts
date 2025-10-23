@@ -1,22 +1,44 @@
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { useTradeRecordExtendList } from "@/lib/services/trade-records/use-trade-record-extend-list";
 
 export const useTradeRecordSummary = (holdingId: string) => {
-  const { data: list = [] } = useTradeRecordList(holdingId);
+  const list = useTradeRecordExtendList(holdingId);
   // 汇总操作次数、金额合计
   let totalFee = 0;
   let totalAmount = 0;
+  let maxTotalAmount = 0;
   let totalShares = 0;
-  for (const record of list) {
-    totalFee += record.adjusted.fee;
-    totalAmount += record.adjusted.amount;
-    totalShares += record.adjusted.shares;
+  let maxTotalShares = 0;
+  let maxTotalAmountTradedAt: string | null = null;
+  let maxTotalSharesTradedAt: string | null = null;
+  if (list.length) {
+    totalAmount = list[0].totalAmount;
+    totalShares = list[0].totalShares;
+    for (let i = list.length - 1; i > 0; i--) {
+      const item = list[i];
+      totalFee += item.record.adjusted.fee;
+      maxTotalAmount = Math.max(totalAmount, item.totalAmount);
+      if (maxTotalAmount === item.totalAmount) {
+        maxTotalAmountTradedAt = item.record.display.tradedAt;
+      }
+      maxTotalShares = Math.max(totalShares, item.totalShares);
+      if (maxTotalShares === item.totalShares) {
+        maxTotalSharesTradedAt = item.record.display.tradedAt;
+      }
+    }
   }
+
   return {
     totalFee,
     totalAmount,
     totalShares,
     costPrice: totalAmount / totalShares,
     count: list.length,
+    maxTotalAmount,
+    maxTotalShares,
+    totalAmountPct: totalAmount / maxTotalAmount,
+    totalSharesPct: totalShares / maxTotalShares,
+    maxTotalAmountTradedAt,
+    maxTotalSharesTradedAt,
   } as TradeRecordSummary;
 };
 
@@ -25,5 +47,11 @@ export interface TradeRecordSummary {
   totalAmount: number; // 总支出金额
   totalShares: number; // 总份额
   costPrice: number; // 当前成本
-  count: number;
+  count: number; // 操作次数
+  maxTotalAmount: number; // 最高时的总交易费用
+  maxTotalShares: number; // 最高时的总份额
+  totalAmountPct: number; // 总交易费用百分位
+  maxTotalAmountTradedAt?: string; // 最高时的总交易费用发生日期
+  totalSharesPct: number; // 总份额百分位
+  maxTotalSharesTradedAt?: string; // 最高时的总份额发生日期
 }
