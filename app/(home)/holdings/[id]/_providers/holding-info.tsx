@@ -18,7 +18,6 @@ export const HoldingInfoProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  console.log("refresh!");
   const { id } = useParams<{ id: string }>();
   const list = useHoldingsWithQuote();
   const data = React.useMemo(

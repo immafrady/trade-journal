@@ -100,6 +100,19 @@ export class TradeRecord {
       id: this.props.id,
     };
   }
+
+  toCSVObject() {
+    return {
+      [TradeRecordConstants.TradedAt]: this.display.tradedAt,
+      [TradeRecordConstants.Type]: this.display.type,
+      [TradeRecordConstants.Shares]: this.props.shares,
+      [TradeRecordConstants.Price]: this.props.price,
+      [TradeRecordConstants.Amount]: this.props.amount,
+      [TradeRecordConstants.Fee]: this.props.fee,
+      [TradeRecordConstants.Factor]: this.props.factor,
+      [TradeRecordConstants.Comment]: this.props.comment,
+    };
+  }
 }
 
 interface TradeRecordProps {

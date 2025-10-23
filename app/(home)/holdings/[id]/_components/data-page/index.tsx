@@ -1,17 +1,22 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabSummary } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary";
 import { ButtonGroup } from "@/components/ui/button-group";
-import { Button } from "@/components/ui/button";
+import { Button, LoadingButton } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { exportAsCSV } from "@/lib/utils";
 
 export const DataPage = ({
   onTabChange,
 }: {
   onTabChange: (isSummary: boolean) => void;
 }) => {
-  // const { id, data } = React.useContext(HoldingInfoContext)!;
+  const { id, data } = React.useContext(HoldingInfoContext)!;
+  const { data: records } = useTradeRecordList(id);
+  const [isLoading, setIsLoading] = React.useState(false);
   const pathname = usePathname(); // 例如 /holdings/10
 
   return (
@@ -50,9 +55,21 @@ export const DataPage = ({
             </Button>
           </ButtonGroup>
         </ButtonGroup>
-        <Button variant={"outline"} asChild>
-          <Link href={`${pathname}/import`}>导出CSV</Link>
-        </Button>
+        <LoadingButton
+          loading={isLoading}
+          disabled={!records || !data}
+          variant={"outline"}
+          onClick={() => {
+            setIsLoading(true);
+            exportAsCSV(
+              `${data!.ticker.label}-操作记录`,
+              records!.map((item) => item.toCSVObject()),
+            );
+            setIsLoading(false);
+          }}
+        >
+          导出CSV
+        </LoadingButton>
         <Button variant={"destructive"} asChild>
           <Link href={`${pathname}/import`}>清除数据</Link>
         </Button>
