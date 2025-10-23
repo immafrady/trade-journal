@@ -8,6 +8,9 @@ import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 import { exportAsCSV } from "@/lib/utils";
+import { clearAllTradeRecords } from "@/lib/services/trade-records/trade-record-apis";
+import { toast } from "sonner";
+import { MyAlertDialog } from "@/components/ui/my/alert-dialog";
 
 export const DataPage = ({
   onTabChange,
@@ -15,8 +18,9 @@ export const DataPage = ({
   onTabChange: (isSummary: boolean) => void;
 }) => {
   const { id, data } = React.useContext(HoldingInfoContext)!;
-  const { data: records } = useTradeRecordList(id);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { data: records, mutate } = useTradeRecordList(id);
+  const [exportLoading, setExportLoading] = React.useState(false);
+  const [clearLoading, setClearLoading] = React.useState(false);
   const pathname = usePathname(); // 例如 /holdings/10
 
   return (
@@ -56,23 +60,48 @@ export const DataPage = ({
           </ButtonGroup>
         </ButtonGroup>
         <LoadingButton
-          loading={isLoading}
-          disabled={!records || !data}
+          loading={exportLoading}
+          disabled={!records || !data || clearLoading}
           variant={"outline"}
           onClick={() => {
-            setIsLoading(true);
+            setExportLoading(true);
             exportAsCSV(
               `${data!.ticker.label}-操作记录`,
               records!.map((item) => item.toCSVObject()),
             );
-            setIsLoading(false);
+            setExportLoading(false);
           }}
         >
           导出CSV
         </LoadingButton>
-        <Button variant={"destructive"} asChild>
-          <Link href={`${pathname}/import`}>清除数据</Link>
-        </Button>
+        <MyAlertDialog
+          trigger={
+            <LoadingButton
+              loading={clearLoading}
+              disabled={exportLoading}
+              variant={"destructive"}
+              onClick={() => setClearLoading(true)}
+            >
+              清除数据
+            </LoadingButton>
+          }
+          title={"确定删除?"}
+          description={"一旦删除，所有记录将无法找回"}
+          showCancel={true}
+          onCancel={() => setClearLoading(false)}
+          onConfirm={async () => {
+            try {
+              const response = await clearAllTradeRecords(id);
+              const { message } = await response.json();
+              await mutate([], false);
+              toast.success(message);
+            } catch (e) {
+              console.error("clear data fail:", e);
+            } finally {
+              setClearLoading(false);
+            }
+          }}
+        />
       </div>
     </div>
   );
