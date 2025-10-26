@@ -3,7 +3,7 @@
 import { ResponsiveDialog } from "@/components/ui/my/responsive-dialog";
 import React from "react";
 import { TradeRecord } from "@/lib/services/trade-records/trade-record";
-import { useForm } from "@tanstack/react-form";
+import { useForm, useStore } from "@tanstack/react-form";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import { DatePicker } from "@/components/ui/my/date-picker";
@@ -17,24 +17,27 @@ import {
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
 import dayjs from "dayjs";
 import { FieldLayout } from "@/components/ui/my/field-layout";
+import { Input } from "@/components/ui/input";
 
-const requireAmount = (type: TradeRecordType) =>
-  [TradeRecordType.Merge, TradeRecordType.Split].includes(type);
-const requireFee = (type: TradeRecordType) =>
+const requireAmount = (type?: TradeRecordType) =>
+  type && [TradeRecordType.Merge, TradeRecordType.Split].includes(type);
+const requireFee = (type?: TradeRecordType) =>
+  type &&
   [
     TradeRecordType.Buy,
     TradeRecordType.Sell,
     TradeRecordType.Subscribe,
     TradeRecordType.Redeem,
   ].includes(type);
-const requirePrice = (type: TradeRecordType) =>
+const requirePrice = (type?: TradeRecordType) =>
+  type &&
   [
     TradeRecordType.Buy,
     TradeRecordType.Sell,
     TradeRecordType.Subscribe,
     TradeRecordType.Redeem,
   ].includes(type);
-const requireShares = (type: TradeRecordType) =>
+const requireShares = (type?: TradeRecordType) =>
   TradeRecordType.Dividend !== type;
 
 export const DialogEdit = ({
@@ -58,6 +61,8 @@ export const DialogEdit = ({
     },
     onSubmit: ({ value }) => {
       const type = TradeRecordType.parseFromLabel(value.type)!;
+      console.log(type);
+      console.log(value);
 
       const newRecord = new TradeRecord({
         id: record?.props.id,
@@ -75,6 +80,9 @@ export const DialogEdit = ({
       console.log(newRecord.toJSON());
     },
   });
+
+  const t = useStore(form.store, (state: any) => state.values.type);
+  const type = TradeRecordType.parseFromLabel(t);
 
   return (
     <ResponsiveDialog
@@ -111,6 +119,9 @@ export const DialogEdit = ({
           />
           <form.Field
             name={"type"}
+            validators={{
+              onChange: ({ value }) => (!value ? "必填项！" : undefined),
+            }}
             children={(field) => (
               <FieldLayout
                 label={TradeRecordConstants.Type}
@@ -135,6 +146,20 @@ export const DialogEdit = ({
               </FieldLayout>
             )}
           />
+          {requireShares(type) && (
+            <form.Field
+              name={"shares"}
+              children={(field) => (
+                <FieldLayout label={TradeRecordConstants.Shares} field={field}>
+                  <Input
+                    value={field.state.value}
+                    type={"number"}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                </FieldLayout>
+              )}
+            />
+          )}
         </div>
       </form>
     </ResponsiveDialog>
