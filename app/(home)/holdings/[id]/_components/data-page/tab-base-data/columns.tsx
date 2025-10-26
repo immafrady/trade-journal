@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Edit, MoreHorizontal } from "lucide-react";
 import { DialogDetail } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-detail";
 import { cn } from "@/lib/utils";
 
@@ -167,10 +167,6 @@ export function getColumns(
               <DropdownMenuItem>
                 <Edit />
                 编辑
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Trash />
-                删除
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -1,8 +1,5 @@
 import useSWR, { SWRResponse } from "swr";
-import {
-  TradeRecord,
-  TradeRecordModel,
-} from "@/lib/services/trade-records/trade-record";
+import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 
 export function useTradeRecordList(
   holdingId: string,
@@ -11,10 +8,21 @@ export function useTradeRecordList(
     `/api/actions/trade-records?holdingId=${holdingId}`,
     async (api) => {
       const response = await fetch(api);
-      const { data } = await response.json();
-      return data.map((model: TradeRecordModel) =>
-        TradeRecord.fromDatabase(model),
-      );
+      const { data: list } = await response.json();
+      let totalShares = 0;
+      let totalAmount = 0;
+      const result: TradeRecord[] = [];
+      for (let i = list.length - 1; i >= 0; i--) {
+        const record = TradeRecord.fromDatabase(list[i]);
+        totalShares += record.adjusted.shares;
+        totalAmount += record.adjusted.amount;
+        record.cumulative = {
+          totalAmount,
+          totalShares,
+        };
+        result.unshift(record);
+      }
+      return result;
     },
     {
       fallbackData: [],

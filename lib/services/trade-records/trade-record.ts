@@ -62,6 +62,15 @@ export class TradeRecord {
     shares: number;
   };
 
+  // 截止至今（后续计算）
+  public cumulative: {
+    totalAmount: number;
+    totalShares: number;
+  } = {
+    totalAmount: 0,
+    totalShares: 0,
+  };
+
   /**
    * 数据库解析
    * @param model

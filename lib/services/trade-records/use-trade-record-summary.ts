@@ -1,7 +1,7 @@
-import { useTradeRecordExtendList } from "@/lib/services/trade-records/use-trade-record-extend-list";
+import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 
 export const useTradeRecordSummary = (holdingId: string) => {
-  const list = useTradeRecordExtendList(holdingId);
+  const { data: list = [] } = useTradeRecordList(holdingId);
   // 汇总操作次数、金额合计
   let totalFee = 0;
   let totalAmount = 0;
@@ -11,18 +11,18 @@ export const useTradeRecordSummary = (holdingId: string) => {
   let maxTotalAmountTradedAt: string | null = null;
   let maxTotalSharesTradedAt: string | null = null;
   if (list.length) {
-    totalAmount = list[0].totalAmount;
-    totalShares = list[0].totalShares;
+    totalAmount = list[0].cumulative.totalAmount;
+    totalShares = list[0].cumulative.totalShares;
     for (let i = list.length - 1; i > 0; i--) {
-      const item = list[i];
-      totalFee += item.record.adjusted.fee;
-      maxTotalAmount = Math.max(totalAmount, item.totalAmount);
-      if (maxTotalAmount === item.totalAmount) {
-        maxTotalAmountTradedAt = item.record.display.tradedAt;
+      const record = list[i];
+      totalFee += record.adjusted.fee;
+      maxTotalAmount = Math.max(totalAmount, record.cumulative.totalAmount);
+      if (maxTotalAmount === record.cumulative.totalAmount) {
+        maxTotalAmountTradedAt = record.display.tradedAt;
       }
-      maxTotalShares = Math.max(totalShares, item.totalShares);
-      if (maxTotalShares === item.totalShares) {
-        maxTotalSharesTradedAt = item.record.display.tradedAt;
+      maxTotalShares = Math.max(totalShares, record.cumulative.totalShares);
+      if (maxTotalShares === record.cumulative.totalShares) {
+        maxTotalSharesTradedAt = record.display.tradedAt;
       }
     }
   }
