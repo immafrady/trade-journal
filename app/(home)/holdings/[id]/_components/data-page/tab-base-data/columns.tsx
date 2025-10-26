@@ -145,7 +145,7 @@ export function getColumns(
       header: TradeRecordConstants.Comment,
       accessorFn: (row) => row.props.comment,
       cell: (row) => (
-        <div className={"max-w-10 truncate"}>{row.getValue() as string}</div>
+        <div className={"max-w-20 truncate"}>{row.getValue() as string}</div>
       ),
     },
     {
