@@ -23,7 +23,7 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
-import { formatMoney } from "@/lib/market-utils";
+import { formatMoney, formatShares } from "@/lib/market-utils";
 import { Separator } from "@/components/ui/separator";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 
@@ -105,7 +105,7 @@ export function StepPreviewData({
                       list={[
                         {
                           title: TradeRecordConstants.Shares,
-                          content: record.props.shares,
+                          content: formatShares(record.props.shares),
                         },
                         {
                           title: TradeRecordConstants.Price,
@@ -130,7 +130,7 @@ export function StepPreviewData({
                       list={[
                         {
                           title: TradeRecordConstants.AdjustedShares,
-                          content: record.adjusted.shares,
+                          content: formatShares(record.adjusted.shares),
                         },
                         {
                           title: TradeRecordConstants.AdjustedAmount,

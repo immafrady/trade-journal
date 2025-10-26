@@ -3,7 +3,11 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { View } from "lucide-react";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
-import { formatMoney, StockValueFormatter } from "@/lib/market-utils";
+import {
+  formatMoney,
+  formatShares,
+  StockValueFormatter,
+} from "@/lib/market-utils";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
 import { TradeRecord } from "@/lib/services/trade-records/trade-record";
@@ -38,7 +42,7 @@ export const DialogDetail = ({
           },
           {
             title: TradeRecordConstants.Shares,
-            content: record.props.shares,
+            content: formatShares(record.props.shares),
           },
           {
             title: TradeRecordConstants.Price,
@@ -67,7 +71,7 @@ export const DialogDetail = ({
           },
           {
             title: TradeRecordConstants.AdjustedShares,
-            content: record.adjusted.shares,
+            content: formatShares(record.adjusted.shares),
           },
           {
             title: TradeRecordConstants.AdjustedAmount,
@@ -76,6 +80,20 @@ export const DialogDetail = ({
           {
             title: TradeRecordConstants.AdjustedFee,
             content: formatMoney(record.adjusted.fee),
+          },
+        ]}
+      />
+      <Separator className={"my-2"} />
+      <h3 className={"text-center font-medium"}>建仓以来</h3>
+      <InlineDisplay
+        list={[
+          {
+            title: TradeRecordConstants.CumulativeTotalAmount,
+            content: formatMoney(record.cumulative.totalAmount),
+          },
+          {
+            title: TradeRecordConstants.CumulativeTotalShares,
+            content: formatShares(record.cumulative.totalShares),
           },
         ]}
       />

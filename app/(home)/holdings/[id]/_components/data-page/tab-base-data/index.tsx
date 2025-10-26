@@ -35,8 +35,8 @@ export const TabBaseData = () => {
             await deleteSelectedTradeRecord(
               rows.map((row) => String(row.props.id!)),
             );
-            tableRef.current?.resetRowSelection();
             await mutate();
+            tableRef.current?.resetRowSelection();
             try {
             } catch (e: any) {
               toast.error(e.toString());
