@@ -10,6 +10,8 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { BookOpen } from "lucide-react";
+import { DialogEdit } from "@/app/(home)/holdings/[id]/_components/dialog-edit";
+import React from "react";
 
 export const BlankPage = () => {
   const pathname = usePathname(); // 例如 /holdings/10
@@ -24,9 +26,7 @@ export const BlankPage = () => {
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2">
-          <Button asChild>
-            <Link href={`${pathname}/add`}>新增一条</Link>
-          </Button>
+          <DialogEdit trigger={<Button>新增一条</Button>} />
           <Button variant={"outline"} asChild>
             <Link href={`${pathname}/import`}>导入CSV</Link>
           </Button>

@@ -12,7 +12,7 @@ import { clearAllTradeRecords } from "@/lib/services/trade-records/trade-record-
 import { toast } from "sonner";
 import { MyAlertDialog } from "@/components/ui/my/alert-dialog";
 import { TabBaseData } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data";
-import { DialogEdit } from "@/app/(home)/holdings/[id]/_components/data-page/dialog-edit";
+import { DialogEdit } from "@/app/(home)/holdings/[id]/_components/dialog-edit";
 
 export const DataPage = ({
   onTabChange,
