@@ -17,7 +17,7 @@ export const FieldLayout = ({
     <div className={"flex flex-col gap-1"}>
       <div className={"flex items-center gap-2"}>
         <div className={"font-medium"}>{label}</div>
-        <div className={"flex-1"}>{children}</div>
+        <div className={"flex-1 flex [&>*]:flex-1"}>{children}</div>
       </div>
       <div className={"text-sm"}>
         {field.state.meta.isValidating ? (

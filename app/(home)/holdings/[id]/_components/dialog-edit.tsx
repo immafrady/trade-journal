@@ -5,12 +5,6 @@ import React from "react";
 import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { useForm } from "@tanstack/react-form";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldTitle,
-} from "@/components/ui/field";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import { DatePicker } from "@/components/ui/my/date-picker";
 import {
@@ -99,7 +93,7 @@ export const DialogEdit = ({
           e.stopPropagation();
         }}
       >
-        <FieldGroup>
+        <div className={"flex flex-col gap-4"}>
           <form.Field
             name={"tradedAt"}
             children={(field) => (
@@ -114,12 +108,15 @@ export const DialogEdit = ({
                 />
               </FieldLayout>
             )}
-          ></form.Field>
+          />
           <form.Field
             name={"type"}
             children={(field) => (
-              <Field>
-                <FieldTitle>{TradeRecordConstants.Type}</FieldTitle>
+              <FieldLayout
+                label={TradeRecordConstants.Type}
+                description={"根据交易类型显示不同的表单"}
+                field={field}
+              >
                 <Select
                   value={field.state.value}
                   onValueChange={(v) => field.handleChange(v)}
@@ -135,11 +132,10 @@ export const DialogEdit = ({
                     ))}
                   </SelectContent>
                 </Select>
-                <FieldDescription>根据交易类型显示不同的表单</FieldDescription>
-              </Field>
+              </FieldLayout>
             )}
-          ></form.Field>
-        </FieldGroup>
+          />
+        </div>
       </form>
     </ResponsiveDialog>
   );
