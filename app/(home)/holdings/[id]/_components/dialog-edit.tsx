@@ -89,6 +89,9 @@ export const DialogEdit = ({
       onSubmit={async () => {
         await form.handleSubmit();
       }}
+      onClosed={() => {
+        form.reset();
+      }}
     >
       <form
         onSubmit={(e) => {
@@ -99,11 +102,6 @@ export const DialogEdit = ({
         <FieldGroup>
           <form.Field
             name={"tradedAt"}
-            validators={{
-              onChange: ({ value }) => {
-                return value ? "错误的日期" : undefined;
-              },
-            }}
             children={(field) => (
               <FieldLayout
                 label={TradeRecordConstants.TradedAt}

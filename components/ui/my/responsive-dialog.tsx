@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button, LoadingButton } from "@/components/ui/button";
 
 export const ResponsiveDialog = ({
   trigger,
@@ -17,15 +17,23 @@ export const ResponsiveDialog = ({
   title,
   description,
   onSubmit,
+  onClosed,
 }: {
   trigger: React.ReactNode;
   children: React.ReactNode;
   title: string;
   description?: string;
-  onSubmit?: () => void;
+  onSubmit?: () => Promise<void>;
+  onClosed?: () => void;
 }) => {
-  console.log("ResponsiveDialog"!);
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  React.useEffect(() => {
+    if (!open) {
+      onClosed?.();
+    }
+    return () => {};
+  }, [onClosed, open]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -40,7 +48,19 @@ export const ResponsiveDialog = ({
             <DialogClose asChild>
               <Button variant="outline">取消</Button>
             </DialogClose>
-            <Button onClick={onSubmit}>提交</Button>
+            <LoadingButton
+              loading={loading}
+              onClick={async () => {
+                setLoading(true);
+                try {
+                  await onSubmit();
+                } finally {
+                  setLoading(false);
+                }
+              }}
+            >
+              提交
+            </LoadingButton>
           </DialogFooter>
         )}
       </DialogContent>
