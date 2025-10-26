@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
 import dayjs from "dayjs";
+import { FieldLayout } from "@/components/ui/my/field-layout";
 
 const requireAmount = (type: TradeRecordType) =>
   [TradeRecordType.Merge, TradeRecordType.Split].includes(type);
@@ -98,15 +99,22 @@ export const DialogEdit = ({
         <FieldGroup>
           <form.Field
             name={"tradedAt"}
+            validators={{
+              onChange: ({ value }) => {
+                return value ? "错误的日期" : undefined;
+              },
+            }}
             children={(field) => (
-              <Field>
-                <FieldTitle>{TradeRecordConstants.TradedAt}</FieldTitle>
+              <FieldLayout
+                label={TradeRecordConstants.TradedAt}
+                description={"交易的发生日期"}
+                field={field}
+              >
                 <DatePicker
                   date={field.state.value}
                   onChange={(d) => field.handleChange(d!)}
                 />
-                <FieldDescription>交易发生的日期</FieldDescription>
-              </Field>
+              </FieldLayout>
             )}
           ></form.Field>
           <form.Field
