@@ -6,6 +6,8 @@ import {
   formatShares,
   StockValueFormatter,
 } from "@/lib/market-utils";
+import { DataTableColumnHeader } from "@/components/ui/my/data-table/column-header";
+import { Dayjs } from "dayjs";
 
 export function getColumns(
   formatter?: StockValueFormatter,
@@ -13,6 +15,7 @@ export function getColumns(
   formatter ??= (num) => num + "";
   return [
     {
+      id: "no",
       header: "No.",
       accessorFn: (row, index) => index + 1,
       cell: (row) => (
@@ -20,7 +23,30 @@ export function getColumns(
       ),
     },
     {
-      header: TradeRecordConstants.Type,
+      id: "tradedAt",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={TradeRecordConstants.TradedAt}
+          className={"text-center"}
+        />
+      ),
+      accessorFn: (row) => row.props.tradedAt,
+      cell: (row) => (
+        <div className={"text-center"}>
+          {(row.getValue() as Dayjs).format("YYYY-MM-DD")}
+        </div>
+      ),
+    },
+    {
+      id: "type",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={TradeRecordConstants.Type}
+          className={"text-center"}
+        />
+      ),
       accessorFn: (row) => row.display.type,
       cell: (row) => (
         <div className={"text-center"}>{row.getValue() as string}</div>
@@ -28,8 +54,12 @@ export function getColumns(
     },
     {
       id: "price",
-      header: () => (
-        <div className={"text-right"}>{TradeRecordConstants.Price}</div>
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={TradeRecordConstants.Price}
+          className={"text-right"}
+        />
       ),
       accessorFn: (row) => row.derived.price,
       cell: (row) => (
@@ -40,8 +70,12 @@ export function getColumns(
     },
     {
       id: "shares",
-      header: () => (
-        <div className={"text-right"}>{TradeRecordConstants.Shares}</div>
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={TradeRecordConstants.Shares}
+          className={"text-right"}
+        />
       ),
       accessorFn: (row) => row.props.shares,
       cell: (row) => (
@@ -52,8 +86,12 @@ export function getColumns(
     },
     {
       id: "amount",
-      header: () => (
-        <div className={"text-right"}>{TradeRecordConstants.Amount}</div>
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={TradeRecordConstants.Amount}
+          className={"text-right"}
+        />
       ),
       accessorFn: (row) => row.derived.amount,
       cell: (row) => (
@@ -64,8 +102,12 @@ export function getColumns(
     },
     {
       id: "fee",
-      header: () => (
-        <div className={"text-right"}>{TradeRecordConstants.Fee}</div>
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={TradeRecordConstants.Fee}
+          className={"text-right"}
+        />
       ),
       accessorFn: (row) => row.derived.fee,
       cell: (row) => (
@@ -76,7 +118,7 @@ export function getColumns(
     },
     {
       id: "factor",
-      header: () => (
+      header: ({ column }) => (
         <div className={"text-center"}>{TradeRecordConstants.Factor}</div>
       ),
       accessorFn: (row) => row.props.factor,
