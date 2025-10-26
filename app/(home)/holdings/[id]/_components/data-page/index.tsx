@@ -11,6 +11,7 @@ import { exportAsCSV } from "@/lib/utils";
 import { clearAllTradeRecords } from "@/lib/services/trade-records/trade-record-apis";
 import { toast } from "sonner";
 import { MyAlertDialog } from "@/components/ui/my/alert-dialog";
+import { TabBaseData } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data";
 
 export const DataPage = ({
   onTabChange,
@@ -33,15 +34,15 @@ export const DataPage = ({
         <div className={"flex justify-center"}>
           <TabsList>
             <TabsTrigger value={TabKey.Summary}>基本信息</TabsTrigger>
-            <TabsTrigger value={TabKey.Table}>Password</TabsTrigger>
+            <TabsTrigger value={TabKey.BaseData}>基础数据</TabsTrigger>
           </TabsList>
         </div>
 
         <TabsContent value={TabKey.Summary}>
           <TabSummary />
         </TabsContent>
-        <TabsContent value={TabKey.Table}>
-          Change your password here.
+        <TabsContent value={TabKey.BaseData}>
+          <TabBaseData />
         </TabsContent>
       </Tabs>
       <div
@@ -109,5 +110,5 @@ export const DataPage = ({
 
 enum TabKey {
   Summary = "summary",
-  Table = "table",
+  BaseData = "base-data",
 }

@@ -1,4 +1,6 @@
-export const formatMoney = (num: number) => {
+export type StockValueFormatter = (num: number) => string;
+
+export const formatMoney: StockValueFormatter = (num: number) => {
   const formatted = Math.abs(num).toLocaleString("zh-CN", {
     style: "currency",
     currency: "CNY",
@@ -8,7 +10,8 @@ export const formatMoney = (num: number) => {
 
 export const formatShares = (num?: number) => num?.toFixed(2) ?? "--";
 
-export const formatFund = (num?: number) => num?.toFixed(4) ?? "--";
+export const formatFund: StockValueFormatter = (num?: number) =>
+  num?.toFixed(4) ?? "--";
 
 export const formatPercent = (num?: number) => (num?.toFixed(2) ?? "--") + "%";
 
