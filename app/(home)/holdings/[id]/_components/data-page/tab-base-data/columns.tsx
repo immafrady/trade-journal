@@ -19,12 +19,14 @@ import { Button } from "@/components/ui/button";
 import { Edit, MoreHorizontal } from "lucide-react";
 import { DialogDetail } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-detail";
 import { cn } from "@/lib/utils";
+import { getSelectableColumn } from "@/components/ui/my/data-table/selectable-column";
 
 export function getColumns(
   formatter?: StockValueFormatter,
 ): ColumnDef<TradeRecord>[] {
   formatter ??= (num) => num + "";
   return [
+    getSelectableColumn(),
     {
       id: "no",
       header: "No.",

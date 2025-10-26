@@ -28,6 +28,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   className?: string;
   getRowClassName?: (row: Row<TData>) => string;
+  onSelect?: (rows: TData[]) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -35,6 +36,7 @@ export function DataTable<TData, TValue>({
   data,
   className,
   getRowClassName,
+  onSelect,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
@@ -49,9 +51,14 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const selectedRows = table.getFilteredSelectedRowModel().rows;
+  React.useEffect(() => {
+    onSelect?.(selectedRows.map((row) => row.original));
+  }, [selectedRows, onSelect]);
+
   return (
     <div>
-      <div className={cn("overflow-hidden rounded-md border", className)}>
+      <div className={cn("overflow-hidden rounded-md border my-2", className)}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -47,6 +47,7 @@ export function DataTablePagination<TData>({
               ))}
             </SelectContent>
           </Select>
+          <p className="text-sm font-medium">条</p>
         </div>
         <div className="flex items-center">
           <div className={"flex items-center"}>
