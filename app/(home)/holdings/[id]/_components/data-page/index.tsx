@@ -12,6 +12,7 @@ import { clearAllTradeRecords } from "@/lib/services/trade-records/trade-record-
 import { toast } from "sonner";
 import { MyAlertDialog } from "@/components/ui/my/alert-dialog";
 import { TabBaseData } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data";
+import { DialogEdit } from "@/app/(home)/holdings/[id]/_components/data-page/dialog-edit";
 
 export const DataPage = ({
   onTabChange,
@@ -52,9 +53,7 @@ export const DataPage = ({
       >
         <ButtonGroup>
           <ButtonGroup>
-            <Button asChild>
-              <Link href={`${pathname}/add`}>新增一条</Link>
-            </Button>
+            <DialogEdit trigger={<Button>新增一条</Button>} />
             <Button variant={"outline"} asChild>
               <Link href={`${pathname}/import`}>导入CSV</Link>
             </Button>

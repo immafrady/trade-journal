@@ -1,6 +1,7 @@
-export type StockValueFormatter = (num: number) => string;
+export type StockValueFormatter = (num?: number) => string;
 
-export const formatMoney: StockValueFormatter = (num: number) => {
+export const formatMoney: StockValueFormatter = (num?: number) => {
+  if (!num) return "--";
   const formatted = Math.abs(num).toLocaleString("zh-CN", {
     style: "currency",
     currency: "CNY",

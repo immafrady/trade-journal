@@ -50,6 +50,10 @@ export class TradeRecordType {
     return this.values.find((record) => record.label === label);
   }
 
+  static parseFromStringValue(value?: string) {
+    return value ? this.parseFromValue(+value) : undefined;
+  }
+
   static parseFromValue(value?: number) {
     return this.values.find((record) => record.value === value);
   }
