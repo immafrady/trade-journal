@@ -23,6 +23,25 @@ import {
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
 import dayjs from "dayjs";
 
+const requireAmount = (type: TradeRecordType) =>
+  [TradeRecordType.Merge, TradeRecordType.Split].includes(type);
+const requireFee = (type: TradeRecordType) =>
+  [
+    TradeRecordType.Buy,
+    TradeRecordType.Sell,
+    TradeRecordType.Subscribe,
+    TradeRecordType.Redeem,
+  ].includes(type);
+const requirePrice = (type: TradeRecordType) =>
+  [
+    TradeRecordType.Buy,
+    TradeRecordType.Sell,
+    TradeRecordType.Subscribe,
+    TradeRecordType.Redeem,
+  ].includes(type);
+const requireShares = (type: TradeRecordType) =>
+  TradeRecordType.Dividend !== type;
+
 export const DialogEdit = ({
   trigger,
   record,
@@ -34,7 +53,7 @@ export const DialogEdit = ({
   const form = useForm({
     defaultValues: {
       tradedAt: record?.props.tradedAt.toDate() ?? new Date(),
-      type: record ? String(record.props.type.value) : undefined,
+      type: record?.props.type.label,
       factor: record?.props.factor ?? 1,
       shares: record?.props.shares ?? "",
       price: record?.props.price ?? "",
@@ -43,35 +62,19 @@ export const DialogEdit = ({
       comment: record?.props.comment ?? "",
     },
     onSubmit: ({ value }) => {
-      const type = TradeRecordType.parseFromStringValue(value.type)!;
+      const type = TradeRecordType.parseFromLabel(value.type)!;
 
       const newRecord = new TradeRecord({
         id: record?.props.id,
         holdingId: +holdingId,
         tradedAt: dayjs(value.tradedAt),
         type,
-        amount: [TradeRecordType.Merge, TradeRecordType.Split].includes(type)
-          ? 0
-          : +value.amount,
+        amount: requireAmount(type) ? 0 : +value.amount,
         comment: value.comment,
         factor: value.factor,
-        fee: [
-          TradeRecordType.Buy,
-          TradeRecordType.Sell,
-          TradeRecordType.Subscribe,
-          TradeRecordType.Redeem,
-        ].includes(type)
-          ? +value.fee
-          : undefined,
-        price: [
-          TradeRecordType.Buy,
-          TradeRecordType.Sell,
-          TradeRecordType.Subscribe,
-          TradeRecordType.Redeem,
-        ].includes(type)
-          ? +value.price
-          : undefined,
-        shares: TradeRecordType.Dividend === type ? 0 : +value.shares,
+        fee: requireFee(type) ? +value.fee : undefined,
+        price: requirePrice(type) ? +value.price : undefined,
+        shares: requireShares(type) ? +value.shares : 0,
       });
 
       console.log(newRecord.toJSON());
@@ -120,7 +123,7 @@ export const DialogEdit = ({
                   </SelectTrigger>
                   <SelectContent>
                     {TradeRecordType.values.map((type, idx) => (
-                      <SelectItem key={idx} value={String(type.value)}>
+                      <SelectItem key={idx} value={type.label}>
                         {type.label}
                       </SelectItem>
                     ))}
