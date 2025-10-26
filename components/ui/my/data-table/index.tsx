@@ -8,11 +8,12 @@ import {
   getSortedRowModel,
   Row,
   SortingState,
+  Table,
   useReactTable,
 } from "@tanstack/react-table";
 
 import {
-  Table,
+  Table as TableWrapper,
   TableBody,
   TableCell,
   TableHead,
@@ -31,13 +32,16 @@ interface DataTableProps<TData, TValue> {
   onSelect?: (rows: TData[]) => void;
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-  className,
-  getRowClassName,
-  onSelect,
-}: DataTableProps<TData, TValue>) {
+function DataTableInner<TData, TValue>(
+  {
+    columns,
+    data,
+    className,
+    getRowClassName,
+    onSelect,
+  }: DataTableProps<TData, TValue>,
+  ref: React.Ref<Table<TData>>,
+) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
     data,
@@ -51,6 +55,8 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  React.useImperativeHandle(ref, () => table);
+
   const selectedRows = table.getFilteredSelectedRowModel().rows;
   React.useEffect(() => {
     onSelect?.(selectedRows.map((row) => row.original));
@@ -59,7 +65,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className={cn("overflow-hidden rounded-md border my-2", className)}>
-        <Table>
+        <TableWrapper>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -107,9 +113,17 @@ export function DataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-        </Table>
+        </TableWrapper>
       </div>
       <DataTablePagination table={table} />
     </div>
   );
 }
+
+DataTableInner.displayName = "DataTable";
+
+export const DataTable = React.forwardRef(DataTableInner) as <TData, TValue>(
+  props: DataTableProps<TData, TValue> & {
+    ref?: React.Ref<Table<TData>>;
+  },
+) => React.ReactElement | null;

@@ -19,3 +19,29 @@ export const GET = async (request: NextRequest) => {
     // todo 处理异常流
   }
 };
+
+export const DELETE = async (request: NextRequest) => {
+  const { ids } = await request.json();
+  if (Array.isArray(ids)) {
+    if (ids.length) {
+      const supabase = await createClient();
+      return NextResponse.json(
+        await supabase.from("trade_records").delete().in("id", ids),
+      );
+    } else {
+      return NextResponse.json(
+        {
+          error: "没有勾选待删除的ID",
+        },
+        { status: 400 },
+      );
+    }
+  } else {
+    return NextResponse.json(
+      {
+        error: "参数类型有误",
+      },
+      { status: 400 },
+    );
+  }
+};

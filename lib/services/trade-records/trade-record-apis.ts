@@ -13,3 +13,10 @@ export const clearAllTradeRecords = async (holdingId: string) => {
     method: "DELETE",
   });
 };
+
+export const deleteSelectedTradeRecord = async (ids: string[]) => {
+  return fetch(`/api/actions/trade-records`, {
+    method: "DELETE",
+    body: JSON.stringify({ ids }),
+  });
+};
