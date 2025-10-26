@@ -12,6 +12,9 @@ export const TabBaseData = () => {
       data={list}
       columns={getColumns(data?.quote?.formatter)}
       className={"bg-card"}
+      getRowClassName={(row) =>
+        row.original.props.shares < 0 ? "bg-red-50 text-red-700" : ""
+      }
     />
   );
 };

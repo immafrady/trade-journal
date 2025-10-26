@@ -6,6 +6,7 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -26,12 +27,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   className?: string;
+  getRowClassName?: (row: Row<TData>) => string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   className,
+  getRowClassName,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
@@ -74,6 +77,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={cn(getRowClassName?.(row))}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

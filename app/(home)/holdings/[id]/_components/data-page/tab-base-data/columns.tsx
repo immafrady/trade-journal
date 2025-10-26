@@ -8,6 +8,17 @@ import {
 } from "@/lib/market-utils";
 import { DataTableColumnHeader } from "@/components/ui/my/data-table/column-header";
 import { Dayjs } from "dayjs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { DialogDetail } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-detail";
+import { cn } from "@/lib/utils";
 
 export function getColumns(
   formatter?: StockValueFormatter,
@@ -110,15 +121,18 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.derived.fee,
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatMoney(row.getValue() as number)}
-        </div>
-      ),
+      cell: (row) => {
+        const v = row.getValue() as number;
+        return (
+          <div className={cn("text-right", !v && "text-destructive")}>
+            {formatMoney(v)}
+          </div>
+        );
+      },
     },
     {
       id: "factor",
-      header: ({ column }) => (
+      header: () => (
         <div className={"text-center"}>{TradeRecordConstants.Factor}</div>
       ),
       accessorFn: (row) => row.props.factor,
@@ -130,7 +144,38 @@ export function getColumns(
       id: "comment",
       header: TradeRecordConstants.Comment,
       accessorFn: (row) => row.props.comment,
-      cell: (row) => <div className={"w-60"}>{row.getValue() as string}</div>,
+      cell: (row) => (
+        <div className={"max-w-10 truncate"}>{row.getValue() as string}</div>
+      ),
+    },
+    {
+      id: "action",
+      header: "操作",
+      cell: ({ row }) => {
+        const record = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">打开菜单</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DialogDetail record={record} formatter={formatter} />
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Edit />
+                编辑
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Trash />
+                删除
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
     },
   ];
 }
