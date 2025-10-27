@@ -1,10 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  getSinaStockTypeColor,
-  getSinaStockTypeLabel,
-  SinaStockType,
-} from "@/lib/enums/sina-stock-type";
+import { SinaStockType } from "@/lib/enums/sina-stock-type";
 import React from "react";
 import { SinaTicker } from "@/lib/services/sina/ticker";
 import { SinaQuote } from "@/lib/services/sina/quote";

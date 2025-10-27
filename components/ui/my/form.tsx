@@ -1,1 +1,0 @@
-type FieldType = "text" | "nu";

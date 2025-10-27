@@ -95,7 +95,7 @@ export function parseFromCsv(
           resolve(list);
         }
       },
-      error(error: Error, file: string) {
+      error(error: Error) {
         reject([error]);
       },
     });
