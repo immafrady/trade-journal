@@ -3,6 +3,7 @@ import { LoginForm } from "./_components/login-form";
 import { toast } from "sonner";
 import React from "react";
 import Logo from "@/components/ui/my/logo";
+import { removeSWRStorage } from "@/lib/swr/clear-and-refresh";
 
 export default function LoginPage(props: PageProps<"/login">) {
   const searchParams = React.use(props.searchParams);
@@ -14,6 +15,10 @@ export default function LoginPage(props: PageProps<"/login">) {
     }
     return () => {};
   }, [searchParams.error, searchParams.error_description]);
+
+  React.useEffect(() => {
+    removeSWRStorage();
+  }, []);
 
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
