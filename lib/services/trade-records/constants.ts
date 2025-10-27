@@ -1,0 +1,15 @@
+export const TradeRecordConstants = {
+  TradedAt: "交易日期",
+  Type: "交易类型",
+  Factor: "系数",
+  Shares: "份额",
+  Price: "成交价格",
+  Amount: "交易金额",
+  Fee: "交易费用",
+  Comment: "备注",
+  AdjustedAmount: "加权交易金额",
+  AdjustedShares: "加权份额",
+  AdjustedFee: "加权交易费用",
+  CumulativeTotalAmount: "累计交易金额",
+  CumulativeTotalShares: "累计份额",
+} as const;

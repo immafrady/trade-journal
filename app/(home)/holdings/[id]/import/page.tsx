@@ -1,0 +1,94 @@
+"use client";
+import { StepChooseFile } from "@/app/(home)/holdings/[id]/import/_components/step-choose-file";
+import React from "react";
+import { StepParseError } from "@/app/(home)/holdings/[id]/import/_components/step-parse-error";
+import {
+  TradeRecord,
+  TradeRecordModel,
+} from "@/lib/services/trade-records/trade-record";
+import { StepPreviewData } from "@/app/(home)/holdings/[id]/import/_components/step-preview-data";
+import { addTradeRecords } from "@/lib/services/trade-records/trade-record-apis";
+import { toast } from "sonner";
+import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { useRouter } from "next/navigation";
+import {
+  AppBar,
+  AppBarExtra,
+  AppBarTitle,
+  AppContainer,
+} from "@/components/ui/my/app-container";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+
+export default function Page() {
+  const { id, data } = React.useContext(HoldingInfoContext);
+  const [errors, setErrors] = React.useState<Error[]>([]);
+  const [records, setRecords] = React.useState<TradeRecord[]>([]);
+  const { data: list, mutate } = useTradeRecordList(id);
+  const router = useRouter();
+  return (
+    <AppContainer
+      appBar={
+        <AppBar>
+          {data?.ticker.label && (
+            <AppBarExtra>
+              <AppBarTitle>{data.ticker.label} · 导入</AppBarTitle>
+            </AppBarExtra>
+          )}
+        </AppBar>
+      }
+    >
+      <div className={"common-layout"}>
+        {records.length ? (
+          <StepPreviewData
+            records={records}
+            onSubmit={async () => {
+              const response = await addTradeRecords(records);
+              const { data, error } = await response.json();
+              if (error && error.message) {
+                toast.error(error.message);
+              } else {
+                const newRecords = data.map((d: TradeRecordModel) =>
+                  TradeRecord.fromDatabase(d),
+                );
+                await mutate(
+                  [...(list ?? []), ...newRecords].sort(
+                    // 首先按照日期倒序，其次按照id倒序
+                    (a: TradeRecord, b: TradeRecord) => {
+                      if (!a.props.tradedAt.isSame(b.props.tradedAt)) {
+                        return (
+                          b.props.tradedAt.valueOf() -
+                          a.props.tradedAt.valueOf()
+                        );
+                      }
+                      return b.props.id! - a.props.id!;
+                    },
+                  ),
+                  false,
+                );
+                toast.success(`成功插入${newRecords.length}条数据`);
+                router.replace(`/holdings/${id}`);
+              }
+            }}
+            onRedo={() => setRecords([])}
+          />
+        ) : errors.length ? (
+          <StepParseError
+            errors={errors}
+            onRedo={() => {
+              setErrors([]);
+            }}
+          />
+        ) : (
+          <StepChooseFile
+            onPick={(r) => {
+              setRecords(r);
+            }}
+            onErrors={(e) => {
+              setErrors(e);
+            }}
+          />
+        )}
+      </div>
+    </AppContainer>
+  );
+}
