@@ -1,19 +1,19 @@
 "use client";
 import { LoginForm } from "./_components/login-form";
 import { toast } from "sonner";
-import { use, useEffect } from "react";
+import React from "react";
 import Logo from "@/components/ui/my/logo";
 
 export default function LoginPage(props: PageProps<"/login">) {
-  const searchParams = use(props.searchParams);
-  useEffect(() => {
+  const searchParams = React.use(props.searchParams);
+  React.useEffect(() => {
     if (searchParams.error) {
       toast.error(searchParams.error, {
         description: searchParams.error_description,
       });
     }
     return () => {};
-  });
+  }, [searchParams.error, searchParams.error_description]);
 
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
