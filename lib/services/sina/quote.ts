@@ -1,6 +1,11 @@
 import { SinaTicker } from "@/lib/services/sina/ticker";
 import { SinaStockType } from "@/lib/enums/sina-stock-type";
-import { calculatePercent, formatFund, formatMoney } from "@/lib/market-utils";
+import {
+  calculatePercent,
+  formatFund,
+  formatMoney,
+  StockValueFormatter,
+} from "@/lib/market-utils";
 
 export class SinaQuote {
   constructor(public readonly ticker: SinaTicker) {
@@ -8,7 +13,7 @@ export class SinaQuote {
       ticker.type === SinaStockType.AShare ? formatMoney : formatFund;
   }
 
-  public formatter: (num: number) => string;
+  public formatter: StockValueFormatter;
   // 股票相关
   public time?: string;
   public open?: number;
