@@ -46,7 +46,7 @@ export function LoginForm({
                     await supabase.auth.signInWithOAuth({
                       provider: "github",
                       options: {
-                        redirectTo: url,
+                        redirectTo: url + "api/auth/callback",
                       },
                     });
                   }}
