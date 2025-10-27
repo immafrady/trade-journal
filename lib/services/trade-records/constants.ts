@@ -10,6 +10,7 @@ export const TradeRecordConstants = {
   AdjustedAmount: "加权交易金额",
   AdjustedShares: "加权份额",
   AdjustedFee: "加权交易费用",
-  CumulativeTotalAmount: "累计交易金额",
-  CumulativeTotalShares: "累计份额",
+  CumulativeTotalAmount: "当前累计交易金额",
+  CumulativeTotalShares: "当前累计份额",
+  CumulativeCostPrice: "当前成本价格",
 } as const;

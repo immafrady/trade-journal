@@ -66,9 +66,11 @@ export class TradeRecord {
   public cumulative: {
     totalAmount: number;
     totalShares: number;
+    costPrice: number;
   } = {
     totalAmount: 0,
     totalShares: 0,
+    costPrice: 0,
   };
 
   /**

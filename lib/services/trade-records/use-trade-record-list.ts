@@ -19,6 +19,7 @@ export function useTradeRecordList(
         record.cumulative = {
           totalAmount,
           totalShares,
+          costPrice: totalShares > 0 ? totalAmount / totalShares : 0,
         };
         result.unshift(record);
       }

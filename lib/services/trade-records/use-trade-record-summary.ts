@@ -5,6 +5,7 @@ export const useTradeRecordSummary = (holdingId: string) => {
   // 汇总操作次数、金额合计
   let totalFee = 0;
   let totalAmount = 0;
+  let costPrice = 0;
   let maxTotalAmount = 0;
   let totalShares = 0;
   let maxTotalShares = 0;
@@ -13,6 +14,7 @@ export const useTradeRecordSummary = (holdingId: string) => {
   if (list.length) {
     totalAmount = list[0].cumulative.totalAmount;
     totalShares = list[0].cumulative.totalShares;
+    costPrice = list[0].cumulative.costPrice;
     for (let i = list.length - 1; i > 0; i--) {
       const record = list[i];
       totalFee += record.adjusted.fee;
@@ -31,7 +33,7 @@ export const useTradeRecordSummary = (holdingId: string) => {
     totalFee,
     totalAmount,
     totalShares,
-    costPrice: totalAmount / totalShares,
+    costPrice,
     count: list.length,
     maxTotalAmount,
     maxTotalShares,

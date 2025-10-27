@@ -88,6 +88,10 @@ export const DialogDetail = ({
       <InlineDisplay
         list={[
           {
+            title: TradeRecordConstants.CumulativeCostPrice,
+            content: formatter(record.cumulative.costPrice),
+          },
+          {
             title: TradeRecordConstants.CumulativeTotalAmount,
             content: formatMoney(record.cumulative.totalAmount),
           },
