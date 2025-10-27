@@ -1,19 +1,6 @@
 "use client";
 
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  Row,
-  SortingState,
-  Table,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
+import { flexRender, Row, Table } from "@tanstack/react-table";
 
 import {
   Table as TableWrapper,
@@ -27,55 +14,17 @@ import { cn } from "@/lib/utils";
 import { DataTablePagination } from "@/components/ui/my/data-table/pagination";
 import React from "react";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps<TData> {
+  table: Table<TData>;
   className?: string;
   getRowClassName?: (row: Row<TData>) => string;
-  onSelect?: (rows: TData[]) => void;
 }
 
-function DataTableInner<TData, TValue>(
-  {
-    columns,
-    data,
-    className,
-    getRowClassName,
-    onSelect,
-  }: DataTableProps<TData, TValue>,
-  ref: React.Ref<Table<TData>>,
-) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-    },
-  });
-
-  React.useImperativeHandle(ref, () => table);
-
-  const selectedRows = table.getFilteredSelectedRowModel().rows;
-  React.useEffect(() => {
-    onSelect?.(selectedRows.map((row) => row.original));
-  }, [selectedRows, onSelect]);
-
+export function DataTable<TData>({
+  table,
+  className,
+  getRowClassName,
+}: DataTableProps<TData>) {
   return (
     <div>
       <div className={cn("overflow-hidden rounded-md border my-2", className)}>
@@ -119,10 +68,10 @@ function DataTableInner<TData, TValue>(
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={table.getAllColumns().length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  没有结果
                 </TableCell>
               </TableRow>
             )}
@@ -133,11 +82,3 @@ function DataTableInner<TData, TValue>(
     </div>
   );
 }
-
-DataTableInner.displayName = "DataTable";
-
-export const DataTable = React.forwardRef(DataTableInner) as <TData, TValue>(
-  props: DataTableProps<TData, TValue> & {
-    ref?: React.Ref<Table<TData>>;
-  },
-) => React.ReactElement | null;
