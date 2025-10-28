@@ -15,7 +15,7 @@ export const useTradeRecordSummary = (holdingId: string) => {
     totalAmount = list[0].cumulative.totalAmount;
     totalShares = list[0].cumulative.totalShares;
     costPrice = list[0].cumulative.costPrice;
-    for (let i = list.length - 1; i > 0; i--) {
+    for (let i = list.length - 1; i >= 0; i--) {
       const record = list[i];
       totalFee += record.adjusted.fee;
       maxTotalAmount = Math.max(totalAmount, record.cumulative.totalAmount);
