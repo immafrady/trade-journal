@@ -53,20 +53,18 @@ export const DialogEdit = ({
     },
     onSubmit: ({ value }) => {
       const type = TradeRecordType.parseFromLabel(value.type)!;
-      console.log(type);
-      console.log(value);
 
       const newRecord = new TradeRecord({
         id: record?.props.id,
         holdingId: +holdingId,
         tradedAt: dayjs(value.tradedAt),
         type,
-        amount: requireAmount(type) ? 0 : +value.amount,
+        amount: requireAmount(type) && value.amount ? +value.amount : undefined,
         comment: value.comment,
         factor: +value.factor,
-        fee: requireFee(type) ? +value.fee : undefined,
-        price: requirePrice(type) ? +value.price : undefined,
-        shares: requireShares(type) ? +value.shares : 0,
+        fee: requireFee(type) && value.fee ? +value.fee : undefined,
+        price: requirePrice(type) && value.price ? +value.price : undefined,
+        shares: requireShares(type) && value.shares ? +value.shares : 0,
       });
 
       console.log(newRecord.toJSON());
@@ -142,18 +140,25 @@ export const DialogEdit = ({
             <form.Field
               name={"shares"}
               validators={{
-                onChangeListenTo: ["type"],
+                onChangeListenTo: ["type", "amount", "price"],
                 onChange: ({ value, fieldApi }) => {
                   const type = TradeRecordType.parseFromLabel(
                     fieldApi.form.getFieldValue("type"),
                   );
-                  if (type) {
+                  const amount = fieldApi.form.getFieldValue("amount");
+                  const price = fieldApi.form.getFieldValue("price");
+                  if (value === "") {
+                    if (amount === "" && price === "") {
+                      return "必填项";
+                    }
+                  } else if (type) {
+                    const v = +value;
                     if (inputPositive(type)) {
-                      if (+value <= 0) {
+                      if (v <= 0) {
                         return "请输入正数";
                       }
                     } else {
-                      if (+value >= 0) {
+                      if (v >= 0) {
                         return "请输入负数";
                       }
                     }
@@ -192,17 +197,17 @@ export const DialogEdit = ({
             <form.Field
               name={"price"}
               validators={{
+                onChangeListenTo: ["amount", "shares"],
                 onChange: ({ value, fieldApi }) => {
-                  const v = +value;
-                  if (v <= 0 && value !== "") {
-                    return "请输入正数";
-                  }
                   if (
                     value === "" &&
                     fieldApi.form.getFieldValue("amount") === "" &&
                     fieldApi.form.getFieldValue("shares") === ""
                   ) {
                     return "必填项";
+                  }
+                  if (+value <= 0 && value !== "") {
+                    return "请输入正数";
                   }
                 },
               }}
@@ -237,18 +242,25 @@ export const DialogEdit = ({
             <form.Field
               name={"amount"}
               validators={{
-                onChangeListenTo: ["type"],
+                onChangeListenTo: ["type", "price", "shares"],
                 onChange: ({ value, fieldApi }) => {
                   const type = TradeRecordType.parseFromLabel(
                     fieldApi.form.getFieldValue("type"),
                   );
-                  if (type) {
+                  const shares = fieldApi.form.getFieldValue("shares");
+                  const price = fieldApi.form.getFieldValue("price");
+                  if (value === "") {
+                    if (shares === "" && price === "") {
+                      return "必填项";
+                    }
+                  } else if (type) {
+                    const v = +value;
                     if (inputPositive(type)) {
-                      if (+value <= 0) {
+                      if (v <= 0) {
                         return "请输入正数";
                       }
                     } else {
-                      if (+value >= 0) {
+                      if (v >= 0) {
                         return "请输入负数";
                       }
                     }
