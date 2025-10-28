@@ -15,8 +15,8 @@ export const FieldLayout = ({
 }) => {
   return (
     <div className={"flex flex-col gap-1"}>
-      <div className={"flex items-center gap-2"}>
-        <div className={"font-medium"}>{label}</div>
+      <div className={"flex gap-2"}>
+        <div className={"font-medium leading-9"}>{label}</div>
         <div className={"flex-1 flex [&>*]:flex-1"}>{children}</div>
       </div>
       <div className={"text-sm"}>

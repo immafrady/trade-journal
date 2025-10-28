@@ -20,6 +20,7 @@ import { FieldLayout } from "@/components/ui/my/field-layout";
 import { Input } from "@/components/ui/input";
 import {
   calcAmount,
+  calcFee,
   calcPrice,
   calcShares,
   inputPositive,
@@ -29,6 +30,7 @@ import {
   requireShares,
 } from "./utils";
 import { formatMoney, formatShares } from "@/lib/market-utils";
+import { Textarea } from "@/components/ui/textarea";
 
 export const DialogEdit = ({
   trigger,
@@ -42,7 +44,7 @@ export const DialogEdit = ({
     defaultValues: {
       tradedAt: record?.props.tradedAt.toDate() ?? new Date(),
       type: record?.props.type.label,
-      factor: record?.props.factor ?? 1,
+      factor: record?.props.factor ?? "1",
       shares: record?.props.shares ?? "",
       price: record?.props.price ?? "",
       amount: record?.props.amount ?? "",
@@ -61,7 +63,7 @@ export const DialogEdit = ({
         type,
         amount: requireAmount(type) ? 0 : +value.amount,
         comment: value.comment,
-        factor: value.factor,
+        factor: +value.factor,
         fee: requireFee(type) ? +value.fee : undefined,
         price: requirePrice(type) ? +value.price : undefined,
         shares: requireShares(type) ? +value.shares : 0,
@@ -278,6 +280,78 @@ export const DialogEdit = ({
               }}
             />
           )}
+          {requireFee(type) && (
+            <form.Field
+              name={"fee"}
+              children={(field) => {
+                const shares = +field.form.getFieldValue("shares");
+                const price = +field.form.getFieldValue("price");
+                const amount = +field.form.getFieldValue("amount");
+                return (
+                  <FieldLayout
+                    label={TradeRecordConstants.Fee}
+                    description={"实际交易发生的费用，请填写正数"}
+                    field={field}
+                  >
+                    <Input
+                      value={field.state.value}
+                      type={"number"}
+                      placeholder={
+                        shares && price && amount
+                          ? formatMoney(calcFee(shares, price, amount))
+                          : "请输入，可留空"
+                      }
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                  </FieldLayout>
+                );
+              }}
+            />
+          )}
+          <form.Field
+            name={"factor"}
+            validators={{
+              onChange: ({ value }) => {
+                const v = +value;
+                if (!Number.isInteger(v)) {
+                  return "请填写整数";
+                }
+                if (v <= 0) {
+                  return "请填写正数";
+                }
+              },
+            }}
+            children={(field) => {
+              return (
+                <FieldLayout
+                  label={TradeRecordConstants.Factor}
+                  description={"用于合并多个相同交易，请填写正整数"}
+                  field={field}
+                >
+                  <Input
+                    value={field.state.value}
+                    type={"number"}
+                    placeholder={"请输入，默认填1"}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                </FieldLayout>
+              );
+            }}
+          />
+          <form.Field
+            name={"comment"}
+            children={(field) => {
+              return (
+                <FieldLayout label={TradeRecordConstants.Comment} field={field}>
+                  <Textarea
+                    value={field.state.value}
+                    placeholder={"随便写点什么都行"}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                </FieldLayout>
+              );
+            }}
+          />
         </div>
       </form>
     </ResponsiveDialog>
