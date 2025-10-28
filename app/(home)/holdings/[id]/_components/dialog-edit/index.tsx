@@ -19,12 +19,16 @@ import dayjs from "dayjs";
 import { FieldLayout } from "@/components/ui/my/field-layout";
 import { Input } from "@/components/ui/input";
 import {
+  calcAmount,
+  calcPrice,
+  calcShares,
   inputPositive,
   requireAmount,
   requireFee,
   requirePrice,
   requireShares,
 } from "./utils";
+import { formatMoney, formatShares } from "@/lib/market-utils";
 
 export const DialogEdit = ({
   trigger,
@@ -33,7 +37,7 @@ export const DialogEdit = ({
   trigger: React.ReactNode;
   record?: TradeRecord;
 }) => {
-  const { id: holdingId } = React.useContext(HoldingInfoContext);
+  const { id: holdingId, data } = React.useContext(HoldingInfoContext);
   const form = useForm({
     defaultValues: {
       tradedAt: record?.props.tradedAt.toDate() ?? new Date(),
@@ -154,41 +158,124 @@ export const DialogEdit = ({
                   }
                 },
               }}
-              children={(field) => (
-                <FieldLayout
-                  label={TradeRecordConstants.Shares}
-                  description={
-                    type &&
-                    `交易的份额变化, 请填写 ${inputPositive(type) ? "正" : "负"}数`
-                  }
-                  field={field}
-                >
-                  <Input
-                    value={field.state.value}
-                    type={"number"}
-                    placeholder={"请输入"}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                </FieldLayout>
-              )}
+              children={(field) => {
+                const price = +field.form.getFieldValue("price");
+                const amount = +field.form.getFieldValue("amount");
+                const fee = +field.form.getFieldValue("fee");
+                return (
+                  <FieldLayout
+                    label={TradeRecordConstants.Shares}
+                    description={
+                      type &&
+                      `交易的份额变化, 请填写 ${inputPositive(type) ? "正" : "负"}数`
+                    }
+                    field={field}
+                  >
+                    <Input
+                      value={field.state.value}
+                      type={"number"}
+                      placeholder={
+                        amount && price
+                          ? formatShares(calcShares(price, amount, fee))
+                          : "请输入"
+                      }
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                  </FieldLayout>
+                );
+              }}
             />
           )}
           {requirePrice(type) && (
             <form.Field
               name={"price"}
-              children={(field) => (
-                <FieldLayout
-                  label={TradeRecordConstants.Price}
-                  description={`输入了${TradeRecordConstants.Amount}、${TradeRecordConstants.Shares}`}
-                  field={field}
-                >
-                  <Input
-                    value={field.state.value}
-                    type={"number"}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                </FieldLayout>
-              )}
+              validators={{
+                onChange: ({ value, fieldApi }) => {
+                  const v = +value;
+                  if (v <= 0 && value !== "") {
+                    return "请输入正数";
+                  }
+                  if (
+                    value === "" &&
+                    fieldApi.form.getFieldValue("amount") === "" &&
+                    fieldApi.form.getFieldValue("shares") === ""
+                  ) {
+                    return "必填项";
+                  }
+                },
+              }}
+              children={(field) => {
+                const shares = +field.form.getFieldValue("shares");
+                const amount = +field.form.getFieldValue("amount");
+                const fee = +field.form.getFieldValue("fee");
+                return (
+                  <FieldLayout
+                    label={TradeRecordConstants.Price}
+                    description={"实际成交的价格"}
+                    field={field}
+                  >
+                    <Input
+                      value={field.state.value}
+                      type={"number"}
+                      placeholder={
+                        shares && amount && data
+                          ? data?.quote?.formatter(
+                              calcPrice(amount, shares, fee),
+                            )
+                          : "请输入"
+                      }
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                  </FieldLayout>
+                );
+              }}
+            />
+          )}
+          {requireAmount(type) && (
+            <form.Field
+              name={"amount"}
+              validators={{
+                onChangeListenTo: ["type"],
+                onChange: ({ value, fieldApi }) => {
+                  const type = TradeRecordType.parseFromLabel(
+                    fieldApi.form.getFieldValue("type"),
+                  );
+                  if (type) {
+                    if (inputPositive(type)) {
+                      if (+value <= 0) {
+                        return "请输入正数";
+                      }
+                    } else {
+                      if (+value >= 0) {
+                        return "请输入负数";
+                      }
+                    }
+                  }
+                },
+              }}
+              children={(field) => {
+                const shares = +field.form.getFieldValue("shares");
+                const price = +field.form.getFieldValue("price");
+                const fee = +field.form.getFieldValue("fee");
+                return (
+                  <FieldLayout
+                    label={TradeRecordConstants.Amount}
+                    description={`实际成交的金额（含手续费），请填写 ${inputPositive(type) ? "正" : "负"}数`}
+                    field={field}
+                  >
+                    <Input
+                      value={field.state.value}
+                      type={"number"}
+                      placeholder={
+                        shares && price
+                          ? formatMoney(calcAmount(price, shares, fee))
+                          : "请输入"
+                      }
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                  </FieldLayout>
+                );
+              }}
             />
           )}
         </div>

@@ -1,7 +1,14 @@
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
 
 export const requireAmount = (type?: TradeRecordType) =>
-  type && [TradeRecordType.Merge, TradeRecordType.Split].includes(type);
+  type &&
+  [
+    TradeRecordType.Buy,
+    TradeRecordType.Sell,
+    TradeRecordType.Subscribe,
+    TradeRecordType.Redeem,
+    TradeRecordType.Dividend,
+  ].includes(type);
 
 export const requireFee = (type?: TradeRecordType) =>
   type &&
