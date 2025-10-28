@@ -18,34 +18,13 @@ import { TradeRecordType } from "@/lib/enums/trade-record-type";
 import dayjs from "dayjs";
 import { FieldLayout } from "@/components/ui/my/field-layout";
 import { Input } from "@/components/ui/input";
-
-const requireAmount = (type?: TradeRecordType) =>
-  type && [TradeRecordType.Merge, TradeRecordType.Split].includes(type);
-const requireFee = (type?: TradeRecordType) =>
-  type &&
-  [
-    TradeRecordType.Buy,
-    TradeRecordType.Sell,
-    TradeRecordType.Subscribe,
-    TradeRecordType.Redeem,
-  ].includes(type);
-const requirePrice = (type?: TradeRecordType) =>
-  type &&
-  [
-    TradeRecordType.Buy,
-    TradeRecordType.Sell,
-    TradeRecordType.Subscribe,
-    TradeRecordType.Redeem,
-  ].includes(type);
-const requireShares = (type?: TradeRecordType) =>
-  TradeRecordType.Dividend !== type;
-const inputPositive = (type?: TradeRecordType) =>
-  type &&
-  [
-    TradeRecordType.Buy,
-    TradeRecordType.Subscribe,
-    TradeRecordType.Split,
-  ].includes(type);
+import {
+  inputPositive,
+  requireAmount,
+  requireFee,
+  requirePrice,
+  requireShares,
+} from "./utils";
 
 export const DialogEdit = ({
   trigger,
@@ -182,6 +161,25 @@ export const DialogEdit = ({
                     type &&
                     `交易的份额变化, 请填写 ${inputPositive(type) ? "正" : "负"}数`
                   }
+                  field={field}
+                >
+                  <Input
+                    value={field.state.value}
+                    type={"number"}
+                    placeholder={"请输入"}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                </FieldLayout>
+              )}
+            />
+          )}
+          {requirePrice(type) && (
+            <form.Field
+              name={"price"}
+              children={(field) => (
+                <FieldLayout
+                  label={TradeRecordConstants.Price}
+                  description={`输入了${TradeRecordConstants.Amount}、${TradeRecordConstants.Shares}`}
                   field={field}
                 >
                   <Input
