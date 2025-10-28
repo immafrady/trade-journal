@@ -8,8 +8,6 @@ import dayjs, { Dayjs } from "dayjs";
 export class TradeRecord {
   constructor(public props: TradeRecordProps) {
     this.props.factor ??= 1;
-    this.props.amount ??= 0;
-    this.props.price ??= 0;
     this.props.fee ??= 0;
     this.props.comment ??= "";
     if (!this.props.amount && !this.props.price) {
@@ -34,11 +32,12 @@ export class TradeRecord {
       price: price || (amount && shares ? (amount - fee) / shares : 0),
       amount: amount || (price && shares ? price * shares + fee : 0),
       fee: fee || (price && amount && shares ? amount - price * shares : 0),
+      shares: shares || (amount && price ? (amount - fee) / price : 0),
     };
     this.adjusted = {
       amount: this.derived.amount * factor,
       fee: this.derived.fee * factor,
-      shares: shares * factor,
+      shares: this.derived.shares * factor,
     };
   }
 
@@ -53,6 +52,7 @@ export class TradeRecord {
     price: number;
     amount: number;
     fee: number;
+    shares: number;
   };
 
   // 算上系数
@@ -104,7 +104,7 @@ export class TradeRecord {
       factor: this.props.factor!,
       fee: this.props.fee!,
       holding_id: this.props.holdingId,
-      price: this.props.price!,
+      price: this.props.price,
       shares: this.props.shares,
       traded_at: this.display.tradedAt,
       type: this.props.type.value,
@@ -130,7 +130,7 @@ interface TradeRecordProps {
   holdingId: number;
   type: TradeRecordType;
   factor?: number;
-  shares: number;
+  shares?: number;
   price?: number;
   amount?: number;
   fee?: number;
@@ -139,14 +139,15 @@ interface TradeRecordProps {
   id?: number;
 }
 
+// 数据库内保存
 export interface TradeRecordModel {
   id?: number;
   holding_id: number;
   type: TradeRecordTypeValue;
   factor: number;
-  shares: number;
-  price: number;
-  amount: number;
+  shares?: number;
+  price?: number;
+  amount?: number;
   fee: number;
   comment: string;
   traded_at: string;

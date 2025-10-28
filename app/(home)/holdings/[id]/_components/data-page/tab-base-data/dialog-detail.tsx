@@ -42,7 +42,7 @@ export const DialogDetail = ({
           },
           {
             title: TradeRecordConstants.Shares,
-            content: formatShares(record.props.shares),
+            content: formatShares(record.derived.shares),
           },
           {
             title: TradeRecordConstants.Price,

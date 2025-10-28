@@ -71,7 +71,7 @@ export const TabBaseData = () => {
         table={table}
         className={"bg-card"}
         getRowClassName={(row) =>
-          row.original.props.shares < 0 ? "bg-red-50 text-red-700" : ""
+          row.original.derived.shares < 0 ? "bg-red-50 text-red-700" : ""
         }
       />
     </>
