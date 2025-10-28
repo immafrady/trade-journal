@@ -39,6 +39,13 @@ const requirePrice = (type?: TradeRecordType) =>
   ].includes(type);
 const requireShares = (type?: TradeRecordType) =>
   TradeRecordType.Dividend !== type;
+const inputPositive = (type?: TradeRecordType) =>
+  type &&
+  [
+    TradeRecordType.Buy,
+    TradeRecordType.Subscribe,
+    TradeRecordType.Split,
+  ].includes(type);
 
 export const DialogEdit = ({
   trigger,
@@ -149,8 +156,34 @@ export const DialogEdit = ({
           {requireShares(type) && (
             <form.Field
               name={"shares"}
+              validators={{
+                onChangeListenTo: ["type"],
+                onChange: ({ value, fieldApi }) => {
+                  const type = TradeRecordType.parseFromLabel(
+                    fieldApi.form.getFieldValue("type"),
+                  );
+                  if (type) {
+                    if (inputPositive(type)) {
+                      if (+value <= 0) {
+                        return "请输入正数";
+                      }
+                    } else {
+                      if (+value >= 0) {
+                        return "请输入负数";
+                      }
+                    }
+                  }
+                },
+              }}
               children={(field) => (
-                <FieldLayout label={TradeRecordConstants.Shares} field={field}>
+                <FieldLayout
+                  label={TradeRecordConstants.Shares}
+                  description={
+                    type &&
+                    `交易的份额变化, 请填写 ${inputPositive(type) ? "正" : "负"}数`
+                  }
+                  field={field}
+                >
                   <Input
                     value={field.state.value}
                     type={"number"}
