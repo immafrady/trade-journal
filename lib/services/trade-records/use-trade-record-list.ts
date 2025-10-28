@@ -5,8 +5,11 @@ import React from "react";
 export function useTradeRecordList(
   holdingId: string,
 ): SWRResponse<TradeRecord[]> {
+  const key = holdingId
+    ? `/api/actions/trade-records?holdingId=${holdingId}`
+    : null;
   const { data: list = [], ...swr } = useSWR(
-    holdingId ? `/api/actions/trade-records?holdingId=${holdingId}` : null,
+    key,
     async (api) => {
       const response = await fetch(api);
       const { data } = await response.json();
@@ -18,22 +21,27 @@ export function useTradeRecordList(
   );
 
   const data = React.useMemo(() => {
-    let totalShares = 0;
-    let totalAmount = 0;
-    const result: TradeRecord[] = [];
-    for (let i = list.length - 1; i >= 0; i--) {
-      const record = TradeRecord.fromDatabase(list[i]);
-      totalShares += record.adjusted.shares;
-      totalAmount += record.adjusted.amount;
-      record.cumulative = {
-        totalAmount,
-        totalShares,
-        costPrice: totalShares > 0 ? totalAmount / totalShares : 0,
-      };
-      result.unshift(record);
+    try {
+      let totalShares = 0;
+      let totalAmount = 0;
+      const result: TradeRecord[] = [];
+      for (let i = list.length - 1; i >= 0; i--) {
+        const record = TradeRecord.fromDatabase(list[i]);
+        totalShares += record.adjusted.shares;
+        totalAmount += record.adjusted.amount;
+        record.cumulative = {
+          totalAmount,
+          totalShares,
+          costPrice: totalShares > 0 ? totalAmount / totalShares : 0,
+        };
+        result.unshift(record);
+      }
+      return result;
+    } catch (e) {
+      console.error(key, e);
+      return [];
     }
-    return result;
-  }, [list]);
+  }, [key, list]);
 
   return { ...swr, data };
 }

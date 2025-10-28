@@ -6,12 +6,13 @@ import { SinaStockType } from "@/lib/enums/sina-stock-type";
 import React from "react";
 
 export function useRealtimeQuotes(tickers: SinaTicker[]) {
-  const key = tickers.length
+  const searchCodes = tickers.length
     ? tickers.map((ticker) => ticker.searchCode).join(",")
     : null;
+  const key = searchCodes ? `/api/sina/quotes?list=${searchCodes}` : null;
 
   const { data: text = "", ...swr } = useSWR(
-    key ? `/api/sina/quotes?list=${key}` : null,
+    key,
     async (api) => {
       const response = await fetch(api);
       return await response.text();
@@ -21,23 +22,27 @@ export function useRealtimeQuotes(tickers: SinaTicker[]) {
     },
   );
   const data = React.useMemo(() => {
-    const lines = text.split("\n").filter(Boolean);
-    const result: Record<string, SinaQuote> = {};
-
-    for (let i = 0, j = 0; i < lines.length; i++, j++) {
-      const ticker = tickers[j];
-      const quote = new SinaQuote(ticker);
-      // 处理股票
-      quote.parseStock(lines[i]);
-      if (ticker.type !== SinaStockType.AShare) {
-        // 处理of
-        i++;
-        quote.parseFundNav(lines[i]);
+    try {
+      const lines = text.split("\n").filter(Boolean);
+      const result: Record<string, SinaQuote> = {};
+      for (let i = 0, j = 0; i < lines.length; i++, j++) {
+        const ticker = tickers[j];
+        const quote = new SinaQuote(ticker);
+        // 处理股票
+        quote.parseStock(lines[i]);
+        if (ticker.type !== SinaStockType.AShare) {
+          // 处理of
+          i++;
+          quote.parseFundNav(lines[i]);
+        }
+        result[ticker.searchCode] = quote;
       }
-      result[ticker.searchCode] = quote;
+      return result;
+    } catch (e) {
+      console.error(key, e);
+      return [];
     }
-    return result;
-  }, [text, tickers]);
+  }, [key, text, tickers]);
 
   return { ...swr, data };
 }
