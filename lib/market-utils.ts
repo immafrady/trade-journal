@@ -1,3 +1,5 @@
+import { SinaStockType } from "@/lib/enums/sina-stock-type";
+
 export type StockValueFormatter = (num?: number) => string;
 
 export const formatMoney: StockValueFormatter = (num?: number) => {
@@ -9,11 +11,14 @@ export const formatMoney: StockValueFormatter = (num?: number) => {
   return num < 0 ? `(${formatted})` : formatted;
 };
 
-export const formatShares = (num?: number) => num?.toFixed(2) ?? "--";
-
 export const formatFund: StockValueFormatter = (num?: number) =>
   num?.toFixed(4) ?? "--";
 
+export function formatStockValue(type: SinaStockType): StockValueFormatter {
+  return type === SinaStockType.AShare ? formatMoney : formatFund;
+}
+
+export const formatShares = (num?: number) => num?.toFixed(2) ?? "--";
 export const formatPercent = (num?: number) => (num?.toFixed(2) ?? "--") + "%";
 
 export const calculatePercent = (current: number, prev: number) =>

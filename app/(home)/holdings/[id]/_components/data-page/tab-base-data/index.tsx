@@ -20,9 +20,12 @@ export const TabBaseData = () => {
   const { data: list = [], mutate } = useTradeRecordList(id);
   const [loading, setLoading] = React.useState(false);
 
+  const columns = React.useMemo(() => {
+    return getColumns(data?.quote?.formatter);
+  }, [data?.quote?.formatter]);
   const table = useReactTable({
     data: list,
-    columns: getColumns(data?.quote?.formatter),
+    columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
