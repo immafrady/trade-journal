@@ -166,6 +166,7 @@ export const DialogEdit = ({
                     }
                   } else if (type) {
                     const v = +value;
+                    if (Number.isNaN(v)) return "请输入数字";
                     if (inputPositive(type)) {
                       if (v <= 0) {
                         return "请输入正数";
@@ -219,8 +220,12 @@ export const DialogEdit = ({
                   ) {
                     return "必填项";
                   }
-                  if (+value <= 0 && value !== "") {
-                    return "请输入正数";
+                  if (value !== "") {
+                    const v = +value;
+                    if (Number.isNaN(v)) return "请输入数字";
+                    if (v <= 0) {
+                      return "请输入正数";
+                    }
                   }
                 },
               }}
@@ -268,6 +273,7 @@ export const DialogEdit = ({
                     }
                   } else if (type) {
                     const v = +value;
+                    if (Number.isNaN(v)) return "请输入数字";
                     if (inputPositive(type)) {
                       if (v <= 0) {
                         return "请输入正数";
