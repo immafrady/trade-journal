@@ -1,6 +1,9 @@
 /* eslint-disable react/no-children-prop */
 
-import { ResponsiveDialog } from "@/components/ui/my/responsive-dialog";
+import {
+  ResponsiveDialog,
+  ResponsiveDialogRef,
+} from "@/components/ui/my/responsive-dialog";
 import React from "react";
 import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { useForm, useStore } from "@tanstack/react-form";
@@ -45,6 +48,7 @@ export const DialogEdit = ({
   trigger: React.ReactNode;
   record?: TradeRecord;
 }) => {
+  const dialogRef = React.useRef<ResponsiveDialogRef>(null);
   const { id: holdingId, data } = React.useContext(HoldingInfoContext);
   const { mutate } = useTradeRecordList(holdingId);
   const editType = record ? "编辑" : "新增";
@@ -60,9 +64,11 @@ export const DialogEdit = ({
       fee: record?.props.fee ?? "",
       comment: record?.props.comment ?? "",
     },
+    onSubmitInvalid: () => {
+      toast.error(`校验失败，无法提交`);
+    },
     onSubmit: async ({ value }) => {
       const type = TradeRecordType.parseFromLabel(value.type)!;
-
       const newRecord = new TradeRecord({
         holdingId: +holdingId,
         tradedAt: dayjs(value.tradedAt),
@@ -79,8 +85,9 @@ export const DialogEdit = ({
       } else {
         await addTradeRecords([newRecord]);
       }
-      await mutate();
       toast.success(`${editType}成功`);
+      dialogRef.current?.setOpen(false);
+      await mutate();
     },
   });
 
@@ -89,6 +96,7 @@ export const DialogEdit = ({
 
   return (
     <ResponsiveDialog
+      ref={dialogRef}
       trigger={trigger}
       title={editType}
       onSubmit={async () => {
@@ -158,6 +166,8 @@ export const DialogEdit = ({
                   const type = TradeRecordType.parseFromLabel(
                     fieldApi.form.getFieldValue("type"),
                   );
+                  if (!requireShares(type)) return; // 不用校验
+
                   const amount = fieldApi.form.getFieldValue("amount");
                   const price = fieldApi.form.getFieldValue("price");
                   if (value === "") {
@@ -213,6 +223,10 @@ export const DialogEdit = ({
               validators={{
                 onChangeListenTo: ["amount", "shares"],
                 onChange: ({ value, fieldApi }) => {
+                  const type = TradeRecordType.parseFromLabel(
+                    fieldApi.form.getFieldValue("type"),
+                  );
+                  if (!requirePrice(type)) return; // 不用校验
                   if (
                     value === "" &&
                     fieldApi.form.getFieldValue("amount") === "" &&
@@ -265,6 +279,7 @@ export const DialogEdit = ({
                   const type = TradeRecordType.parseFromLabel(
                     fieldApi.form.getFieldValue("type"),
                   );
+                  if (!requireAmount(type)) return; // 不用校验
                   const shares = fieldApi.form.getFieldValue("shares");
                   const price = fieldApi.form.getFieldValue("price");
                   if (value === "") {
@@ -314,6 +329,16 @@ export const DialogEdit = ({
           {requireFee(type) && (
             <form.Field
               name={"fee"}
+              validators={{
+                onChange: ({ value, fieldApi }) => {
+                  const type = TradeRecordType.parseFromLabel(
+                    fieldApi.form.getFieldValue("type"),
+                  );
+                  if (!requireFee(type)) return; // 不用校验
+
+                  if (Number.isNaN(+value)) return "请输入数字";
+                },
+              }}
               children={(field) => {
                 const shares = +field.form.getFieldValue("shares");
                 const price = +field.form.getFieldValue("price");

@@ -11,21 +11,28 @@ import {
 import React from "react";
 import { Button, LoadingButton } from "@/components/ui/button";
 
-export const ResponsiveDialog = ({
-  trigger,
-  children,
-  title,
-  description,
-  onSubmit,
-  onClosed,
-}: {
-  trigger: React.ReactNode;
-  children: React.ReactNode;
-  title: string;
-  description?: string;
-  onSubmit?: () => Promise<void>;
-  onClosed?: () => void;
-}) => {
+export interface ResponsiveDialogRef {
+  setOpen: (open: boolean) => void;
+}
+
+const ResponsiveDialogInner = (
+  {
+    trigger,
+    children,
+    title,
+    description,
+    onSubmit,
+    onClosed,
+  }: {
+    trigger: React.ReactNode;
+    children: React.ReactNode;
+    title: string;
+    description?: string;
+    onSubmit?: () => Promise<void>;
+    onClosed?: () => void;
+  },
+  ref: React.ForwardedRef<ResponsiveDialogRef>,
+) => {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   React.useEffect(() => {
@@ -34,6 +41,8 @@ export const ResponsiveDialog = ({
     }
     return () => {};
   }, [onClosed, open]);
+
+  React.useImperativeHandle(ref, () => ({ setOpen }));
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -54,7 +63,6 @@ export const ResponsiveDialog = ({
                 setLoading(true);
                 try {
                   await onSubmit();
-                  setOpen(false);
                 } finally {
                   setLoading(false);
                 }
@@ -68,3 +76,5 @@ export const ResponsiveDialog = ({
     </Dialog>
   );
 };
+
+export const ResponsiveDialog = React.forwardRef(ResponsiveDialogInner);
