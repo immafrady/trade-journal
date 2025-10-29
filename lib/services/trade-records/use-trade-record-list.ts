@@ -1,14 +1,27 @@
 import useSWR, { SWRResponse } from "swr";
 import { TradeRecord } from "@/lib/services/trade-records/trade-record";
+import React from "react";
 
 export function useTradeRecordList(
   holdingId: string,
 ): SWRResponse<TradeRecord[]> {
-  return useSWR(
-    `/api/actions/trade-records?holdingId=${holdingId}`,
+  const key = holdingId
+    ? `/api/actions/trade-records?holdingId=${holdingId}`
+    : null;
+  const { data: list = [], ...swr } = useSWR(
+    key,
     async (api) => {
       const response = await fetch(api);
-      const { data: list } = await response.json();
+      const { data } = await response.json();
+      return data;
+    },
+    {
+      fallbackData: [],
+    },
+  );
+
+  const data = React.useMemo(() => {
+    try {
       let totalShares = 0;
       let totalAmount = 0;
       const result: TradeRecord[] = [];
@@ -19,13 +32,16 @@ export function useTradeRecordList(
         record.cumulative = {
           totalAmount,
           totalShares,
+          costPrice: totalShares > 0 ? totalAmount / totalShares : 0,
         };
         result.unshift(record);
       }
       return result;
-    },
-    {
-      fallbackData: [],
-    },
-  );
+    } catch (e) {
+      console.error(key, e);
+      return [];
+    }
+  }, [key, list]);
+
+  return { ...swr, data };
 }

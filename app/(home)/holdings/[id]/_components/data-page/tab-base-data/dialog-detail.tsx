@@ -42,7 +42,7 @@ export const DialogDetail = ({
           },
           {
             title: TradeRecordConstants.Shares,
-            content: formatShares(record.props.shares),
+            content: formatShares(record.derived.shares),
           },
           {
             title: TradeRecordConstants.Price,
@@ -87,6 +87,10 @@ export const DialogDetail = ({
       <h3 className={"text-center font-medium"}>建仓以来</h3>
       <InlineDisplay
         list={[
+          {
+            title: TradeRecordConstants.CumulativeCostPrice,
+            content: formatter(record.cumulative.costPrice),
+          },
           {
             title: TradeRecordConstants.CumulativeTotalAmount,
             content: formatMoney(record.cumulative.totalAmount),

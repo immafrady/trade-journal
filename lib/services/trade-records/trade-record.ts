@@ -7,23 +7,50 @@ import dayjs, { Dayjs } from "dayjs";
 
 export class TradeRecord {
   constructor(public props: TradeRecordProps) {
+    // 校验必填字段
+    switch (this.props.type) {
+      case TradeRecordType.Buy:
+      case TradeRecordType.Sell:
+      case TradeRecordType.Subscribe:
+      case TradeRecordType.Redeem: {
+        if (
+          [this.props.amount, this.props.shares, this.props.price].filter(
+            (v) => !!v,
+          ).length < 2
+        ) {
+          throw new Error(
+            `
+            “${this.props.type.label}”类型以下字段三选二必填：${TradeRecordConstants.Shares}、${TradeRecordConstants.Price}、${TradeRecordConstants.Amount}
+            - ${TradeRecordConstants.Shares}: ${this.props.shares}
+            - ${TradeRecordConstants.Price}: ${this.props.price}
+            - ${TradeRecordConstants.Amount}: ${this.props.amount}
+            `,
+          );
+        }
+        break;
+      }
+      case TradeRecordType.Dividend: {
+        if (!this.props.amount) {
+          throw new Error(
+            `“${this.props.type.label}”类型必填字段：${TradeRecordConstants.Amount}`,
+          );
+        }
+        break;
+      }
+      case TradeRecordType.Split:
+      case TradeRecordType.Merge: {
+        if (!this.props.shares) {
+          throw new Error(
+            `“${this.props.type.label}”类型必填字段：${TradeRecordConstants.Shares}`,
+          );
+        }
+        break;
+      }
+    }
+
     this.props.factor ??= 1;
-    this.props.amount ??= 0;
-    this.props.price ??= 0;
     this.props.fee ??= 0;
     this.props.comment ??= "";
-    if (!this.props.amount && !this.props.price) {
-      throw new Error(
-        `
-        “${TradeRecordConstants.Price}”或“${TradeRecordConstants.Amount}“必须有值
-        - ${TradeRecordConstants.Price}: ${this.props.price}
-        - ${TradeRecordConstants.Amount}: ${this.props.amount}
-        
-        原始数据：
-        ${JSON.stringify(this.props)}
-        `,
-      );
-    }
     this.props.comment ??= "";
     this.display = {
       tradedAt: dayjs(this.props.tradedAt).format("YYYY-MM-DD"),
@@ -34,11 +61,12 @@ export class TradeRecord {
       price: price || (amount && shares ? (amount - fee) / shares : 0),
       amount: amount || (price && shares ? price * shares + fee : 0),
       fee: fee || (price && amount && shares ? amount - price * shares : 0),
+      shares: shares || (amount && price ? (amount - fee) / price : 0),
     };
     this.adjusted = {
       amount: this.derived.amount * factor,
       fee: this.derived.fee * factor,
-      shares: shares * factor,
+      shares: this.derived.shares * factor,
     };
   }
 
@@ -53,6 +81,7 @@ export class TradeRecord {
     price: number;
     amount: number;
     fee: number;
+    shares: number;
   };
 
   // 算上系数
@@ -66,9 +95,11 @@ export class TradeRecord {
   public cumulative: {
     totalAmount: number;
     totalShares: number;
+    costPrice: number;
   } = {
     totalAmount: 0,
     totalShares: 0,
+    costPrice: 0,
   };
 
   /**
@@ -102,7 +133,7 @@ export class TradeRecord {
       factor: this.props.factor!,
       fee: this.props.fee!,
       holding_id: this.props.holdingId,
-      price: this.props.price!,
+      price: this.props.price,
       shares: this.props.shares,
       traded_at: this.display.tradedAt,
       type: this.props.type.value,
@@ -128,7 +159,7 @@ interface TradeRecordProps {
   holdingId: number;
   type: TradeRecordType;
   factor?: number;
-  shares: number;
+  shares?: number;
   price?: number;
   amount?: number;
   fee?: number;
@@ -137,14 +168,15 @@ interface TradeRecordProps {
   id?: number;
 }
 
+// 数据库内保存
 export interface TradeRecordModel {
   id?: number;
   holding_id: number;
   type: TradeRecordTypeValue;
   factor: number;
-  shares: number;
-  price: number;
-  amount: number;
+  shares?: number;
+  price?: number;
+  amount?: number;
   fee: number;
   comment: string;
   traded_at: string;

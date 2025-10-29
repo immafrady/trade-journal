@@ -1,16 +1,13 @@
 import { SinaTicker } from "@/lib/services/sina/ticker";
-import { SinaStockType } from "@/lib/enums/sina-stock-type";
 import {
   calculatePercent,
-  formatFund,
-  formatMoney,
+  formatStockValue,
   StockValueFormatter,
 } from "@/lib/market-utils";
 
 export class SinaQuote {
   constructor(public readonly ticker: SinaTicker) {
-    this.formatter =
-      ticker.type === SinaStockType.AShare ? formatMoney : formatFund;
+    this.formatter = formatStockValue(ticker.type);
   }
 
   public formatter: StockValueFormatter;

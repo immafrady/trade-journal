@@ -4,39 +4,58 @@ import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { DataTable } from "@/components/ui/my/data-table";
 import { Button, LoadingButton } from "@/components/ui/button";
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { Layers, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { deleteSelectedTradeRecord } from "@/lib/services/trade-records/trade-record-apis";
-import { Table } from "@tanstack/react-table";
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 
 export const TabBaseData = () => {
-  const tableRef = React.useRef<Table<TradeRecord>>(null);
   const { id, data } = React.useContext(HoldingInfoContext);
   const { data: list = [], mutate } = useTradeRecordList(id);
-  const [rows, setRows] = React.useState<TradeRecord[]>([]);
   const [loading, setLoading] = React.useState(false);
+
+  const columns = React.useMemo(() => {
+    return getColumns(data?.quote?.formatter);
+  }, [data?.quote?.formatter]);
+  const table = useReactTable({
+    data: list,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+  });
+
+  const selectedRows = table
+    .getFilteredSelectedRowModel()
+    .rows.map((row) => row.original);
 
   return (
     <>
       <div className={"flex justify-between my-2"}>
-        <Button disabled={!rows.length} variant={"outline"}>
+        <Button disabled={!selectedRows.length} variant={"outline"}>
           <Layers />
           汇总展示
         </Button>
         <LoadingButton
           loading={loading}
-          disabled={!rows.length}
+          disabled={!selectedRows.length}
           variant={"destructive"}
           size={"sm"}
           icon={<Trash />}
           onClick={async () => {
             setLoading(true);
             await deleteSelectedTradeRecord(
-              rows.map((row) => String(row.props.id!)),
+              selectedRows.map((row) => String(row.props.id!)),
             );
             await mutate();
-            tableRef.current?.resetRowSelection();
+            table.resetRowSelection();
             try {
             } catch (e: any) {
               toast.error(e.toString());
@@ -49,14 +68,11 @@ export const TabBaseData = () => {
         </LoadingButton>
       </div>
       <DataTable
-        ref={tableRef}
-        data={list}
-        columns={getColumns(data?.quote?.formatter)}
+        table={table}
         className={"bg-card"}
         getRowClassName={(row) =>
-          row.original.props.shares < 0 ? "bg-red-50 text-red-700" : ""
+          row.original.derived.shares < 0 ? "bg-red-50 text-red-700" : ""
         }
-        onSelect={setRows}
       />
     </>
   );

@@ -91,7 +91,7 @@ export function getColumns(
           className={"text-right"}
         />
       ),
-      accessorFn: (row) => row.props.shares,
+      accessorFn: (row) => row.derived.shares,
       cell: (row) => (
         <div className={"text-right"}>
           {formatShares(row.getValue() as number)}
