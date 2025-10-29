@@ -14,8 +14,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import {
+  DialogSummary,
+  DialogSummaryRef,
+} from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-summary";
 
 export const TabBaseData = () => {
+  const dialogSummaryRef = React.useRef<DialogSummaryRef>(null);
   const { id, data } = React.useContext(HoldingInfoContext);
   const { data: list = [], mutate } = useTradeRecordList(id);
   const [loading, setLoading] = React.useState(false);
@@ -39,7 +44,11 @@ export const TabBaseData = () => {
   return (
     <>
       <div className={"flex justify-between my-2"}>
-        <Button disabled={!selectedRows.length} variant={"outline"}>
+        <Button
+          disabled={!selectedRows.length}
+          variant={"outline"}
+          onClick={() => dialogSummaryRef.current?.openDialog(selectedRows)}
+        >
           <Layers />
           汇总展示
         </Button>
@@ -74,6 +83,7 @@ export const TabBaseData = () => {
           row.original.derived.shares < 0 ? "bg-red-50 text-red-700" : ""
         }
       />
+      <DialogSummary ref={dialogSummaryRef} />
     </>
   );
 };

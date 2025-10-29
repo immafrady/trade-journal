@@ -12,7 +12,9 @@ import React from "react";
 import { Button, LoadingButton } from "@/components/ui/button";
 
 export interface ResponsiveDialogRef {
+  open: boolean;
   setOpen: (open: boolean) => void;
+  toggleOpen: () => void;
 }
 
 const ResponsiveDialogInner = (
@@ -24,7 +26,7 @@ const ResponsiveDialogInner = (
     onSubmit,
     onClosed,
   }: {
-    trigger: React.ReactNode;
+    trigger?: React.ReactNode;
     children: React.ReactNode;
     title: string;
     description?: string;
@@ -42,10 +44,14 @@ const ResponsiveDialogInner = (
     return () => {};
   }, [onClosed, open]);
 
-  React.useImperativeHandle(ref, () => ({ setOpen }));
+  React.useImperativeHandle(ref, () => ({
+    open,
+    setOpen,
+    toggleOpen: () => setOpen((o) => !o),
+  }));
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className="sm:max-w-[425px] max-h-[calc(100svh-4rem)] flex flex-col">
         <DialogHeader className={"shrink-0"}>
           <DialogTitle>{title}</DialogTitle>
