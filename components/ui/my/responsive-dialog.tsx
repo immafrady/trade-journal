@@ -54,6 +54,7 @@ export const ResponsiveDialog = ({
                 setLoading(true);
                 try {
                   await onSubmit();
+                  setOpen(false);
                 } finally {
                   setLoading(false);
                 }

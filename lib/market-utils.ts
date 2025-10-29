@@ -12,13 +12,13 @@ export const formatMoney: StockValueFormatter = (num?: number) => {
 };
 
 export const formatFund: StockValueFormatter = (num?: number) =>
-  num?.toFixed(4) ?? "--";
+  num ? num.toFixed(4) : "--";
 
 export function formatStockValue(type: SinaStockType): StockValueFormatter {
   return type === SinaStockType.AShare ? formatMoney : formatFund;
 }
 
-export const formatShares = (num?: number) => num?.toFixed(2) ?? "--";
+export const formatShares = (num?: number) => (num ? num.toFixed(2) : "--");
 export const formatPercent = (num?: number) => (num?.toFixed(2) ?? "--") + "%";
 
 export const calculatePercent = (current: number, prev: number) =>

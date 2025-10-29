@@ -31,6 +31,12 @@ import {
 } from "./utils";
 import { formatMoney, formatShares } from "@/lib/market-utils";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  addTradeRecords,
+  updateTradeRecord,
+} from "@/lib/services/trade-records/trade-record-apis";
+import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { toast } from "sonner";
 
 export const DialogEdit = ({
   trigger,
@@ -40,6 +46,9 @@ export const DialogEdit = ({
   record?: TradeRecord;
 }) => {
   const { id: holdingId, data } = React.useContext(HoldingInfoContext);
+  const { mutate } = useTradeRecordList(holdingId);
+  const editType = record ? "编辑" : "新增";
+
   const form = useForm({
     defaultValues: {
       tradedAt: record?.props.tradedAt.toDate() ?? new Date(),
@@ -51,11 +60,10 @@ export const DialogEdit = ({
       fee: record?.props.fee ?? "",
       comment: record?.props.comment ?? "",
     },
-    onSubmit: ({ value }) => {
+    onSubmit: async ({ value }) => {
       const type = TradeRecordType.parseFromLabel(value.type)!;
 
       const newRecord = new TradeRecord({
-        id: record?.props.id,
         holdingId: +holdingId,
         tradedAt: dayjs(value.tradedAt),
         type,
@@ -66,8 +74,13 @@ export const DialogEdit = ({
         price: requirePrice(type) && value.price ? +value.price : undefined,
         shares: requireShares(type) && value.shares ? +value.shares : 0,
       });
-
-      console.log(newRecord.toJSON());
+      if (record?.props.id) {
+        await updateTradeRecord(String(record.props.id), newRecord);
+      } else {
+        await addTradeRecords([newRecord]);
+      }
+      await mutate();
+      toast.success(`${editType}成功`);
     },
   });
 
@@ -77,7 +90,7 @@ export const DialogEdit = ({
   return (
     <ResponsiveDialog
       trigger={trigger}
-      title={record ? "编辑" : "新增"}
+      title={editType}
       onSubmit={async () => {
         await form.handleSubmit();
       }}
