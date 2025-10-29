@@ -37,14 +37,14 @@ export const ResponsiveDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[425px] max-h-[calc(100svh-4rem)] flex flex-col">
+        <DialogHeader className={"shrink-0"}>
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        {children}
+        <div className={"overflow-y-auto px-2 flex-1"}>{children}</div>
         {onSubmit && (
-          <DialogFooter>
+          <DialogFooter className={"shrink-0"}>
             <DialogClose asChild>
               <Button variant="outline">取消</Button>
             </DialogClose>
