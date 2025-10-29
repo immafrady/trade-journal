@@ -40,7 +40,7 @@ export function useRealtimeQuotes(tickers: SinaTicker[]) {
       return result;
     } catch (e) {
       console.error(key, e);
-      return [];
+      return {};
     }
   }, [key, text, tickers]);
 
