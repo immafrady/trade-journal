@@ -7,21 +7,50 @@ import dayjs, { Dayjs } from "dayjs";
 
 export class TradeRecord {
   constructor(public props: TradeRecordProps) {
+    // 校验必填字段
+    switch (this.props.type) {
+      case TradeRecordType.Buy:
+      case TradeRecordType.Sell:
+      case TradeRecordType.Subscribe:
+      case TradeRecordType.Redeem: {
+        if (
+          [this.props.amount, this.props.shares, this.props.price].filter(
+            (v) => !!v,
+          ).length < 2
+        ) {
+          throw new Error(
+            `
+            “${this.props.type.label}”类型以下字段三选二必填：${TradeRecordConstants.Shares}、${TradeRecordConstants.Price}、${TradeRecordConstants.Amount}
+            - ${TradeRecordConstants.Shares}: ${this.props.shares}
+            - ${TradeRecordConstants.Price}: ${this.props.price}
+            - ${TradeRecordConstants.Amount}: ${this.props.amount}
+            `,
+          );
+        }
+        break;
+      }
+      case TradeRecordType.Dividend: {
+        if (!this.props.amount) {
+          throw new Error(
+            `“${this.props.type.label}”类型必填字段：${TradeRecordConstants.Amount}`,
+          );
+        }
+        break;
+      }
+      case TradeRecordType.Split:
+      case TradeRecordType.Merge: {
+        if (!this.props.shares) {
+          throw new Error(
+            `“${this.props.type.label}”类型必填字段：${TradeRecordConstants.Shares}`,
+          );
+        }
+        break;
+      }
+    }
+
     this.props.factor ??= 1;
     this.props.fee ??= 0;
     this.props.comment ??= "";
-    if (!this.props.amount && !this.props.price) {
-      throw new Error(
-        `
-        “${TradeRecordConstants.Price}”或“${TradeRecordConstants.Amount}“必须有值
-        - ${TradeRecordConstants.Price}: ${this.props.price}
-        - ${TradeRecordConstants.Amount}: ${this.props.amount}
-        
-        原始数据：
-        ${JSON.stringify(this.props)}
-        `,
-      );
-    }
     this.props.comment ??= "";
     this.display = {
       tradedAt: dayjs(this.props.tradedAt).format("YYYY-MM-DD"),
