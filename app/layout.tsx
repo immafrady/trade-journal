@@ -16,6 +16,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Trade Journal",
   description: "记录你的股市点点滴滴",
+  icons: {
+    icon: "/icon?<generated>",
+    apple: "/icon?<generated>",
+  },
 };
 
 export default function RootLayout({
