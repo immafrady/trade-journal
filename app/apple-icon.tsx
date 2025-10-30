@@ -1,0 +1,37 @@
+import { ImageResponse } from "next/og";
+import { BookOpenCheck } from "lucide-react";
+
+// Image metadata
+export const size = {
+  width: 32,
+  height: 32,
+};
+export const contentType = "image/png";
+
+// Image generation
+export default function AppleIcon() {
+  return new ImageResponse(
+    (
+      // ImageResponse JSX element
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "oklch(0.4461 0.0263 256.8018)",
+          color: "oklch(0.9670 0.0029 264.5419)",
+        }}
+      >
+        <BookOpenCheck className="size-4" />
+      </div>
+    ),
+    // ImageResponse options
+    {
+      // For convenience, we can re-use the exported icons size metadata
+      // config to also set the ImageResponse's width and height.
+      ...size,
+    },
+  );
+}
