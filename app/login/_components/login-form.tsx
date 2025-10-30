@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -16,6 +16,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [loading, setLoading] = React.useState(false);
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -27,11 +28,22 @@ export function LoginForm({
           <form>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
-                <Button
+                <LoadingButton
+                  loading={loading}
+                  icon={
+                    <Image
+                      className="dark:invert"
+                      src="/github.svg"
+                      alt="Github logomark"
+                      width={20}
+                      height={20}
+                    />
+                  }
                   variant="outline"
                   className="w-full"
                   onClick={async (e) => {
                     e.preventDefault();
+                    setLoading(true);
                     let url =
                       process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
                       process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
@@ -49,17 +61,11 @@ export function LoginForm({
                         redirectTo: url + "api/auth/callback",
                       },
                     });
+                    // setLoading(false);
                   }}
                 >
-                  <Image
-                    className="dark:invert"
-                    src="/github.svg"
-                    alt="Github logomark"
-                    width={20}
-                    height={20}
-                  />
                   Login with Github
-                </Button>
+                </LoadingButton>
               </div>
             </div>
           </form>
