@@ -11,21 +11,30 @@ import {
 import React from "react";
 import { Button, LoadingButton } from "@/components/ui/button";
 
-export const ResponsiveDialog = ({
-  trigger,
-  children,
-  title,
-  description,
-  onSubmit,
-  onClosed,
-}: {
-  trigger: React.ReactNode;
-  children: React.ReactNode;
-  title: string;
-  description?: string;
-  onSubmit?: () => Promise<void>;
-  onClosed?: () => void;
-}) => {
+export interface ResponsiveDialogRef {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  toggleOpen: () => void;
+}
+
+const ResponsiveDialogInner = (
+  {
+    trigger,
+    children,
+    title,
+    description,
+    onSubmit,
+    onClosed,
+  }: {
+    trigger?: React.ReactNode;
+    children: React.ReactNode;
+    title: string;
+    description?: string;
+    onSubmit?: () => Promise<void>;
+    onClosed?: () => void;
+  },
+  ref: React.ForwardedRef<ResponsiveDialogRef>,
+) => {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   React.useEffect(() => {
@@ -34,17 +43,23 @@ export const ResponsiveDialog = ({
     }
     return () => {};
   }, [onClosed, open]);
+
+  React.useImperativeHandle(ref, () => ({
+    open,
+    setOpen,
+    toggleOpen: () => setOpen((o) => !o),
+  }));
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      <DialogContent className="sm:max-w-[425px] max-h-[calc(100svh-4rem)] flex flex-col">
+        <DialogHeader className={"shrink-0"}>
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        {children}
+        <div className={"overflow-y-auto px-2 flex-1"}>{children}</div>
         {onSubmit && (
-          <DialogFooter>
+          <DialogFooter className={"shrink-0"}>
             <DialogClose asChild>
               <Button variant="outline">取消</Button>
             </DialogClose>
@@ -54,7 +69,6 @@ export const ResponsiveDialog = ({
                 setLoading(true);
                 try {
                   await onSubmit();
-                  setOpen(false);
                 } finally {
                   setLoading(false);
                 }
@@ -68,3 +82,5 @@ export const ResponsiveDialog = ({
     </Dialog>
   );
 };
+
+export const ResponsiveDialog = React.forwardRef(ResponsiveDialogInner);
