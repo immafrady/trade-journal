@@ -12,17 +12,18 @@ export const useTradeRecordSummary = (holdingId: string) => {
   let maxTotalAmountTradedAt: string | null = null;
   let maxTotalSharesTradedAt: string | null = null;
   if (list.length) {
+    // 最新的值就是当前的成本
     totalAmount = list[0].cumulative.totalAmount;
     totalShares = list[0].cumulative.totalShares;
     costPrice = list[0].cumulative.costPrice;
     for (let i = list.length - 1; i >= 0; i--) {
       const record = list[i];
       totalFee += record.adjusted.fee;
-      maxTotalAmount = Math.max(totalAmount, record.cumulative.totalAmount);
+      maxTotalAmount = Math.max(maxTotalAmount, record.cumulative.totalAmount);
       if (maxTotalAmount === record.cumulative.totalAmount) {
         maxTotalAmountTradedAt = record.display.tradedAt;
       }
-      maxTotalShares = Math.max(totalShares, record.cumulative.totalShares);
+      maxTotalShares = Math.max(maxTotalShares, record.cumulative.totalShares);
       if (maxTotalShares === record.cumulative.totalShares) {
         maxTotalSharesTradedAt = record.display.tradedAt;
       }
