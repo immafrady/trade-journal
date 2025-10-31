@@ -70,7 +70,6 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
             <SimpleDisplay
               title={"场外价格"}
               value={quote.formatter(quote.fundNav!)}
-              change={formatPercent(quote.fundNavPct!)}
               colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
             />
           }
