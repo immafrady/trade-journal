@@ -4,7 +4,7 @@ export const TradeRecordConstants = {
   Factor: "系数",
   Shares: "份额变化",
   Price: "成交价格",
-  Amount: "成本变化",
+  Amount: "金额变化",
   Fee: "费用支出",
   Comment: "备注",
   AdjustedAmount: "加权成本变化",
