@@ -41,13 +41,13 @@ export function parseFromCsv(
             }
             // 份额
             const shares = item[TradeRecordConstants.Shares];
-            if (!Utils.isNumber(shares)) {
+            if (!(Utils.isEmpty(shares) || Utils.isNumber(shares))) {
               e.add(TradeRecordConstants.Shares, "必须为数字");
             }
 
             // 价格
             const price = item[TradeRecordConstants.Price];
-            if (!Utils.isNumber(price)) {
+            if (!(Utils.isEmpty(price) || Utils.isNumber(price))) {
               e.add(TradeRecordConstants.Price, "可不填，但若填写必须为数字");
             }
 

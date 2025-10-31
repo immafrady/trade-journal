@@ -24,22 +24,30 @@ const schema = [
   },
   {
     label: TradeRecordConstants.Shares,
-    required: true,
-    description:
-      "交易的份额变化\n· “买入”、“申购”、“拆股”时填正数\n· “卖出”、“赎回”、“合股”时填负数\n· “分红”填0",
+    description: `
+      交易的份额变化
+      · “买入”、“申购”、“拆股”时填正数
+      · “卖出”、“赎回”、“合股”时填负数
+      · “分红”填0
+      * 与“${TradeRecordConstants.Price}”、“${TradeRecordConstants.Amount}”三选二填写
+      `,
   },
   {
     label: TradeRecordConstants.Price,
     description: `
       交易发生的价格
-      “分红”、“拆股”、“合股”填0
-      * 与“${TradeRecordConstants.Amount}”二选一进行填写
+      · “分红”、“拆股”、“合股”填0
+      * 与“${TradeRecordConstants.Shares}”、“${TradeRecordConstants.Amount}”三选二填写
     `,
   },
   {
     label: TradeRecordConstants.Amount,
     required: false,
-    description: `包含手续费的金额\n默认通过“成交份额x成交价格+交易费用”推导出来\n* 与“${TradeRecordConstants.Price}”二选一进行填写`,
+    description: `
+    包含手续费的金额
+    · 默认通过“成交份额x成交价格+交易费用”推导出来
+    * 与“${TradeRecordConstants.Shares}”、“${TradeRecordConstants.Price}”三选二填写
+    `,
   },
   {
     label: TradeRecordConstants.Fee,
