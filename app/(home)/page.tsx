@@ -6,7 +6,12 @@ import { TickerCard } from "@/app/(home)/_components/ticker-card";
 import { NavigateToHoldingsAdd } from "@/app/(home)/_components/navigate-to-holdings-add";
 import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import Loading from "@/components/ui/my/loading";
-import { AppBar, AppContainer } from "@/components/ui/my/app-container";
+import {
+  AppBar,
+  AppBarExtraContent,
+  AppContainer,
+} from "@/components/ui/my/app-container";
+import { HoldingSummary } from "@/app/(home)/_components/holding-summary";
 
 export default function Page() {
   const { isLoading } = useHoldingList();
@@ -15,10 +20,23 @@ export default function Page() {
   return isLoading ? (
     <Loading isLoading={true} />
   ) : (
-    <AppContainer appBar={<AppBar />} hideBackButton={true}>
+    <AppContainer
+      appBar={
+        <AppBar bgGradient={!!list.length}>
+          {list.length && (
+            <AppBarExtraContent
+              className={"px-2 -mb-6 relative z-50 pointer-events-auto"}
+            >
+              <HoldingSummary />
+            </AppBarExtraContent>
+          )}
+        </AppBar>
+      }
+      hideBackButton={true}
+    >
       {list.length ? (
         <>
-          <div className={"common-layout flex flex-col gap-2"}>
+          <div className={"common-layout flex flex-col gap-2 pt-10"}>
             {list?.map(({ id, ticker, quote }) => {
               return (
                 <TickerCard

@@ -6,6 +6,10 @@ import { persistSWRCache } from "@/providers/swr-storage-provider";
 
 const key = "/api/actions/holdings";
 
+export type HoldingInfo = {
+  id: string;
+  ticker: SinaTicker;
+};
 export function useHoldingList() {
   const { data: list = [], ...swr } = useSWR(key, async (key) => {
     const response = await fetch(key);
@@ -15,10 +19,13 @@ export function useHoldingList() {
 
   const data: { id: string; ticker: SinaTicker }[] = React.useMemo(() => {
     try {
-      return list.map((holding: any) => ({
-        id: holding.id + "",
-        ticker: new SinaTicker(holding.type, holding.label, holding.code),
-      }));
+      return list.map(
+        (holding: any) =>
+          ({
+            id: holding.id + "",
+            ticker: new SinaTicker(holding.type, holding.label, holding.code),
+          }) as HoldingInfo,
+      );
     } catch (e) {
       console.error(key, e);
       return [];
