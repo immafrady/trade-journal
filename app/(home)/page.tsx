@@ -12,7 +12,9 @@ export default function Page() {
   const { isLoading } = useHoldingList();
   const list = useHoldingsWithQuote();
 
-  return list.length ? (
+  return isLoading ? (
+    <Loading isLoading={true} />
+  ) : list.length ? (
     <AppContainer appBar={<AppBar />} hideBackButton={true}>
       <div className={"common-layout flex flex-col gap-2"}>
         {list?.map(({ id, ticker, quote }) => {
