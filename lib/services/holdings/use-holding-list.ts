@@ -2,7 +2,7 @@
 import useSWR from "swr";
 import { SinaTicker } from "@/lib/services/sina/ticker";
 import React from "react";
-import { persistSWRCache } from "@/lib/swr/local-storage-provider";
+import { persistSWRCache } from "@/providers/swr-storage-provider";
 
 const key = "/api/actions/holdings";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { UserMetaProvider } from "@/providers/user-meta";
-import { SWRStorageProvider } from "@/lib/swr/local-storage-provider";
 import { ClientOnly } from "@/components/client-only";
+import { SWRStorageProvider } from "@/providers/swr-storage-provider";
 
 export default function BaseLayout({
   children,
