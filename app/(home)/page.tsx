@@ -14,24 +14,27 @@ export default function Page() {
 
   return isLoading || isValidating ? (
     <Loading isLoading={true} />
-  ) : list.length ? (
-    <AppContainer appBar={<AppBar />} hideBackButton={true}>
-      <div className={"common-layout flex flex-col gap-2"}>
-        {list?.map(({ id, ticker, quote }) => {
-          return (
-            <TickerCard
-              key={ticker.key}
-              id={id}
-              ticker={ticker}
-              quote={quote}
-            />
-          );
-        })}
-      </div>
-      <NavigateToHoldingsAdd />
-      <Loading isLoading={isLoading} />
-    </AppContainer>
   ) : (
-    <StartGuidance />
+    <AppContainer appBar={<AppBar />} hideBackButton={true}>
+      {list.length ? (
+        <>
+          <div className={"common-layout flex flex-col gap-2"}>
+            {list?.map(({ id, ticker, quote }) => {
+              return (
+                <TickerCard
+                  key={ticker.key}
+                  id={id}
+                  ticker={ticker}
+                  quote={quote}
+                />
+              );
+            })}
+          </div>
+          <NavigateToHoldingsAdd />
+        </>
+      ) : (
+        <StartGuidance />
+      )}
+    </AppContainer>
   );
 }
