@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import React from "react";
 import Logo from "@/components/ui/my/logo";
 import { removeSWRStorage } from "@/lib/swr/clear-and-refresh";
+import { removeUserMetadata } from "@/providers/user-meta";
 
 export default function LoginPage(props: PageProps<"/login">) {
   const searchParams = React.use(props.searchParams);
@@ -18,6 +19,7 @@ export default function LoginPage(props: PageProps<"/login">) {
 
   React.useEffect(() => {
     removeSWRStorage();
+    removeUserMetadata();
   }, []);
 
   return (

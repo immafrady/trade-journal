@@ -9,14 +9,36 @@ interface UserMetadata {
   username: string;
 }
 
-export const UserMetaContext = React.createContext<UserMetadata | null>(null);
+// 持久化
+const USER_META_STORE_KEY = "user-metadata";
+function getUserMetadata() {
+  try {
+    const item = localStorage.getItem(USER_META_STORE_KEY);
+    if (item) {
+      return JSON.parse(item) as UserMetadata;
+    }
+  } catch (e) {
+    removeUserMetadata();
+    console.error(e);
+  }
+  return null;
+}
+export function removeUserMetadata() {
+  localStorage.removeItem(USER_META_STORE_KEY);
+}
+
+export const UserMetaContext = React.createContext<UserMetadata | null>(
+  getUserMetadata(),
+);
 
 export const UserMetaProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [userMeta, setUserMeta] = React.useState<UserMetadata | null>(null);
+  const [userMeta, setUserMeta] = React.useState<UserMetadata | null>(
+    getUserMetadata(),
+  );
 
   React.useEffect(() => {
     const supabase = createClient();
@@ -27,13 +49,20 @@ export const UserMetaProvider = ({
           cache: "no-store",
         });
         const blob = await response.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        setUserMeta({
-          avatar: blobUrl,
+        const reader = new FileReader();
+        const avatar = await new Promise((resolve, reject) => {
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+        const md = {
+          avatar: avatar as string,
           email: metadata.email,
           name: metadata.name,
           username: metadata.user_name,
-        });
+        };
+        localStorage.setItem(USER_META_STORE_KEY, JSON.stringify(md));
+        setUserMeta(md);
       }
     });
     return () => {};
