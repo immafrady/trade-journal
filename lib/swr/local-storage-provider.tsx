@@ -3,6 +3,15 @@
 import React from "react";
 import { SWRConfig } from "swr";
 
+export const SWR_STORE_KEY = "app-cache";
+let _persist: () => void = () => {};
+let _map: Map<string, any> = new Map();
+
+// 主动持久化
+export function persistSWRCache() {
+  _persist();
+}
+
 export function SWRStorageProvider({
   children,
 }: {
@@ -12,16 +21,22 @@ export function SWRStorageProvider({
     <SWRConfig
       value={{
         provider: () => {
-          const map = new Map<string, any>(
-            JSON.parse(localStorage.getItem("app-cache") || "[]"),
+          _map = new Map<string, any>(
+            JSON.parse(localStorage.getItem(SWR_STORE_KEY) || "[]"),
           );
-          window.addEventListener("beforeunload", () => {
-            localStorage.setItem(
-              "app-cache",
-              JSON.stringify([...map.entries()]),
-            );
+
+          // 页面隐藏或卸载时持久化缓存
+          _persist = () => {
+            const appCache = JSON.stringify(Array.from(_map.entries()));
+            localStorage.setItem(SWR_STORE_KEY, appCache);
+          };
+
+          window.addEventListener("pagehide", _persist);
+          window.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "hidden") _persist();
           });
-          return map;
+          window.addEventListener("beforeunload", _persist);
+          return _map;
         },
       }}
     >
