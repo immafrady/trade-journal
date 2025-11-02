@@ -48,13 +48,13 @@ export const DataPage = ({
       </Tabs>
       <div
         className={
-          "fixed bottom-0 left-0 right-0 p-safe-offset-2 flex justify-center gap-4 bg-muted"
+          "fixed bottom-0 left-0 right-0 pb-safe-offset-4 py-safe-offset-2 flex justify-center gap-2 bg-muted"
         }
       >
         <ButtonGroup>
           <ButtonGroup>
-            <DialogEdit trigger={<Button>新增一条</Button>} />
-            <Button variant={"outline"} asChild>
+            <DialogEdit trigger={<Button size={"sm"}>新增一条</Button>} />
+            <Button variant={"outline"} size={"sm"} asChild>
               <Link href={`${pathname}/import`}>导入CSV</Link>
             </Button>
           </ButtonGroup>
@@ -63,6 +63,7 @@ export const DataPage = ({
           loading={exportLoading}
           disabled={!records || !data || clearLoading}
           variant={"outline"}
+          size={"sm"}
           onClick={() => {
             setExportLoading(true);
             exportAsCSV(
@@ -80,6 +81,7 @@ export const DataPage = ({
               loading={clearLoading}
               disabled={exportLoading}
               variant={"destructive"}
+              size={"sm"}
               onClick={() => setClearLoading(true)}
             >
               清除数据

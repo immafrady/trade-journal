@@ -29,6 +29,7 @@ export default function Page() {
         </ul>
         <Button
           variant={"destructive"}
+          className={"mb-safe-offset-20"}
           onClick={async () => {
             const supabase = createClient();
             await supabase.auth.signOut();
