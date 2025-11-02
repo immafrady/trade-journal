@@ -13,7 +13,7 @@ export default function Page() {
   const list = useHoldingsWithQuote();
 
   return list.length ? (
-    <AppContainer appBar={<AppBar />}>
+    <AppContainer appBar={<AppBar />} hideBackButton={true}>
       <div className={"common-layout flex flex-col gap-2"}>
         {list?.map(({ id, ticker, quote }) => {
           return (

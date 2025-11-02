@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { UserMetaContext } from "@/providers/user-meta";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
@@ -9,29 +9,40 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, RefreshCcw } from "lucide-react";
 import { PwaContext } from "@/providers/pwa";
 
+interface AppContainerProps {
+  hideBackButton?: boolean;
+}
+
+const AppContainerPropsContext = React.createContext<AppContainerProps>({
+  hideBackButton: false,
+});
+
 export const AppContainer = ({
   appBar,
   children,
   className,
+  hideBackButton,
 }: {
   appBar?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
-}) => {
+} & AppContainerProps) => {
   return (
-    <div className={"flex flex-col overflow-hidden h-svh"}>
-      {appBar}
-      <motion.main
-        layout={"preserve-aspect"}
-        layoutId={"app-container-main"}
-        className={cn(
-          "relative flex-1 overflow-y-auto overflow-x-hidden",
-          className,
-        )}
-      >
-        {children}
-      </motion.main>
-    </div>
+    <AppContainerPropsContext.Provider value={{ hideBackButton }}>
+      <div className={"flex flex-col overflow-hidden h-svh"}>
+        {appBar}
+        <motion.main
+          layout={"preserve-aspect"}
+          layoutId={"app-container-main"}
+          className={cn(
+            "relative flex-1 overflow-y-auto overflow-x-hidden",
+            className,
+          )}
+        >
+          {children}
+        </motion.main>
+      </div>
+    </AppContainerPropsContext.Provider>
   );
 };
 
@@ -104,19 +115,22 @@ export const AppBarSlogan = ({
   isLargeAvatar?: boolean;
 }) => {
   const { isStandalone } = React.useContext(PwaContext);
+  const { hideBackButton } = useContext(AppContainerPropsContext);
 
   return (
     <motion.div layoutId={"app-bar-slogan"}>
       <div className={"flex items-center gap-2"}>
         {isStandalone && !isLargeAvatar && (
           <div>
-            <Button
-              variant={"ghost"}
-              size={"sm"}
-              onClick={() => window.history.back()}
-            >
-              <ArrowLeft />
-            </Button>
+            {!hideBackButton && (
+              <Button
+                variant={"ghost"}
+                size={"sm"}
+                onClick={() => window.history.back()}
+              >
+                <ArrowLeft />
+              </Button>
+            )}
             <Button
               variant={"ghost"}
               size={"sm"}
