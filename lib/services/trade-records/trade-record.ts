@@ -109,7 +109,9 @@ export class TradeRecord {
   static fromDatabase(model: TradeRecordModel) {
     const type = TradeRecordType.parseFromValue(model.type);
     if (!type) {
-      throw new Error("无法解析交易类型");
+      throw new Error(
+        `无法解析交易类型: ${model.type}, 原始数据: ${JSON.stringify(model)}`,
+      );
     }
     return new TradeRecord({
       holdingId: model.holding_id,
