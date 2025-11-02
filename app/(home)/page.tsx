@@ -9,10 +9,10 @@ import Loading from "@/components/ui/my/loading";
 import { AppBar, AppContainer } from "@/components/ui/my/app-container";
 
 export default function Page() {
-  const { isLoading, isValidating } = useHoldingList();
+  const { isLoading } = useHoldingList();
   const list = useHoldingsWithQuote();
 
-  return isLoading || isValidating ? (
+  return isLoading ? (
     <Loading isLoading={true} />
   ) : (
     <AppContainer appBar={<AppBar />} hideBackButton={true}>
