@@ -38,6 +38,7 @@ export function SWRStorageProvider({
           window.addEventListener("beforeunload", _persist);
           return _map;
         },
+        revalidateOnFocus: false,
       }}
     >
       {children}

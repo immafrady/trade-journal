@@ -115,9 +115,9 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
               if (error) {
                 toast.error(error);
               } else {
+                route.replace("/");
                 await mutate();
                 toast.success(message);
-                route.replace("/");
               }
             }}
           />
