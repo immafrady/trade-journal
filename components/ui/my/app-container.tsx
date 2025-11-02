@@ -5,6 +5,9 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Logo from "@/components/ui/my/logo";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, RefreshCcw } from "lucide-react";
+import { PwaContext } from "@/providers/pwa";
 
 export const AppContainer = ({
   appBar,
@@ -61,7 +64,7 @@ export const AppBar = ({
           isLargeAvatar ? "flex-col" : "justify-between",
         )}
       >
-        <AppBarSlogan />
+        <AppBarSlogan isLargeAvatar={isLargeAvatar} />
         <AppBarAvatar isLargeAvatar={isLargeAvatar} />
       </nav>
       {children}
@@ -95,15 +98,41 @@ export const AppBarExtraContent = ({
   );
 };
 
-export const AppBarSlogan = () => {
+export const AppBarSlogan = ({
+  isLargeAvatar,
+}: {
+  isLargeAvatar?: boolean;
+}) => {
+  const { isStandalone } = React.useContext(PwaContext);
+
   return (
     <motion.div layoutId={"app-bar-slogan"}>
-      <Link className={"flex align-center"} href="/">
-        <Logo />
-        <span className={" pl-1 font-sans text-secondary-foreground"}>
-          Trade Journal
-        </span>
-      </Link>
+      <div className={"flex items-center gap-2"}>
+        {isStandalone && !isLargeAvatar && (
+          <div>
+            <Button
+              variant={"ghost"}
+              size={"sm"}
+              onClick={() => window.history.back()}
+            >
+              <ArrowLeft />
+            </Button>
+            <Button
+              variant={"ghost"}
+              size={"sm"}
+              onClick={() => window.location.reload()}
+            >
+              <RefreshCcw />
+            </Button>
+          </div>
+        )}
+        <Link className={"flex items-center"} href="/">
+          <Logo />
+          <span className={" pl-1 font-sans text-secondary-foreground"}>
+            Trade Journal
+          </span>
+        </Link>
+      </div>
     </motion.div>
   );
 };

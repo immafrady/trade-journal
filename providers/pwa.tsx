@@ -8,7 +8,11 @@ interface Pwa {
   isStandalone: boolean;
 }
 
-export const PwaContext = React.createContext<Pwa | null>(null);
+export const PwaContext = React.createContext<Pwa>({
+  isStandalone: false,
+  isIOS: false,
+  isSupported: false,
+});
 
 export const PwaProvider = ({ children }: { children: React.ReactNode }) => {
   const [isSupported, setIsSupported] = React.useState(false);
@@ -19,7 +23,10 @@ export const PwaProvider = ({ children }: { children: React.ReactNode }) => {
     setIsIOS(
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream,
     );
-    setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
+    setIsStandalone(
+      window.matchMedia("(display-mode: standalone)").matches ||
+        (window.navigator as any)?.standalone === true,
+    );
     if ("serviceWorker" in navigator) {
       setIsSupported(true);
       registerServiceWorker();
