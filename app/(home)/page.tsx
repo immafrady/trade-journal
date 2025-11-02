@@ -9,27 +9,32 @@ import Loading from "@/components/ui/my/loading";
 import { AppBar, AppContainer } from "@/components/ui/my/app-container";
 
 export default function Page() {
-  const { isLoading } = useHoldingList();
+  const { isLoading, isValidating } = useHoldingList();
   const list = useHoldingsWithQuote();
 
-  return list.length ? (
-    <AppContainer appBar={<AppBar />}>
-      <div className={"common-layout flex flex-col gap-2"}>
-        {list?.map(({ id, ticker, quote }) => {
-          return (
-            <TickerCard
-              key={ticker.key}
-              id={id}
-              ticker={ticker}
-              quote={quote}
-            />
-          );
-        })}
-      </div>
-      <NavigateToHoldingsAdd />
-      <Loading isLoading={isLoading} />
-    </AppContainer>
+  return isLoading || isValidating ? (
+    <Loading isLoading={true} />
   ) : (
-    <StartGuidance />
+    <AppContainer appBar={<AppBar />} hideBackButton={true}>
+      {list.length ? (
+        <>
+          <div className={"common-layout flex flex-col gap-2"}>
+            {list?.map(({ id, ticker, quote }) => {
+              return (
+                <TickerCard
+                  key={ticker.key}
+                  id={id}
+                  ticker={ticker}
+                  quote={quote}
+                />
+              );
+            })}
+          </div>
+          <NavigateToHoldingsAdd />
+        </>
+      ) : (
+        <StartGuidance />
+      )}
+    </AppContainer>
   );
 }

@@ -47,6 +47,7 @@ export const TabBaseData = () => {
         <Button
           disabled={!selectedRows.length}
           variant={"outline"}
+          size={"sm"}
           onClick={() => dialogSummaryRef.current?.openDialog(selectedRows)}
         >
           <Layers />

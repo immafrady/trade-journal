@@ -84,7 +84,7 @@ export const DialogDetail = ({
         ]}
       />
       <Separator className={"my-2"} />
-      <h3 className={"text-center font-medium"}>建仓以来</h3>
+      <h3 className={"text-center font-medium"}>建仓以来（复权）</h3>
       <InlineDisplay
         list={[
           {

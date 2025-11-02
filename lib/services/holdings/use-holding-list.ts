@@ -2,6 +2,7 @@
 import useSWR from "swr";
 import { SinaTicker } from "@/lib/services/sina/ticker";
 import React from "react";
+import { persistSWRCache } from "@/providers/swr-storage-provider";
 
 const key = "/api/actions/holdings";
 
@@ -23,6 +24,6 @@ export function useHoldingList() {
       return [];
     }
   }, [list]);
-
+  persistSWRCache();
   return { ...swr, data };
 }

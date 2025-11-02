@@ -33,6 +33,6 @@ export const SimpleDisplayVertical = ({
     <div className={"font-light text-sm text-secondary-foreground"}>
       {title}
     </div>
-    <div className={"font-bold text-xl"}>{children}</div>
+    <div className={"font-bold text-lg md:text-base"}>{children}</div>
   </div>
 );

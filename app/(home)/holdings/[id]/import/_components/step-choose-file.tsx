@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/button";
 import { FileSpreadsheet } from "lucide-react";
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
 import React from "react";
@@ -76,6 +76,7 @@ export function StepChooseFile({
 }) {
   const fileRef = React.useRef<HTMLInputElement | null>(null);
   const { id } = React.useContext(HoldingInfoContext);
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   return (
     <FragmentTemplate
@@ -89,6 +90,7 @@ export function StepChooseFile({
             className="hidden"
             accept={"text/csv"}
             onChange={async (e) => {
+              setLoading(true);
               const file = e.target.files?.[0];
               if (file) {
                 try {
@@ -98,14 +100,19 @@ export function StepChooseFile({
                   onErrors(e);
                 }
               }
+              setLoading(false);
             }}
             ref={fileRef}
           />
           <motion.div layoutId={"primary-button"}>
-            <Button type={"button"} onClick={() => fileRef.current?.click()}>
+            <LoadingButton
+              loading={loading}
+              type={"button"}
+              onClick={() => fileRef.current?.click()}
+            >
               <FileSpreadsheet />
               选取文件
-            </Button>
+            </LoadingButton>
           </motion.div>
         </>
       }
