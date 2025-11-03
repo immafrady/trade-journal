@@ -39,7 +39,7 @@ export default function Page() {
         >
           {list.length ? (
             <>
-              <div className={"common-layout flex flex-col gap-2 pt-10"}>
+              <div className={"common-layout flex flex-col gap-2 pt-10 pb-20"}>
                 {list?.map(({ id, ticker, quote }) => {
                   return (
                     <TickerCard
