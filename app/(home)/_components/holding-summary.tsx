@@ -5,18 +5,8 @@ import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { formatMoney, formatPercent } from "@/lib/market-utils";
 
 export const HoldingSummary = () => {
-  const { map } = React.useContext(HoldingSummaryContext);
-  const data = Object.values(map).reduce(
-    (prev, curr) => {
-      return {
-        totalAmount: prev.totalAmount + curr.totalAmount,
-        maxTotalAmount: prev.maxTotalAmount + curr.maxTotalAmount,
-      };
-    },
-    {
-      totalAmount: 0,
-      maxTotalAmount: 0,
-    },
+  const { totalAmount, maxTotalAmount } = React.useContext(
+    HoldingSummaryContext,
   );
   return (
     <Card className={"py-4"}>
@@ -25,13 +15,11 @@ export const HoldingSummary = () => {
         <InlineDisplay
           className={"gap-0.5"}
           list={[
-            { title: "总仓位", content: formatMoney(data.totalAmount) },
-            { title: "最高仓位", content: formatMoney(data.maxTotalAmount) },
+            { title: "总仓位", content: formatMoney(totalAmount) },
+            { title: "最高仓位", content: formatMoney(maxTotalAmount) },
             {
               title: "仓位百分位",
-              content: formatPercent(
-                (data.totalAmount / data.maxTotalAmount) * 100,
-              ),
+              content: formatPercent((totalAmount / maxTotalAmount) * 100),
             },
           ]}
         />
