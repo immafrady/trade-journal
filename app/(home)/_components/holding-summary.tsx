@@ -1,120 +1,41 @@
-import {
-  HoldingInfo,
-  useHoldingList,
-} from "@/lib/services/holdings/use-holding-list";
-import {
-  TradeRecordSummary,
-  useTradeRecordSummary,
-} from "@/lib/services/trade-records/use-trade-record-summary";
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { HoldingSummaryContext } from "@/app/(home)/_components/holding-summary-provider";
+import { InlineDisplay } from "@/components/ui/my/inline-display";
+import { formatMoney, formatPercent } from "@/lib/market-utils";
 
-type TradeRecordSummaryMap = Record<string, TradeRecordSummary>;
 export const HoldingSummary = () => {
-  const { data } = useHoldingList();
-  const [map, setMap] = React.useState<TradeRecordSummaryMap>({});
-  const onChange = React.useCallback(
-    (id: string, summary: TradeRecordSummary) => {
-      setMap((m) => ({ ...m, [id]: summary }));
+  const { map } = React.useContext(HoldingSummaryContext);
+  const data = Object.values(map).reduce(
+    (prev, curr) => {
+      return {
+        totalAmount: prev.totalAmount + curr.totalAmount,
+        maxTotalAmount: prev.maxTotalAmount + curr.maxTotalAmount,
+      };
     },
-    [],
+    {
+      totalAmount: 0,
+      maxTotalAmount: 0,
+    },
   );
   return (
-    <>
-      <Card className={"py-4"}>
-        <CardContent>
-          <Carousel
-            opts={{
-              loop: true,
-              align: "center",
-            }}
-            className={"flex-1 mx-4"}
-          >
-            <CarouselContent>
-              <Summary map={map} list={data} />
-              <Graph map={map} list={data} />
-              <Rank map={map} list={data} />
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </CardContent>
-      </Card>
-      {data?.map((holding) => (
-        <HoldingFetchItem
-          key={holding.id}
-          id={holding.id}
-          onChange={onChange}
+    <Card className={"py-4"}>
+      <CardContent>
+        <h3 className={"font-medium text-lg mb-2"}>账户总览</h3>
+        <InlineDisplay
+          className={"gap-0.5"}
+          list={[
+            { title: "总仓位", content: formatMoney(data.totalAmount) },
+            { title: "最高仓位", content: formatMoney(data.maxTotalAmount) },
+            {
+              title: "仓位百分位",
+              content: formatPercent(
+                (data.totalAmount / data.maxTotalAmount) * 100,
+              ),
+            },
+          ]}
         />
-      ))}
-    </>
+      </CardContent>
+    </Card>
   );
-};
-
-const HoldingFetchItem = ({
-  id,
-  onChange,
-}: {
-  id: string;
-  onChange: (id: string, summary: TradeRecordSummary) => void;
-}) => {
-  const summary = useTradeRecordSummary(id);
-  const prevRef = React.useRef<TradeRecordSummary | null>(null);
-
-  React.useEffect(() => {
-    if (!summary) return;
-    const prev = prevRef.current;
-    if (!prev || JSON.stringify(prev) !== JSON.stringify(summary)) {
-      prevRef.current = summary;
-      onChange(id, summary);
-    }
-  }, [id, summary, onChange]);
-
-  return null;
-};
-
-const Template = ({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) => {
-  return (
-    <CarouselItem>
-      <div>
-        <h3 className={"font-medium text-lg mb-2"}>{title}</h3>
-        <div>{children}</div>
-      </div>
-    </CarouselItem>
-  );
-};
-
-const Summary = ({
-  map,
-}: {
-  map: TradeRecordSummaryMap;
-  list: HoldingInfo[];
-}) => {
-  return <Template title={"账户总览"}>1</Template>;
-};
-
-const Graph = ({
-  map,
-}: {
-  map: TradeRecordSummaryMap;
-  list: HoldingInfo[];
-}) => {
-  return <Template title={"持仓分布"}>2</Template>;
-};
-
-const Rank = ({ map }: { map: TradeRecordSummaryMap; list: HoldingInfo[] }) => {
-  return <Template title={"仓位榜单"}>3</Template>;
 };

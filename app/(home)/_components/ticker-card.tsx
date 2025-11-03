@@ -15,6 +15,11 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SimpleDisplay } from "@/components/ui/my/quote-display";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
+import {
+  TradeRecordSummary,
+  useTradeRecordSummary,
+} from "@/lib/services/trade-records/use-trade-record-summary";
+import { HoldingSummaryContext } from "@/app/(home)/_components/holding-summary-provider";
 
 export const TickerCard = ({
   id,
@@ -25,6 +30,19 @@ export const TickerCard = ({
   ticker: SinaTicker;
   quote?: SinaQuote;
 }) => {
+  // 计算汇总的逻辑
+  const summary = useTradeRecordSummary(id);
+  const { updateMap } = React.useContext(HoldingSummaryContext);
+  const prevRef = React.useRef<TradeRecordSummary | null>(null);
+  React.useEffect(() => {
+    if (!summary) return;
+    const prev = prevRef.current;
+    if (!prev || JSON.stringify(prev) !== JSON.stringify(summary)) {
+      prevRef.current = summary;
+      updateMap(id, summary);
+    }
+  }, [id, summary, updateMap]);
+
   const isAShare = ticker.type === SinaStockType.AShare;
   const carouselList = [];
   if (quote) {
