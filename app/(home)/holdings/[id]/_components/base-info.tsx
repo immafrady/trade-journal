@@ -136,7 +136,7 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
                   <CarouselItem key={idx}>{item}</CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious size={"sm"} />
+              <CarouselPrevious />
               <CarouselNext />
             </Carousel>
 
