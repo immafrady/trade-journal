@@ -5,7 +5,7 @@ import {
   getSinaStockTypeColor,
   getSinaStockTypeLabel,
 } from "@/lib/enums/sina-stock-type";
-import { LoadingButton } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/my/button";
 import { Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {

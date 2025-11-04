@@ -15,7 +15,7 @@ import {
   getTickerChangeColorClass,
 } from "@/lib/market-utils";
 import { ArrowRight } from "lucide-react";
-import { LoadingButton } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/my/button";
 import { SimpleDisplay } from "@/components/ui/my/quote-display";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import {

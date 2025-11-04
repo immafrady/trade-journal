@@ -3,8 +3,8 @@ import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-recor
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { DataTable } from "@/components/ui/my/data-table";
-import { Button, LoadingButton } from "@/components/ui/button";
-import { Layers, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Archive, Database, Gauge, Layers, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { deleteSelectedTradeRecord } from "@/lib/services/trade-records/trade-record-apis";
 import {
@@ -18,6 +18,7 @@ import {
   DialogSummary,
   DialogSummaryRef,
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-summary";
+import { LoadingButton, ToggleButton } from "@/components/ui/my/button";
 
 export const TabBaseData = () => {
   const dialogSummaryRef = React.useRef<DialogSummaryRef>(null);
@@ -30,6 +31,7 @@ export const TabBaseData = () => {
   }, [data?.quote?.formatter]);
   const table = useReactTable({
     data: list,
+    state: {},
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -53,6 +55,39 @@ export const TabBaseData = () => {
           <Layers />
           汇总展示
         </Button>
+        <ToggleButton
+          variant={"secondary"}
+          size={"sm"}
+          stateList={[
+            {
+              children: (
+                <>
+                  <Database />
+                  基础数据
+                </>
+              ),
+            },
+            {
+              children: (
+                <>
+                  <Gauge />
+                  高阶数据
+                </>
+              ),
+            },
+            {
+              children: (
+                <>
+                  <Archive />
+                  累计数据
+                </>
+              ),
+            },
+          ]}
+          onStateChange={(s) => {
+            console.log("state", s);
+          }}
+        />
         <LoadingButton
           loading={loading}
           disabled={!selectedRows.length}

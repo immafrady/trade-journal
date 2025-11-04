@@ -1,4 +1,4 @@
-import { LoadingButton } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/my/button";
 import { FileSpreadsheet } from "lucide-react";
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
 import React from "react";

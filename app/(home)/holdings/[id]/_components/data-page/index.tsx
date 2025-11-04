@@ -1,7 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabSummary } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary";
 import { ButtonGroup } from "@/components/ui/button-group";
-import { Button, LoadingButton } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -13,6 +14,7 @@ import { toast } from "sonner";
 import { MyAlertDialog } from "@/components/ui/my/alert-dialog";
 import { TabBaseData } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data";
 import { DialogEdit } from "@/app/(home)/holdings/[id]/_components/dialog-edit";
+import { LoadingButton } from "@/components/ui/my/button";
 
 export const DataPage = ({
   onTabChange,
