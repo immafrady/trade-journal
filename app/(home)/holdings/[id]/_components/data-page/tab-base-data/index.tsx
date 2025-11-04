@@ -61,26 +61,26 @@ export const TabBaseData = () => {
           stateList={[
             {
               children: (
-                <>
+                <div className={"flex items-center gap-0.5"}>
                   <Database />
                   基础数据
-                </>
+                </div>
               ),
             },
             {
               children: (
-                <>
+                <div className={"flex items-center gap-0.5"}>
                   <Gauge />
                   高阶数据
-                </>
+                </div>
               ),
             },
             {
               children: (
-                <>
+                <div className={"flex items-center gap-0.5"}>
                   <Archive />
                   累计数据
-                </>
+                </div>
               ),
             },
           ]}

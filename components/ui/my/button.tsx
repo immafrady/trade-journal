@@ -3,6 +3,7 @@ import type { VariantProps } from "class-variance-authority";
 import { Loader2Icon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { AnimatePresence, motion } from "motion/react";
 
 function LoadingButton({
   loading,
@@ -49,7 +50,17 @@ function ToggleButton({
         onStateChange(c % stateList.length);
       }}
     >
-      {currentState.children}
+      <AnimatePresence mode={"wait"}>
+        <motion.div
+          key={count % stateList.length}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {currentState.children}
+        </motion.div>
+      </AnimatePresence>
     </Button>
   );
 }
