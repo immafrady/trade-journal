@@ -84,7 +84,7 @@ export class TradeRecord {
     shares: number;
   };
 
-  // 算上系数
+  // 加权
   public adjusted: {
     amount: number;
     fee: number;

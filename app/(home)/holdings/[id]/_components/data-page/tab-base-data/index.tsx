@@ -1,4 +1,9 @@
-import { getColumns } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/columns";
+import {
+  adjustVisibility,
+  baseVisibility,
+  cumulativeVisibility,
+  getColumns,
+} from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/columns";
 import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
@@ -25,13 +30,20 @@ export const TabBaseData = () => {
   const { id, data } = React.useContext(HoldingInfoContext);
   const { data: list = [], mutate } = useTradeRecordList(id);
   const [loading, setLoading] = React.useState(false);
+  const [columnVisibility, setColumnVisibility] = React.useState<
+    | typeof baseVisibility
+    | typeof adjustVisibility
+    | typeof cumulativeVisibility
+  >(baseVisibility);
 
   const columns = React.useMemo(() => {
     return getColumns(data?.quote?.formatter);
   }, [data?.quote?.formatter]);
   const table = useReactTable({
     data: list,
-    state: {},
+    state: {
+      columnVisibility,
+    },
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -85,7 +97,13 @@ export const TabBaseData = () => {
             },
           ]}
           onStateChange={(s) => {
-            console.log("state", s);
+            setColumnVisibility(
+              s === 0
+                ? baseVisibility
+                : s === 1
+                  ? adjustVisibility
+                  : cumulativeVisibility,
+            );
           }}
         />
         <LoadingButton
