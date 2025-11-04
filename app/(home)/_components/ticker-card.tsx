@@ -14,9 +14,8 @@ import {
   formatPercent,
   getTickerChangeColorClass,
 } from "@/lib/market-utils";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/button";
 import { SimpleDisplay } from "@/components/ui/my/quote-display";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import {
@@ -25,15 +24,20 @@ import {
 } from "@/lib/services/trade-records/use-trade-record-summary";
 import { HoldingSummaryContext } from "@/app/(home)/_components/holding-summary-provider";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
+import { useRouter } from "next/navigation";
 
 export const TickerCard = ({
   id,
   ticker,
   quote,
+  loadingId,
+  onLinkClick,
 }: {
   id: string;
   ticker: SinaTicker;
   quote?: SinaQuote;
+  loadingId: string;
+  onLinkClick: (id: string) => void;
 }) => {
   // 计算汇总的逻辑
   const summary = useTradeRecordSummary(id);
@@ -48,6 +52,7 @@ export const TickerCard = ({
     }
   }, [id, summary, updateData]);
 
+  const router = useRouter();
   const isAShare = ticker.type === SinaStockType.AShare;
   const carouselList = [];
   if (quote) {
@@ -78,11 +83,16 @@ export const TickerCard = ({
             <SinaStockTypeBadge type={ticker.type} />
             {ticker.label}
           </div>
-          <Button asChild variant={"ghost"}>
-            <Link href={`/holdings/${id}`}>
-              <ArrowRight />
-            </Link>
-          </Button>
+          <LoadingButton
+            loading={!!loadingId && loadingId === id}
+            disabled={!!loadingId && loadingId !== id}
+            variant={"ghost"}
+            icon={<ArrowRight />}
+            onClick={() => {
+              onLinkClick(id);
+              router.push(`/holdings/${id}`);
+            }}
+          />
         </CardTitle>
       </CardHeader>
       <CardContent>
