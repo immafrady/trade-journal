@@ -1,10 +1,15 @@
-import { getColumns } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/columns";
+import {
+  adjustVisibility,
+  baseVisibility,
+  cumulativeVisibility,
+  getColumns,
+} from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/columns";
 import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { DataTable } from "@/components/ui/my/data-table";
-import { Button, LoadingButton } from "@/components/ui/button";
-import { Layers, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Archive, Database, Gauge, Layers, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { deleteSelectedTradeRecord } from "@/lib/services/trade-records/trade-record-apis";
 import {
@@ -18,18 +23,27 @@ import {
   DialogSummary,
   DialogSummaryRef,
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-summary";
+import { LoadingButton, ToggleButton } from "@/components/ui/my/button";
 
 export const TabBaseData = () => {
   const dialogSummaryRef = React.useRef<DialogSummaryRef>(null);
   const { id, data } = React.useContext(HoldingInfoContext);
   const { data: list = [], mutate } = useTradeRecordList(id);
   const [loading, setLoading] = React.useState(false);
+  const [columnVisibility, setColumnVisibility] = React.useState<
+    | typeof baseVisibility
+    | typeof adjustVisibility
+    | typeof cumulativeVisibility
+  >(baseVisibility);
 
   const columns = React.useMemo(() => {
     return getColumns(data?.quote?.formatter);
   }, [data?.quote?.formatter]);
   const table = useReactTable({
     data: list,
+    state: {
+      columnVisibility,
+    },
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -53,6 +67,45 @@ export const TabBaseData = () => {
           <Layers />
           汇总展示
         </Button>
+        <ToggleButton
+          variant={"secondary"}
+          size={"sm"}
+          stateList={[
+            {
+              children: (
+                <div className={"flex items-center gap-0.5"}>
+                  <Database />
+                  基础数据
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div className={"flex items-center gap-0.5"}>
+                  <Gauge />
+                  高阶数据
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div className={"flex items-center gap-0.5"}>
+                  <Archive />
+                  累计数据
+                </div>
+              ),
+            },
+          ]}
+          onStateChange={(s) => {
+            setColumnVisibility(
+              s === 0
+                ? baseVisibility
+                : s === 1
+                  ? adjustVisibility
+                  : cumulativeVisibility,
+            );
+          }}
+        />
         <LoadingButton
           loading={loading}
           disabled={!selectedRows.length}

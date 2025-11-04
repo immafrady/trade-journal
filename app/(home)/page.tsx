@@ -17,6 +17,7 @@ import { HoldingSummaryProvider } from "@/app/(home)/_components/holding-summary
 export default function Page() {
   const { isLoading } = useHoldingList();
   const list = useHoldingsWithQuote();
+  const [loadingId, setLoadingId] = React.useState<string>("");
 
   return (
     <HoldingSummaryProvider>
@@ -45,8 +46,10 @@ export default function Page() {
                     <TickerCard
                       key={ticker.key}
                       id={id}
+                      loadingId={loadingId}
                       ticker={ticker}
                       quote={quote}
+                      onLinkClick={setLoadingId}
                     />
                   );
                 })}

@@ -9,7 +9,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import React from "react";
-import { Button, LoadingButton } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/my/button";
 
 export interface ResponsiveDialogRef {
   open: boolean;
