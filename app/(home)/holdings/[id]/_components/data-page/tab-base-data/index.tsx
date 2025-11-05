@@ -9,8 +9,7 @@ import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { DataTable } from "@/components/ui/my/data-table";
 import { Button } from "@/components/ui/button";
-import { Archive, Database, Gauge, Layers, Trash } from "lucide-react";
-import { toast } from "sonner";
+import { Archive, Database, Gauge, Layers } from "lucide-react";
 import { deleteSelectedTradeRecord } from "@/lib/services/trade-records/trade-record-apis";
 import {
   getCoreRowModel,
@@ -23,13 +22,14 @@ import {
   DialogSummary,
   DialogSummaryRef,
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-summary";
-import { LoadingButton, ToggleButton } from "@/components/ui/my/button";
+import { ToggleButton } from "@/components/ui/my/button";
+import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/bottom-bar";
+import { toast } from "sonner";
 
 export const TabBaseData = () => {
   const dialogSummaryRef = React.useRef<DialogSummaryRef>(null);
   const { id, data } = React.useContext(HoldingInfoContext);
   const { data: list = [], mutate } = useTradeRecordList(id);
-  const [loading, setLoading] = React.useState(false);
   const [columnVisibility, setColumnVisibility] = React.useState<
     | typeof baseVisibility
     | typeof adjustVisibility
@@ -106,29 +106,6 @@ export const TabBaseData = () => {
             );
           }}
         />
-        <LoadingButton
-          loading={loading}
-          disabled={!selectedRows.length}
-          variant={"destructive"}
-          size={"sm"}
-          icon={<Trash />}
-          onClick={async () => {
-            setLoading(true);
-            await deleteSelectedTradeRecord(
-              selectedRows.map((row) => String(row.props.id!)),
-            );
-            await mutate();
-            table.resetRowSelection();
-            try {
-            } catch (e: any) {
-              toast.error(e.toString());
-            } finally {
-              setLoading(false);
-            }
-          }}
-        >
-          批量删除
-        </LoadingButton>
       </div>
       <DataTable
         table={table}
@@ -136,6 +113,18 @@ export const TabBaseData = () => {
         getRowClassName={(row) =>
           row.original.derived.shares < 0 ? "bg-red-50 text-red-700" : ""
         }
+      />
+      <BottomBar
+        selectedRowCount={selectedRows.length}
+        onDeleteConfirm={async () => {
+          const count = selectedRows.length;
+          await deleteSelectedTradeRecord(
+            selectedRows.map((row) => String(row.props.id!)),
+          );
+          await mutate();
+          table.resetRowSelection();
+          toast.success(`成功删除${count}条数据`);
+        }}
       />
       <DialogSummary ref={dialogSummaryRef} />
     </>

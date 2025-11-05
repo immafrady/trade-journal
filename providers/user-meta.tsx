@@ -1,5 +1,4 @@
 "use client";
-import { createClient } from "@/lib/supabase/browser-client";
 import React from "react";
 
 interface UserMetadata {
@@ -41,13 +40,16 @@ export const UserMetaProvider = ({
   );
 
   React.useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(async ({ data }) => {
+    fetch("/api/auth/user-meta").then(async (response) => {
+      const { data } = await response.json();
       if (data.user?.user_metadata) {
         const metadata = data.user?.user_metadata;
-        const response = await fetch(metadata.avatar_url, {
-          cache: "no-store",
-        });
+        const response = await fetch(
+          `/api/proxy?url=${encodeURIComponent(metadata.avatar_url)}`,
+          {
+            cache: "no-store",
+          },
+        );
         const blob = await response.blob();
         const reader = new FileReader();
         const avatar = await new Promise((resolve, reject) => {

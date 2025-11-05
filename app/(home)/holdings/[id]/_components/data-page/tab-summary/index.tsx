@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { AnimatePresence, motion } from "motion/react";
 import { SinaStockType } from "@/lib/enums/sina-stock-type";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary/bottom-bar";
 
 export const TabSummary = () => {
   const { id, data } = React.useContext(HoldingInfoContext)!;
@@ -27,85 +28,88 @@ export const TabSummary = () => {
     };
   }, []);
   return (
-    <div className={"relative common-layout flex flex-col items-center"}>
-      <div className={"w-full max-w-md"}>
-        <section
-          className={
-            "grid justify-center place-items-center gap-2 grid-cols-2 md:grid-cols-4"
-          }
-        >
-          <SimpleDisplayVertical title={"总支出金额"}>
-            {formatMoney(summary.totalAmount)}
-          </SimpleDisplayVertical>
-          <SimpleDisplayVertical title={"总份额"}>
-            {formatShares(summary.totalShares)}
-          </SimpleDisplayVertical>
-          <SimpleDisplayVertical title={"总交易费用"}>
-            {formatMoney(summary.totalFee)}
-          </SimpleDisplayVertical>
-          <SimpleDisplayVertical title={"交易次数"}>
-            {summary.count}
-          </SimpleDisplayVertical>
-        </section>
-        <Separator className={"my-2 md:my-4"} />
-        {data?.quote && (
-          <div>
-            {data.ticker.type === SinaStockType.AShare ? (
-              <PriceCalculationBlock
-                key={0}
-                title={"收益计算"}
-                costPrice={summary.costPrice}
-                currentPrice={data.quote.current!}
-                formatter={data.quote.formatter}
+    <>
+      <div className={"relative common-layout flex flex-col items-center"}>
+        <div className={"w-full max-w-md"}>
+          <section
+            className={
+              "grid justify-center place-items-center gap-2 grid-cols-2 md:grid-cols-4"
+            }
+          >
+            <SimpleDisplayVertical title={"总支出金额"}>
+              {formatMoney(summary.totalAmount)}
+            </SimpleDisplayVertical>
+            <SimpleDisplayVertical title={"总份额"}>
+              {formatShares(summary.totalShares)}
+            </SimpleDisplayVertical>
+            <SimpleDisplayVertical title={"总交易费用"}>
+              {formatMoney(summary.totalFee)}
+            </SimpleDisplayVertical>
+            <SimpleDisplayVertical title={"交易次数"}>
+              {summary.count}
+            </SimpleDisplayVertical>
+          </section>
+          <Separator className={"my-2 md:my-4"} />
+          {data?.quote && (
+            <div>
+              {data.ticker.type === SinaStockType.AShare ? (
+                <PriceCalculationBlock
+                  key={0}
+                  title={"收益计算"}
+                  costPrice={summary.costPrice}
+                  currentPrice={data.quote.current!}
+                  formatter={data.quote.formatter}
+                />
+              ) : (
+                <AnimatePresence mode={"wait"}>
+                  {count % 2 === 0 ? (
+                    <PriceCalculationBlock
+                      key={1}
+                      title={"收益计算（场内计价）"}
+                      costPrice={summary.costPrice}
+                      currentPrice={data.quote.current!}
+                      formatter={data.quote.formatter}
+                    />
+                  ) : (
+                    <PriceCalculationBlock
+                      key={2}
+                      title={"收益计算（场外计价）"}
+                      costPrice={summary.costPrice}
+                      currentPrice={data.quote.fundNav!}
+                      formatter={data.quote.formatter}
+                    />
+                  )}
+                </AnimatePresence>
+              )}
+            </div>
+          )}
+          <Separator className={"my-2 md:my-4"} />
+          {}
+          <AnimatePresence mode={"wait"}>
+            {count % 2 === 0 ? (
+              <DataPeakDisplayBlock
+                key={4}
+                title={TradeRecordConstants.Amount}
+                value={formatMoney(summary.totalAmount)}
+                maxValue={formatMoney(summary.maxTotalAmount)}
+                valuePct={summary.totalAmountPct}
+                valueTradeAt={summary.maxTotalAmountTradedAt ?? ""}
               />
             ) : (
-              <AnimatePresence mode={"wait"}>
-                {count % 2 === 0 ? (
-                  <PriceCalculationBlock
-                    key={1}
-                    title={"收益计算（场内计价）"}
-                    costPrice={summary.costPrice}
-                    currentPrice={data.quote.current!}
-                    formatter={data.quote.formatter}
-                  />
-                ) : (
-                  <PriceCalculationBlock
-                    key={2}
-                    title={"收益计算（场外计价）"}
-                    costPrice={summary.costPrice}
-                    currentPrice={data.quote.fundNav!}
-                    formatter={data.quote.formatter}
-                  />
-                )}
-              </AnimatePresence>
+              <DataPeakDisplayBlock
+                key={5}
+                title={TradeRecordConstants.Shares}
+                value={formatShares(summary.totalShares)}
+                maxValue={formatShares(summary.maxTotalShares)}
+                valuePct={summary.totalSharesPct}
+                valueTradeAt={summary.maxTotalSharesTradedAt ?? ""}
+              />
             )}
-          </div>
-        )}
-        <Separator className={"my-2 md:my-4"} />
-        {}
-        <AnimatePresence mode={"wait"}>
-          {count % 2 === 0 ? (
-            <DataPeakDisplayBlock
-              key={4}
-              title={TradeRecordConstants.Amount}
-              value={formatMoney(summary.totalAmount)}
-              maxValue={formatMoney(summary.maxTotalAmount)}
-              valuePct={summary.totalAmountPct}
-              valueTradeAt={summary.maxTotalAmountTradedAt ?? ""}
-            />
-          ) : (
-            <DataPeakDisplayBlock
-              key={5}
-              title={TradeRecordConstants.Shares}
-              value={formatShares(summary.totalShares)}
-              maxValue={formatShares(summary.maxTotalShares)}
-              valuePct={summary.totalSharesPct}
-              valueTradeAt={summary.maxTotalSharesTradedAt ?? ""}
-            />
-          )}
-        </AnimatePresence>
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
+      <BottomBar />
+    </>
   );
 };
 
