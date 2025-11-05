@@ -1,6 +1,11 @@
-import type { NextConfig } from "next";
+import withSerwistInit from "@serwist/next";
 
-const nextConfig: NextConfig = {
+const withSerwist = withSerwistInit({
+  swSrc: "app/sw.ts",
+  swDest: "public/sw.js",
+});
+
+export default withSerwist({
   /* config options here */
   eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -39,12 +44,11 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self'",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'",
           },
         ],
       },
     ];
   },
-};
-
-export default nextConfig;
+});
