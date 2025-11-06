@@ -9,7 +9,7 @@ import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { DataTable } from "@/components/ui/my/data-table";
 import { Button } from "@/components/ui/button";
-import { Archive, Database, Gauge, Layers } from "lucide-react";
+import { Archive, Database, Filter, Gauge, Layers } from "lucide-react";
 import { deleteSelectedTradeRecord } from "@/lib/services/trade-records/trade-record-apis";
 import {
   getCoreRowModel,
@@ -67,6 +67,7 @@ export const TabBaseData = () => {
           <Layers />
           汇总展示
         </Button>
+
         <ToggleButton
           variant={"secondary"}
           size={"sm"}
@@ -106,6 +107,11 @@ export const TabBaseData = () => {
             );
           }}
         />
+
+        <Button variant={"outline"} size={"sm"}>
+          <Filter />
+          筛选过滤
+        </Button>
       </div>
       <DataTable
         table={table}

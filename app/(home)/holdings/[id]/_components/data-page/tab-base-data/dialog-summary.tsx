@@ -19,14 +19,11 @@ const description = `仅${[
   TradeRecordType.Sell,
   TradeRecordType.Subscribe,
   TradeRecordType.Redeem,
+  TradeRecordType.Dividend,
 ]
   .map((t) => t.label)
   .join("、")}类型的交易参与汇总计算`;
 
-enum TabKey {
-  Records = "records",
-  Summary = "summary",
-}
 export interface DialogSummaryRef {
   openDialog: (records: TradeRecord[]) => void;
 }
@@ -45,6 +42,7 @@ const DialogSummaryInner = (
           TradeRecordType.Sell,
           TradeRecordType.Subscribe,
           TradeRecordType.Redeem,
+          TradeRecordType.Dividend,
         ].includes(r.props.type),
       ),
     [records],
@@ -71,6 +69,10 @@ const DialogSummaryInner = (
         shares: 0,
         price: 0,
       },
+      dividend: {
+        count: 0,
+        amount: 0,
+      },
       t: {
         shares: 0,
         gap: 0,
@@ -87,6 +89,10 @@ const DialogSummaryInner = (
         result.sell.count++;
         result.sell.shares += r.derived.shares;
         result.sell.amount += r.derived.amount;
+      } else {
+        console.log(r);
+        result.dividend.count++;
+        result.dividend.amount += r.derived.amount;
       }
     });
     result.buy.price = result.buy.amount / result.buy.shares;
@@ -98,12 +104,10 @@ const DialogSummaryInner = (
     return result;
   }, [filteredRecords]);
 
-  return (
-    <ResponsiveDialog
-      ref={dialogRef}
-      title={"汇总展示"}
-      description={description}
-    >
+  // 构建展示
+  const displayList: React.ReactNode[] = [];
+  if (summary.buy.count) {
+    displayList.push(
       <InlineDisplay
         list={[
           {
@@ -123,8 +127,11 @@ const DialogSummaryInner = (
             content: data?.quote?.formatter(summary.buy.price),
           },
         ]}
-      />
-      <Separator className={"my-4"} />
+      />,
+    );
+  }
+  if (summary.sell.count) {
+    displayList.push(
       <InlineDisplay
         list={[
           {
@@ -133,7 +140,7 @@ const DialogSummaryInner = (
           },
           {
             title: "卖出金额",
-            content: formatMoney(summary.sell.amount),
+            content: formatMoney(-summary.sell.amount),
           },
           {
             title: "卖出份额",
@@ -144,8 +151,27 @@ const DialogSummaryInner = (
             content: data?.quote?.formatter(summary.sell.price),
           },
         ]}
-      />
-      <Separator className={"my-4"} />
+      />,
+    );
+  }
+  if (summary.dividend.count) {
+    displayList.push(
+      <InlineDisplay
+        list={[
+          {
+            title: "分红次数",
+            content: summary.dividend.count,
+          },
+          {
+            title: "分红金额",
+            content: formatMoney(-summary.dividend.amount),
+          },
+        ]}
+      />,
+    );
+  }
+  if (summary.t.shares) {
+    displayList.push(
       <InlineDisplay
         list={[
           {
@@ -173,7 +199,21 @@ const DialogSummaryInner = (
             ),
           },
         ]}
-      />
+      />,
+    );
+  }
+  return (
+    <ResponsiveDialog
+      ref={dialogRef}
+      title={"汇总展示"}
+      description={description}
+    >
+      {displayList.map((item, index) => (
+        <React.Fragment key={index}>
+          {item}
+          {index < displayList.length - 1 && <Separator className="my-4" />}
+        </React.Fragment>
+      ))}
     </ResponsiveDialog>
   );
 };
