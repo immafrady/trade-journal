@@ -59,6 +59,7 @@ export const TabSummary = () => {
                   costPrice={summary.costPrice}
                   currentPrice={data.quote.current!}
                   formatter={data.quote.formatter}
+                  shares={summary.totalShares}
                 />
               ) : (
                 <AnimatePresence mode={"wait"}>
@@ -69,6 +70,7 @@ export const TabSummary = () => {
                       costPrice={summary.costPrice}
                       currentPrice={data.quote.current!}
                       formatter={data.quote.formatter}
+                      shares={summary.totalShares}
                     />
                   ) : (
                     <PriceCalculationBlock
@@ -77,6 +79,7 @@ export const TabSummary = () => {
                       costPrice={summary.costPrice}
                       currentPrice={data.quote.fundNav!}
                       formatter={data.quote.formatter}
+                      shares={summary.totalShares}
                     />
                   )}
                 </AnimatePresence>
@@ -141,21 +144,17 @@ const PriceCalculationBlock = ({
   title,
   currentPrice,
   costPrice,
+  shares,
   formatter,
 }: {
   title: string;
   currentPrice: number;
   costPrice: number;
+  shares: number;
   formatter: (num: number) => string;
 }) => {
-  const diff = React.useMemo(
-    () => currentPrice - costPrice,
-    [currentPrice, costPrice],
-  );
-  const pct = React.useMemo(
-    () => formatPercent(calculatePercent(currentPrice, costPrice)),
-    [currentPrice, costPrice],
-  );
+  const diff = currentPrice - costPrice;
+  const pct = formatPercent(calculatePercent(currentPrice, costPrice));
   const changeColorClassName = React.useMemo(
     () => getTickerChangeColorClass(diff),
     [diff],
@@ -173,9 +172,11 @@ const PriceCalculationBlock = ({
           content: formatter(currentPrice),
         },
         {
-          title: "价差",
+          title: "收益金额",
           content: (
-            <span className={changeColorClassName}>{formatter(diff)}</span>
+            <span className={changeColorClassName}>
+              {formatter(diff * shares)}
+            </span>
           ),
         },
         {
