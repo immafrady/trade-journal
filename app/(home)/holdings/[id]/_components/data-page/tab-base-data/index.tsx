@@ -1,7 +1,5 @@
 import {
-  adjustVisibility,
   baseVisibility,
-  cumulativeVisibility,
   getColumns,
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/columns";
 import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
@@ -9,7 +7,7 @@ import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { DataTable } from "@/components/ui/my/data-table";
 import { Button } from "@/components/ui/button";
-import { Archive, Database, Gauge, Layers } from "lucide-react";
+import { Layers } from "lucide-react";
 import { deleteSelectedTradeRecord } from "@/lib/services/trade-records/trade-record-apis";
 import {
   getCoreRowModel,
@@ -22,20 +20,20 @@ import {
   DialogSummary,
   DialogSummaryRef,
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-summary";
-import { ToggleButton } from "@/components/ui/my/button";
 import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/bottom-bar";
 import { toast } from "sonner";
 import { DialogFilter } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-filter";
+import {
+  TableColumnToggler,
+  VisibilityState,
+} from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/table-column-toggler";
 
 export const TabBaseData = () => {
   const dialogSummaryRef = React.useRef<DialogSummaryRef>(null);
   const { id, data } = React.useContext(HoldingInfoContext);
   const { data: list = [], mutate } = useTradeRecordList(id);
-  const [columnVisibility, setColumnVisibility] = React.useState<
-    | typeof baseVisibility
-    | typeof adjustVisibility
-    | typeof cumulativeVisibility
-  >(baseVisibility);
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>(baseVisibility);
 
   const columns = React.useMemo(() => {
     return getColumns(data?.quote?.formatter);
@@ -69,46 +67,7 @@ export const TabBaseData = () => {
           汇总展示
         </Button>
 
-        <ToggleButton
-          variant={"secondary"}
-          size={"sm"}
-          stateList={[
-            {
-              children: (
-                <div className={"flex items-center gap-0.5"}>
-                  <Database />
-                  基础数据
-                </div>
-              ),
-            },
-            {
-              children: (
-                <div className={"flex items-center gap-0.5"}>
-                  <Gauge />
-                  高阶数据
-                </div>
-              ),
-            },
-            {
-              children: (
-                <div className={"flex items-center gap-0.5"}>
-                  <Archive />
-                  累计数据
-                </div>
-              ),
-            },
-          ]}
-          onStateChange={(s) => {
-            setColumnVisibility(
-              s === 0
-                ? baseVisibility
-                : s === 1
-                  ? adjustVisibility
-                  : cumulativeVisibility,
-            );
-          }}
-        />
-
+        <TableColumnToggler onVisibilityChange={setColumnVisibility} />
         <DialogFilter />
       </div>
       <DataTable
