@@ -26,6 +26,7 @@ const ResponsiveDialogInner = (
     description,
     onSubmit,
     onClosed,
+    onOpen,
   }: {
     trigger?: React.ReactNode;
     children: React.ReactNode;
@@ -33,17 +34,12 @@ const ResponsiveDialogInner = (
     description?: string;
     onSubmit?: () => Promise<void>;
     onClosed?: () => void;
+    onOpen?: () => void;
   },
   ref: React.ForwardedRef<ResponsiveDialogRef>,
 ) => {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  React.useEffect(() => {
-    if (!open) {
-      onClosed?.();
-    }
-    return () => {};
-  }, [onClosed, open]);
 
   React.useImperativeHandle(ref, () => ({
     open,
@@ -51,7 +47,17 @@ const ResponsiveDialogInner = (
     toggleOpen: () => setOpen((o) => !o),
   }));
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(b) => {
+        if (b) {
+          onOpen?.();
+        } else {
+          onClosed?.();
+        }
+        setOpen(b);
+      }}
+    >
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className="sm:max-w-[425px] max-h-[calc(100svh-4rem)] flex flex-col">
         <DialogHeader className={"shrink-0"}>
