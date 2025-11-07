@@ -154,30 +154,10 @@ const DialogSummaryInner = (
       />,
     );
   }
-  if (summary.dividend.count) {
-    displayList.push(
-      <InlineDisplay
-        list={[
-          {
-            title: "分红次数",
-            content: summary.dividend.count,
-          },
-          {
-            title: "分红金额",
-            content: formatMoney(-summary.dividend.amount),
-          },
-        ]}
-      />,
-    );
-  }
   if (summary.t.shares) {
     displayList.push(
       <InlineDisplay
         list={[
-          {
-            title: "是否做T",
-            content: summary.buy.count && summary.sell.count ? "是" : "否",
-          },
           {
             title: "做T份额",
             content: formatShares(summary.t.shares),
@@ -197,6 +177,23 @@ const DialogSummaryInner = (
                 {formatMoney(summary.t.amount)}
               </div>
             ),
+          },
+        ]}
+      />,
+    );
+  }
+
+  if (summary.dividend.count) {
+    displayList.push(
+      <InlineDisplay
+        list={[
+          {
+            title: "分红次数",
+            content: summary.dividend.count,
+          },
+          {
+            title: "分红金额",
+            content: formatMoney(-summary.dividend.amount),
           },
         ]}
       />,

@@ -175,7 +175,7 @@ const PriceCalculationBlock = ({
           title: "收益金额",
           content: (
             <span className={changeColorClassName}>
-              {formatter(diff * shares)}
+              {formatMoney(diff * shares)}
             </span>
           ),
         },
