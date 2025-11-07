@@ -9,7 +9,7 @@ import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { DataTable } from "@/components/ui/my/data-table";
 import { Button } from "@/components/ui/button";
-import { Archive, Database, Filter, Gauge, Layers } from "lucide-react";
+import { Archive, Database, Gauge, Layers } from "lucide-react";
 import { deleteSelectedTradeRecord } from "@/lib/services/trade-records/trade-record-apis";
 import {
   getCoreRowModel,
@@ -25,6 +25,7 @@ import {
 import { ToggleButton } from "@/components/ui/my/button";
 import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/bottom-bar";
 import { toast } from "sonner";
+import { DialogFilter } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-filter";
 
 export const TabBaseData = () => {
   const dialogSummaryRef = React.useRef<DialogSummaryRef>(null);
@@ -108,10 +109,7 @@ export const TabBaseData = () => {
           }}
         />
 
-        <Button variant={"outline"} size={"sm"}>
-          <Filter />
-          筛选过滤
-        </Button>
+        <DialogFilter />
       </div>
       <DataTable
         table={table}
