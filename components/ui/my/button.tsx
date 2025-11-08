@@ -25,14 +25,14 @@ function LoadingButton({
   );
 }
 
-function ToggleButton({
+function ToggleButton<T>({
   stateList,
   onStateChange,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    stateList: { children: React.ReactNode; className?: string }[];
-    onStateChange: (state: number) => void;
+    stateList: { children: React.ReactNode; value: T; className?: string }[];
+    onStateChange: (state: T) => void;
   }) {
   const [count, setCount] = React.useState(0);
 
@@ -47,7 +47,7 @@ function ToggleButton({
       onClick={() => {
         const c = count + 1;
         setCount(c);
-        onStateChange(c % stateList.length);
+        onStateChange(stateList[c % stateList.length].value);
       }}
     >
       <AnimatePresence mode={"wait"}>

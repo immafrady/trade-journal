@@ -18,7 +18,7 @@ export const TableColumnToggler = ({
   onVisibilityChange: (state: VisibilityState) => void;
 }) => {
   return (
-    <ToggleButton
+    <ToggleButton<VisibilityState>
       variant={"secondary"}
       size={"sm"}
       stateList={[
@@ -29,6 +29,7 @@ export const TableColumnToggler = ({
               基础数据
             </div>
           ),
+          value: baseVisibility,
         },
         {
           children: (
@@ -37,6 +38,7 @@ export const TableColumnToggler = ({
               高阶数据
             </div>
           ),
+          value: adjustVisibility,
         },
         {
           children: (
@@ -45,17 +47,10 @@ export const TableColumnToggler = ({
               累计数据
             </div>
           ),
+          value: cumulativeVisibility,
         },
       ]}
-      onStateChange={(s) => {
-        onVisibilityChange(
-          s === 0
-            ? baseVisibility
-            : s === 1
-              ? adjustVisibility
-              : cumulativeVisibility,
-        );
-      }}
+      onStateChange={onVisibilityChange}
     />
   );
 };
