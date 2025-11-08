@@ -6,20 +6,16 @@ import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-recor
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { DataTable } from "@/components/ui/my/data-table";
-import { Button } from "@/components/ui/button";
-import { Layers } from "lucide-react";
 import { deleteSelectedTradeRecord } from "@/lib/services/trade-records/trade-record-apis";
 import {
+  ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  DialogSummary,
-  DialogSummaryRef,
-} from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-summary";
+import { DialogSummary } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-summary";
 import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/bottom-bar";
 import { toast } from "sonner";
 import { DialogFilter } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-filter";
@@ -29,7 +25,6 @@ import {
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/table-column-toggler";
 
 export const TabBaseData = () => {
-  const dialogSummaryRef = React.useRef<DialogSummaryRef>(null);
   const { id, data } = React.useContext(HoldingInfoContext);
   const { data: list = [], mutate } = useTradeRecordList(id);
   const [columnVisibility, setColumnVisibility] =
@@ -42,12 +37,14 @@ export const TabBaseData = () => {
     data: list,
     state: {
       columnVisibility,
+      columnFilters,
     },
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnFiltersChange: setColumnFilters,
   });
 
   const selectedRows = table
@@ -57,16 +54,7 @@ export const TabBaseData = () => {
   return (
     <>
       <div className={"flex justify-between my-2"}>
-        <Button
-          disabled={!selectedRows.length}
-          variant={"outline"}
-          size={"sm"}
-          onClick={() => dialogSummaryRef.current?.openDialog(selectedRows)}
-        >
-          <Layers />
-          汇总展示
-        </Button>
-
+        <DialogSummary disabled={!selectedRows.length} records={selectedRows} />
         <TableColumnToggler onVisibilityChange={setColumnVisibility} />
         <DialogFilter />
       </div>
@@ -89,7 +77,6 @@ export const TabBaseData = () => {
           toast.success(`成功删除${count}条数据`);
         }}
       />
-      <DialogSummary ref={dialogSummaryRef} />
     </>
   );
 };
