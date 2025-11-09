@@ -156,7 +156,6 @@ export const DialogSummary = ({
     }
   }
 
-  console.log("trigger summary dialog rerender");
   return (
     <ResponsiveDialog
       title={"汇总展示"}
