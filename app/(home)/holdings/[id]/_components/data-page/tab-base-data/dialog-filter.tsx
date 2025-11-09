@@ -61,6 +61,7 @@ export const DialogFilter = ({
     },
   });
 
+  const id = useStore(form.store, (state) => state.values.id);
   const type = useStore(form.store, (state) => state.values.type) as ActionType;
 
   return (
@@ -137,7 +138,12 @@ export const DialogFilter = ({
                   <Button
                     disabled={!field.state.value}
                     variant={"destructive"}
-                    onClick={() => field.handleChange("")}
+                    onClick={() => {
+                      form.setFieldValue("id", "");
+                      form.setFieldValue("type", "");
+                      form.setFieldValue("minValue", "");
+                      form.setFieldValue("maxValue", "");
+                    }}
                   >
                     <Eraser />
                   </Button>
@@ -145,104 +151,118 @@ export const DialogFilter = ({
               </FieldLayout>
             )}
           />
-          <form.Field
-            name={"type"}
-            children={(field) => (
-              <FieldLayout label={"过滤类型"} field={field}>
-                <Select
-                  value={field.state.value}
-                  onValueChange={(v) => field.handleChange(v)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="请选择过滤类型" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[
-                      ActionType.Equal,
-                      ActionType.Less,
-                      ActionType.More,
-                      ActionType.InBetween,
-                    ].map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FieldLayout>
-            )}
-          />
-          {type && type !== ActionType.More && (
-            <form.Field
-              name={"minValue"}
-              validators={{
-                onChangeListenTo: ["id", "type"],
-                onChange: ({ value, fieldApi }) => {
-                  const type = fieldApi.form.getFieldValue(
-                    "type",
-                  ) as ActionType;
-                  if (
-                    fieldApi.form.getFieldValue("id") &&
-                    type &&
-                    type !== ActionType.More
-                  ) {
-                    if (value == "") {
-                      return "必填项";
+          {id && (
+            <>
+              <form.Field
+                name={"type"}
+                validators={{
+                  onChangeListenTo: ["id"],
+                  onChange: ({ value, fieldApi }) => {
+                    if (fieldApi.form.getFieldValue("id")) {
+                      if (!value) {
+                        return "必选项";
+                      }
                     }
-                    if (Number.isNaN(+value)) {
-                      return "请输入数字";
-                    }
-                  }
-                },
-              }}
-              children={(field) => (
-                <FieldLayout
-                  label={type === ActionType.Equal ? "目标值" : "最小值"}
-                  field={field}
-                >
-                  <Input
-                    value={field.state.value}
-                    type={"number"}
-                    placeholder={"请输入"}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                </FieldLayout>
+                  },
+                }}
+                children={(field) => (
+                  <FieldLayout label={"过滤类型"} field={field}>
+                    <Select
+                      value={field.state.value}
+                      onValueChange={(v) => field.handleChange(v)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="请选择过滤类型" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {[
+                          ActionType.Equal,
+                          ActionType.Less,
+                          ActionType.More,
+                          ActionType.InBetween,
+                        ].map((type) => (
+                          <SelectItem key={type} value={type}>
+                            {type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FieldLayout>
+                )}
+              />
+              {type && type !== ActionType.More && (
+                <form.Field
+                  name={"minValue"}
+                  validators={{
+                    onChangeListenTo: ["id", "type"],
+                    onChange: ({ value, fieldApi }) => {
+                      const type = fieldApi.form.getFieldValue(
+                        "type",
+                      ) as ActionType;
+                      if (
+                        fieldApi.form.getFieldValue("id") &&
+                        type &&
+                        type !== ActionType.More
+                      ) {
+                        if (value == "") {
+                          return "必填项";
+                        }
+                        if (Number.isNaN(+value)) {
+                          return "请输入数字";
+                        }
+                      }
+                    },
+                  }}
+                  children={(field) => (
+                    <FieldLayout
+                      label={type === ActionType.Equal ? "目标值" : "最小值"}
+                      field={field}
+                    >
+                      <Input
+                        value={field.state.value}
+                        type={"number"}
+                        placeholder={"请输入"}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                    </FieldLayout>
+                  )}
+                />
               )}
-            />
-          )}
-          {[ActionType.More, ActionType.InBetween].includes(type) && (
-            <form.Field
-              name={"maxValue"}
-              validators={{
-                onChangeListenTo: ["id", "type"],
-                onChange: ({ value, fieldApi }) => {
-                  const type = fieldApi.form.getFieldValue(
-                    "type",
-                  ) as ActionType;
-                  if (
-                    fieldApi.form.getFieldValue("id") &&
-                    [ActionType.More, ActionType.InBetween].includes(type)
-                  ) {
-                    if (value == "") {
-                      return "必填项";
-                    }
-                    if (Number.isNaN(+value)) {
-                      return "请输入数字";
-                    }
-                  }
-                },
-              }}
-              children={(field) => (
-                <FieldLayout label={"最大值"} field={field}>
-                  <Input
-                    value={field.state.value}
-                    type={"number"}
-                    placeholder={"请输入"}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                </FieldLayout>
+              {[ActionType.More, ActionType.InBetween].includes(type) && (
+                <form.Field
+                  name={"maxValue"}
+                  validators={{
+                    onChangeListenTo: ["id", "type"],
+                    onChange: ({ value, fieldApi }) => {
+                      const type = fieldApi.form.getFieldValue(
+                        "type",
+                      ) as ActionType;
+                      if (
+                        fieldApi.form.getFieldValue("id") &&
+                        [ActionType.More, ActionType.InBetween].includes(type)
+                      ) {
+                        if (value == "") {
+                          return "必填项";
+                        }
+                        if (Number.isNaN(+value)) {
+                          return "请输入数字";
+                        }
+                      }
+                    },
+                  }}
+                  children={(field) => (
+                    <FieldLayout label={"最大值"} field={field}>
+                      <Input
+                        value={field.state.value}
+                        type={"number"}
+                        placeholder={"请输入"}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                    </FieldLayout>
+                  )}
+                />
               )}
-            />
+            </>
           )}
         </div>
       </form>
