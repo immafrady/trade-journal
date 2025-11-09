@@ -29,6 +29,9 @@ export const TabBaseData = () => {
   const { data: list = [], mutate } = useTradeRecordList(id);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>(baseVisibility);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
 
   const columns = React.useMemo(() => {
     return getColumns(data?.quote?.formatter);
@@ -56,7 +59,10 @@ export const TabBaseData = () => {
       <div className={"flex justify-between my-2"}>
         <DialogSummary disabled={!selectedRows.length} records={selectedRows} />
         <TableColumnToggler onVisibilityChange={setColumnVisibility} />
-        <DialogFilter />
+        <DialogFilter
+          columnFilters={columnFilters}
+          onColumnFiltersChange={setColumnFilters}
+        />
       </div>
       <DataTable
         table={table}

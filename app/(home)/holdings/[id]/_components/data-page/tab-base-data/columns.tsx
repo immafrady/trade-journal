@@ -78,6 +78,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.derived.price,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatter(row.getValue() as number)}
@@ -94,6 +95,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.cumulative.costPrice,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatter(row.getValue() as number)}
@@ -110,6 +112,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.derived.shares,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatShares(row.getValue() as number)}
@@ -126,6 +129,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.adjusted.shares,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatShares(row.getValue() as number)}
@@ -142,6 +146,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.cumulative.totalShares,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatShares(row.getValue() as number)}
@@ -158,6 +163,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.derived.amount,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatMoney(row.getValue() as number)}
@@ -174,6 +180,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.adjusted.amount,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatMoney(row.getValue() as number)}
@@ -190,6 +197,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.cumulative.totalAmount,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatMoney(row.getValue() as number)}
