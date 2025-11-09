@@ -35,9 +35,11 @@ export function getColumns(
       cell: (row) => (
         <div className={"text-center"}>{row.getValue() as number}</div>
       ),
+      enableColumnFilter: false,
+      enableGlobalFilter: false,
     },
     {
-      id: "tradedAt",
+      id: TradeRecordConstants.TradedAt,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -53,7 +55,7 @@ export function getColumns(
       ),
     },
     {
-      id: "type",
+      id: TradeRecordConstants.Type,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -67,7 +69,7 @@ export function getColumns(
       ),
     },
     {
-      id: "price",
+      id: TradeRecordConstants.Price,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -76,6 +78,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.derived.price,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatter(row.getValue() as number)}
@@ -83,7 +86,7 @@ export function getColumns(
       ),
     },
     {
-      id: "costPrice",
+      id: TradeRecordConstants.CumulativeCostPrice,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -92,6 +95,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.cumulative.costPrice,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatter(row.getValue() as number)}
@@ -99,7 +103,7 @@ export function getColumns(
       ),
     },
     {
-      id: "shares",
+      id: TradeRecordConstants.Shares,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -108,6 +112,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.derived.shares,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatShares(row.getValue() as number)}
@@ -115,7 +120,7 @@ export function getColumns(
       ),
     },
     {
-      id: "adjustShares",
+      id: TradeRecordConstants.AdjustedShares,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -124,6 +129,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.adjusted.shares,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatShares(row.getValue() as number)}
@@ -131,7 +137,7 @@ export function getColumns(
       ),
     },
     {
-      id: "totalShares",
+      id: TradeRecordConstants.CumulativeTotalShares,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -140,6 +146,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.cumulative.totalShares,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatShares(row.getValue() as number)}
@@ -147,7 +154,7 @@ export function getColumns(
       ),
     },
     {
-      id: "amount",
+      id: TradeRecordConstants.Amount,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -156,6 +163,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.derived.amount,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatMoney(row.getValue() as number)}
@@ -163,7 +171,7 @@ export function getColumns(
       ),
     },
     {
-      id: "adjustAmount",
+      id: TradeRecordConstants.AdjustedAmount,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -172,6 +180,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.adjusted.amount,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatMoney(row.getValue() as number)}
@@ -179,7 +188,7 @@ export function getColumns(
       ),
     },
     {
-      id: "totalAmount",
+      id: TradeRecordConstants.CumulativeTotalAmount,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -188,6 +197,7 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.cumulative.totalAmount,
+      filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
           {formatMoney(row.getValue() as number)}
@@ -195,7 +205,7 @@ export function getColumns(
       ),
     },
     {
-      id: "fee",
+      id: TradeRecordConstants.Fee,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -214,7 +224,7 @@ export function getColumns(
       },
     },
     {
-      id: "adjustFee",
+      id: TradeRecordConstants.AdjustedFee,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -233,7 +243,7 @@ export function getColumns(
       },
     },
     {
-      id: "factor",
+      id: TradeRecordConstants.Factor,
       header: () => (
         <div className={"text-center"}>{TradeRecordConstants.Factor}</div>
       ),
@@ -243,7 +253,7 @@ export function getColumns(
       ),
     },
     {
-      id: "comment",
+      id: TradeRecordConstants.Comment,
       header: TradeRecordConstants.Comment,
       accessorFn: (row) => row.props.comment,
       cell: (row) => (
@@ -253,6 +263,9 @@ export function getColumns(
     {
       id: "action",
       header: "操作",
+      enableGlobalFilter: false,
+      enableColumnFilter: false,
+      enableSorting: false,
       cell: ({ row }) => {
         const record = row.original;
         return (
@@ -284,28 +297,28 @@ export function getColumns(
 }
 
 export const baseVisibility = {
-  adjustAmount: false,
-  adjustFee: false,
-  adjustShares: false,
-  totalAmount: false,
-  totalShares: false,
-  costPrice: false,
+  [TradeRecordConstants.AdjustedAmount]: false,
+  [TradeRecordConstants.AdjustedFee]: false,
+  [TradeRecordConstants.AdjustedShares]: false,
+  [TradeRecordConstants.CumulativeTotalAmount]: false,
+  [TradeRecordConstants.CumulativeTotalShares]: false,
+  [TradeRecordConstants.CumulativeCostPrice]: false,
 } as const;
 
 export const adjustVisibility = {
-  amount: false,
-  fee: false,
-  shares: false,
-  totalAmount: false,
-  totalShares: false,
-  costPrice: false,
+  [TradeRecordConstants.Amount]: false,
+  [TradeRecordConstants.Fee]: false,
+  [TradeRecordConstants.Shares]: false,
+  [TradeRecordConstants.CumulativeTotalAmount]: false,
+  [TradeRecordConstants.CumulativeTotalShares]: false,
+  [TradeRecordConstants.CumulativeCostPrice]: false,
 } as const;
 
 export const cumulativeVisibility = {
-  amount: false,
-  fee: false,
-  shares: false,
-  adjustAmount: false,
-  adjustFee: false,
-  adjustShares: false,
+  [TradeRecordConstants.Amount]: false,
+  [TradeRecordConstants.Fee]: false,
+  [TradeRecordConstants.Shares]: false,
+  [TradeRecordConstants.AdjustedAmount]: false,
+  [TradeRecordConstants.AdjustedFee]: false,
+  [TradeRecordConstants.AdjustedShares]: false,
 } as const;

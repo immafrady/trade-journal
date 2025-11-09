@@ -2,7 +2,7 @@ import { SinaStockType } from "@/lib/enums/sina-stock-type";
 
 export type StockValueFormatter = (num?: number) => string;
 
-export const formatMoney: StockValueFormatter = (num?: number) => {
+export const formatMoney = (num?: number) => {
   if (!num) return "--";
   const formatted = Math.abs(num).toLocaleString("zh-CN", {
     style: "currency",
@@ -11,11 +11,14 @@ export const formatMoney: StockValueFormatter = (num?: number) => {
   return num < 0 ? `(${formatted})` : formatted;
 };
 
+export const formatStock: StockValueFormatter = (num?: number) =>
+  num ? num.toFixed(2) : "--";
+
 export const formatFund: StockValueFormatter = (num?: number) =>
   num ? num.toFixed(4) : "--";
 
 export function formatStockValue(type: SinaStockType): StockValueFormatter {
-  return type === SinaStockType.AShare ? formatMoney : formatFund;
+  return type === SinaStockType.AShare ? formatStock : formatFund;
 }
 
 export const formatShares = (num?: number) => (num ? num.toFixed(2) : "--");
