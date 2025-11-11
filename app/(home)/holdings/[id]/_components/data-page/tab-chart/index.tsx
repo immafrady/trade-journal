@@ -17,9 +17,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Button } from "@/components/ui/button";
-import { SkipBack, SkipForward, StepBack, StepForward } from "lucide-react";
-import { Slider } from "@/components/ui/slider";
+import { ChartController } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart/chart-controller";
+import React from "react";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -42,6 +43,9 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function TabChart() {
+  const { id } = React.useContext(HoldingInfoContext)!;
+  const { data: list = [] } = useTradeRecordList(id);
+
   return (
     <div className={"flex flex-col gap-2"}>
       <Card>
@@ -91,25 +95,12 @@ export function TabChart() {
           </ChartContainer>
         </CardContent>
       </Card>
-      <Card>
-        <CardContent>
-          <div className="flex w-full items-center gap-2 text-sm">
-            <Button size={"sm"}>
-              <SkipBack />
-            </Button>
-            <Button size={"sm"}>
-              <StepBack />
-            </Button>
-            <Slider className={"flex-1"} />
-            <Button size={"sm"}>
-              <StepForward />
-            </Button>
-            <Button size={"sm"}>
-              <SkipForward />
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <ChartController
+        records={list}
+        onRangeChange={(record) => {
+          console.log("change:", record);
+        }}
+      />
     </div>
   );
 }
