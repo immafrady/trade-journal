@@ -41,7 +41,7 @@ export const ChartController = ({
         <div className="flex w-full items-center gap-2 text-sm">
           <Button
             size={"sm"}
-            onChange={() => {
+            onClick={() => {
               stepChange(-10);
             }}
           >
@@ -49,7 +49,7 @@ export const ChartController = ({
           </Button>
           <Button
             size={"sm"}
-            onChange={() => {
+            onClick={() => {
               stepChange(-1);
             }}
           >
@@ -66,7 +66,7 @@ export const ChartController = ({
           />
           <Button
             size={"sm"}
-            onChange={() => {
+            onClick={() => {
               stepChange(1);
             }}
           >
@@ -74,12 +74,15 @@ export const ChartController = ({
           </Button>
           <Button
             size={"sm"}
-            onChange={() => {
+            onClick={() => {
               stepChange(10);
             }}
           >
             <SkipForward />
           </Button>
+        </div>
+        <div className={"text-center text-muted-foreground text-sm mt-2"}>
+          第{range[0] + 1}至{range[1] + 1}条数据
         </div>
       </CardContent>
     </Card>
