@@ -76,6 +76,7 @@ const ResponsiveDialogInner = (
                 setLoading(true);
                 try {
                   await onSubmit();
+                  onClosed?.();
                 } finally {
                   setLoading(false);
                 }
