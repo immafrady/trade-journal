@@ -3,14 +3,14 @@ import { Button } from "@/components/ui/button";
 import { SkipBack, SkipForward, StepBack, StepForward } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import React from "react";
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
+import { TradeRecordChart } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart/use-trade-record-chart";
 
 export const ChartController = ({
   records = [],
   onRangeChange,
 }: {
-  records: TradeRecord[];
-  onRangeChange: (range: TradeRecord[]) => void;
+  records: TradeRecordChart[];
+  onRangeChange: (range: TradeRecordChart[]) => void;
 }) => {
   const max = records.length - 1;
   const [range, setRange] = React.useState<number[]>([
@@ -18,23 +18,27 @@ export const ChartController = ({
     max,
   ]);
 
+  const filtered = React.useMemo(() => {
+    return records.slice(range[0], range[1]);
+  }, [records, range]);
+
+  React.useEffect(() => {
+    onRangeChange(filtered);
+  }, [filtered, onRangeChange]);
+
   function stepChange(change: number) {
     const [start, end] = range;
     if (change > 0) {
       // 往右推
       const allowed = Math.min(change, max - end);
-      updateRangeRecords([start + allowed, end + allowed]);
+      setRange([start + allowed, end + allowed]);
     } else {
       // change <= 0 往左推
       const delta = Math.min(-change, start);
-      updateRangeRecords([start - delta, end - delta]);
+      setRange([start - delta, end - delta]);
     }
   }
 
-  function updateRangeRecords(range: number[]) {
-    setRange(range);
-    onRangeChange(records.slice(range[0], range[1]));
-  }
   return (
     <Card>
       <CardContent>
@@ -58,7 +62,7 @@ export const ChartController = ({
           <Slider
             className={"flex-1"}
             value={range}
-            onValueChange={updateRangeRecords}
+            onValueChange={setRange}
             max={max}
             min={0}
             step={1}
@@ -82,7 +86,7 @@ export const ChartController = ({
           </Button>
         </div>
         <div className={"text-center text-muted-foreground text-sm mt-2"}>
-          第{range[0] + 1}至{range[1] + 1}条数据
+          第{range[0] + 1}至{range[1] + 1}数据，共{range[1] - range[0]}条
         </div>
       </CardContent>
     </Card>
