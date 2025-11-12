@@ -55,12 +55,6 @@ export function useTradeRecordList(
           costPrice: totalShares > 0 ? totalAmount / totalShares : 0,
         };
         result.unshift(record);
-        if (
-          [TradeRecordType.Split, TradeRecordType.Merge].includes(
-            record.props.type,
-          )
-        ) {
-        }
       }
       return result;
     } catch (e) {
