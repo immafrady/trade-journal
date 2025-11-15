@@ -13,12 +13,23 @@ export const ChartController = ({
   onRangeChange: (range: TradeRecordChart[]) => void;
 }) => {
   const [size, setSize] = React.useState(10);
-  const maxPage = Math.floor(records.length / size);
+  let maxPage = Math.floor(records.length / size);
+  const extra = records.length - maxPage * size;
+  if (extra < 5) {
+    maxPage--;
+  }
+
   const [page, setPage] = React.useState(maxPage);
 
   const filtered = React.useMemo(() => {
-    return records.slice(page * size, size * (page + 1));
-  }, [records, page, size]);
+    const min = page * size;
+    const max = size * (page + 1);
+    if (page === maxPage && extra < 5) {
+      return records.slice(min);
+    } else {
+      return records.slice(min, max);
+    }
+  }, [page, size, maxPage, extra, records]);
 
   React.useEffect(() => {
     onRangeChange(filtered);
@@ -51,6 +62,7 @@ export const ChartController = ({
           </Button>
           <Button
             disabled={size - 5 <= 0}
+            variant={"secondary"}
             size={"sm"}
             onClick={() => sizeChange(-5)}
           >
@@ -66,6 +78,7 @@ export const ChartController = ({
           />
           <Button
             disabled={size + 5 >= 50}
+            variant={"secondary"}
             size={"sm"}
             onClick={() => {
               sizeChange(5);
