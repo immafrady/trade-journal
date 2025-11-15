@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { SkipBack, SkipForward, StepBack, StepForward } from "lucide-react";
+import { ArrowLeft, ArrowRight, Minus, Plus } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import React from "react";
 import { TradeRecordChart } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart/use-trade-record-chart";
@@ -12,81 +12,79 @@ export const ChartController = ({
   records: TradeRecordChart[];
   onRangeChange: (range: TradeRecordChart[]) => void;
 }) => {
-  const max = records.length - 1;
-  const [range, setRange] = React.useState<number[]>([
-    Math.max(0, max - 10),
-    max,
-  ]);
+  const [size, setSize] = React.useState(10);
+  const maxPage = Math.floor(records.length / size);
+  const [page, setPage] = React.useState(maxPage);
 
   const filtered = React.useMemo(() => {
-    return records.slice(range[0], range[1]);
-  }, [records, range]);
+    return records.slice(page * size, size * (page + 1));
+  }, [records, page, size]);
 
   React.useEffect(() => {
     onRangeChange(filtered);
   }, [filtered, onRangeChange]);
 
-  function stepChange(change: number) {
-    const [start, end] = range;
-    if (change > 0) {
-      // 往右推
-      const allowed = Math.min(change, max - end);
-      setRange([start + allowed, end + allowed]);
-    } else {
-      // change <= 0 往左推
-      const delta = Math.min(-change, start);
-      setRange([start - delta, end - delta]);
-    }
-  }
+  const sizeChange = React.useCallback(
+    (change: number) => {
+      const s = size + change;
+      setSize(s);
+      const maxPage = Math.floor(records.length / s);
+      if (page > maxPage) {
+        setPage(maxPage);
+      }
+    },
+    [size, page, records],
+  );
 
   return (
     <Card>
       <CardContent>
         <div className="flex w-full items-center gap-2 text-sm">
           <Button
+            disabled={page <= 0}
             size={"sm"}
             onClick={() => {
-              stepChange(-10);
+              setPage((p) => p - 1);
             }}
           >
-            <SkipBack />
+            <ArrowLeft />
           </Button>
           <Button
+            disabled={size - 5 <= 0}
             size={"sm"}
-            onClick={() => {
-              stepChange(-1);
-            }}
+            onClick={() => sizeChange(-5)}
           >
-            <StepBack />
+            <Minus />
           </Button>
           <Slider
             className={"flex-1"}
-            value={range}
-            onValueChange={setRange}
-            max={max}
+            value={[page]}
+            onValueChange={([p]) => setPage(p)}
+            max={maxPage}
             min={0}
             step={1}
-            minStepsBetweenThumbs={10}
           />
           <Button
+            disabled={size + 5 >= 50}
             size={"sm"}
             onClick={() => {
-              stepChange(1);
+              sizeChange(5);
             }}
           >
-            <StepForward />
+            <Plus />
           </Button>
           <Button
+            disabled={page >= maxPage}
             size={"sm"}
             onClick={() => {
-              stepChange(10);
+              setPage((p) => p + 1);
             }}
           >
-            <SkipForward />
+            <ArrowRight />
           </Button>
         </div>
         <div className={"text-center text-muted-foreground text-sm mt-2"}>
-          第{range[0] + 1}至{range[1] + 1}数据，共{range[1] - range[0]}条
+          第{page + 1}页，每页{size}条数据
         </div>
       </CardContent>
     </Card>
