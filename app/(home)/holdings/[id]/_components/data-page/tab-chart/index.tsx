@@ -1,6 +1,13 @@
 "use client";
 
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import {
   Card,
@@ -24,6 +31,7 @@ import {
   TradeRecordChart,
   useTradeRecordChart,
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart/use-trade-record-chart";
+import { formatShares } from "@/lib/market-utils";
 
 const chartConfig = {
   price: {
@@ -37,12 +45,11 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function TabChart() {
-  const { id } = React.useContext(HoldingInfoContext)!;
+  const { id, data } = React.useContext(HoldingInfoContext)!;
   const list = useTradeRecordChart(id);
   const [records, setRecords] = React.useState<TradeRecordChart[]>([]);
   const onRangeChange = React.useCallback((record: TradeRecordChart[]) => {
     setRecords(record);
-    console.log("change:", record);
   }, []);
 
   const [priceYDomain, setPriceYDomain] = React.useState([0, 100]);
@@ -77,13 +84,11 @@ export function TabChart() {
             config={chartConfig}
             className="min-h-[200px] max-h-[400px] w-full"
           >
-            <LineChart
+            <ComposedChart
               accessibilityLayer
               data={records}
               margin={{
-                left: 5,
                 top: 10,
-                right: 5,
                 bottom: 5,
               }}
               height={500}
@@ -97,33 +102,46 @@ export function TabChart() {
               />
               <ChartTooltip
                 cursor={true}
-                content={<ChartTooltipContent indicator={"line"} />}
+                content={
+                  <ChartTooltipContent
+                    hideLabel
+                    formatter={(value, name) => (
+                      <div className="text-muted-foreground flex min-w-[130px] items-center text-xs">
+                        {chartConfig[name as keyof typeof chartConfig]?.label ||
+                          name}
+                        <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                          {name === "shares"
+                            ? formatShares(value as number)
+                            : data?.quote?.formatter(value as number)}
+                        </div>
+                      </div>
+                    )}
+                  />
+                }
               />
-              <YAxis yAxisId="left" width={0} domain={priceYDomain} />
+              <YAxis yAxisId="left" domain={sharesYDomain} />
               <YAxis
                 yAxisId="right"
                 orientation="right"
                 width={0}
-                domain={sharesYDomain}
+                domain={priceYDomain}
+              />
+              <Bar
+                yAxisId="left"
+                dataKey="shares"
+                fill="var(--color-shares)"
+                radius={2}
               />
               <Line
-                yAxisId="left"
+                yAxisId="right"
                 dataKey="price"
                 type="monotone"
                 stroke="var(--color-price)"
                 strokeWidth={1}
-                dot={false}
-              />
-              <Line
-                yAxisId="right"
-                dataKey="shares"
-                type="monotone"
-                stroke="var(--color-shares)"
-                strokeWidth={1}
-                dot={false}
+                dot={true}
               />
               <ChartLegend content={<ChartLegendContent />} />
-            </LineChart>
+            </ComposedChart>
           </ChartContainer>
         </CardContent>
       </Card>
