@@ -1,6 +1,13 @@
 "use client";
 
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import {
   Card,
@@ -31,26 +38,25 @@ const chartConfig = {
     color: "var(--chart-1)",
   },
   shares: {
-    label: "持仓份额",
+    label: "份额",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
 
 export function TabChart() {
-  const { id } = React.useContext(HoldingInfoContext)!;
-  const list = useTradeRecordChart(id);
+  const { id, data } = React.useContext(HoldingInfoContext)!;
+  const list = useTradeRecordChart(id, data?.quote?.formatter);
   const [records, setRecords] = React.useState<TradeRecordChart[]>([]);
   const onRangeChange = React.useCallback((record: TradeRecordChart[]) => {
     setRecords(record);
-    console.log("change:", record);
   }, []);
 
   const [priceYDomain, setPriceYDomain] = React.useState([0, 100]);
   const [sharesYDomain, setSharesYDomain] = React.useState([0, 100]);
 
   React.useEffect(() => {
-    const prices = records.map((d) => d.price);
-    const shares = records.map((d) => d.shares);
+    const prices = records.map((d) => +d.price);
+    const shares = records.map((d) => +d.shares);
     let min = Math.min(...prices);
     let max = Math.max(...prices);
     let padding = (max - min) * 0.1;
@@ -77,13 +83,11 @@ export function TabChart() {
             config={chartConfig}
             className="min-h-[200px] max-h-[400px] w-full"
           >
-            <LineChart
+            <ComposedChart
               accessibilityLayer
               data={records}
               margin={{
-                left: 5,
                 top: 10,
-                right: 5,
                 bottom: 5,
               }}
               height={500}
@@ -95,35 +99,30 @@ export function TabChart() {
                 axisLine={true}
                 tickMargin={8}
               />
-              <ChartTooltip
-                cursor={true}
-                content={<ChartTooltipContent indicator={"line"} />}
-              />
-              <YAxis yAxisId="left" width={0} domain={priceYDomain} />
+              <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
+              <YAxis yAxisId="left" domain={sharesYDomain} />
               <YAxis
                 yAxisId="right"
                 orientation="right"
                 width={0}
-                domain={sharesYDomain}
+                domain={priceYDomain}
+              />
+              <Bar
+                yAxisId="left"
+                dataKey="shares"
+                fill="var(--color-shares)"
+                radius={2}
               />
               <Line
-                yAxisId="left"
+                yAxisId="right"
                 dataKey="price"
                 type="monotone"
                 stroke="var(--color-price)"
                 strokeWidth={1}
-                dot={false}
-              />
-              <Line
-                yAxisId="right"
-                dataKey="shares"
-                type="monotone"
-                stroke="var(--color-shares)"
-                strokeWidth={1}
-                dot={false}
+                dot={true}
               />
               <ChartLegend content={<ChartLegendContent />} />
-            </LineChart>
+            </ComposedChart>
           </ChartContainer>
         </CardContent>
       </Card>
