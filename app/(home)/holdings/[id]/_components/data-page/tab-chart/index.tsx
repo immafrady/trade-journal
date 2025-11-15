@@ -31,7 +31,6 @@ import {
   TradeRecordChart,
   useTradeRecordChart,
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart/use-trade-record-chart";
-import { formatShares } from "@/lib/market-utils";
 
 const chartConfig = {
   price: {
@@ -39,14 +38,14 @@ const chartConfig = {
     color: "var(--chart-1)",
   },
   shares: {
-    label: "持仓份额",
+    label: "份额",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
 
 export function TabChart() {
   const { id, data } = React.useContext(HoldingInfoContext)!;
-  const list = useTradeRecordChart(id);
+  const list = useTradeRecordChart(id, data?.quote?.formatter);
   const [records, setRecords] = React.useState<TradeRecordChart[]>([]);
   const onRangeChange = React.useCallback((record: TradeRecordChart[]) => {
     setRecords(record);
@@ -56,8 +55,8 @@ export function TabChart() {
   const [sharesYDomain, setSharesYDomain] = React.useState([0, 100]);
 
   React.useEffect(() => {
-    const prices = records.map((d) => d.price);
-    const shares = records.map((d) => d.shares);
+    const prices = records.map((d) => +d.price);
+    const shares = records.map((d) => +d.shares);
     let min = Math.min(...prices);
     let max = Math.max(...prices);
     let padding = (max - min) * 0.1;
@@ -100,25 +99,7 @@ export function TabChart() {
                 axisLine={true}
                 tickMargin={8}
               />
-              <ChartTooltip
-                cursor={true}
-                content={
-                  <ChartTooltipContent
-                    hideLabel
-                    formatter={(value, name) => (
-                      <div className="text-muted-foreground flex min-w-[130px] items-center text-xs">
-                        {chartConfig[name as keyof typeof chartConfig]?.label ||
-                          name}
-                        <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
-                          {name === "shares"
-                            ? formatShares(value as number)
-                            : data?.quote?.formatter(value as number)}
-                        </div>
-                      </div>
-                    )}
-                  />
-                }
-              />
+              <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
               <YAxis yAxisId="left" domain={sharesYDomain} />
               <YAxis
                 yAxisId="right"
