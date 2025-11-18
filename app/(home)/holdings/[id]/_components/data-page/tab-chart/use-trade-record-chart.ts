@@ -1,17 +1,13 @@
 import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 import React from "react";
-import { formatShares, StockValueFormatter } from "@/lib/market-utils";
 
 export interface TradeRecordChart {
   tradedAt: string;
-  price: string;
-  shares: string;
+  price: number;
+  shares: number;
 }
 
-export const useTradeRecordChart = (
-  holdingId: string,
-  formatter?: StockValueFormatter,
-) => {
+export const useTradeRecordChart = (holdingId: string) => {
   const { data: list = [] } = useTradeRecordList(holdingId);
   return React.useMemo(() => {
     return [...list]
@@ -19,12 +15,10 @@ export const useTradeRecordChart = (
         (r) =>
           ({
             tradedAt: r.display.tradedAt,
-            price: formatter
-              ? formatter(r.cumulative.costPrice)
-              : r.cumulative.costPrice + "",
-            shares: formatShares(r.cumulative.totalShares),
+            price: r.cumulative.costPrice,
+            shares: r.cumulative.totalShares,
           }) satisfies TradeRecordChart,
       )
       .reverse();
-  }, [list, formatter]);
+  }, [list]);
 };
