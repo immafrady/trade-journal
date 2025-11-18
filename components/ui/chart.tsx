@@ -118,6 +118,7 @@ function ChartTooltipContent({
   color,
   nameKey,
   labelKey,
+  valueFormatterMap,
 }: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
   React.ComponentProps<"div"> & {
     hideLabel?: boolean;
@@ -125,6 +126,7 @@ function ChartTooltipContent({
     indicator?: "line" | "dot" | "dashed";
     nameKey?: string;
     labelKey?: string;
+    valueFormatterMap?: Record<string, ((v: any) => string) | undefined>;
   }) {
   const { config } = useChart();
 
@@ -236,7 +238,9 @@ function ChartTooltipContent({
                       </div>
                       {item.value && (
                         <span className="text-foreground font-mono font-medium tabular-nums">
-                          {item.value.toLocaleString()}
+                          {item.name && valueFormatterMap?.[item.name]
+                            ? valueFormatterMap[item.name]!(item.value)
+                            : item.value.toLocaleString()}
                         </span>
                       )}
                     </div>
