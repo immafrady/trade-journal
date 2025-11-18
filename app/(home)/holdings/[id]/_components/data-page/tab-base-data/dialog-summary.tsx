@@ -202,18 +202,17 @@ export const DialogSummary = ({
           },
         };
         filteredRecords.forEach((r) => {
-          if (r.derived.shares > 0) {
+          if (r.adjusted.shares > 0) {
             result.buy.count++;
-            result.buy.shares += r.derived.shares;
-            result.buy.amount += r.derived.amount;
-          } else if (r.derived.shares < 0) {
+            result.buy.shares += r.adjusted.shares;
+            result.buy.amount += r.adjusted.amount;
+          } else if (r.adjusted.shares < 0) {
             result.sell.count++;
-            result.sell.shares += r.derived.shares;
-            result.sell.amount += r.derived.amount;
+            result.sell.shares += r.adjusted.shares;
+            result.sell.amount += r.adjusted.amount;
           } else {
-            console.log(r);
             result.dividend.count++;
-            result.dividend.amount += r.derived.amount;
+            result.dividend.amount += r.adjusted.amount;
           }
         });
         result.buy.price = result.buy.amount / result.buy.shares;
