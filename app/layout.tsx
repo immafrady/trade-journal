@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ClientOnly } from "@/components/client-only";
 import { PwaProvider } from "@/providers/pwa";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,10 @@ export default function RootLayout({
       >
         <Toaster richColors position={"top-center"} duration={1500} />
         <ClientOnly>
-          <PwaProvider>{children}</PwaProvider>
+          <PwaProvider>
+            {children}
+            <Analytics />
+          </PwaProvider>
         </ClientOnly>
       </body>
     </html>
