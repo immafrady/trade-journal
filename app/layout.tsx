@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ClientOnly } from "@/components/client-only";
 import { PwaProvider } from "@/providers/pwa";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <PwaProvider>
             {children}
             <Analytics />
+            <SpeedInsights />
           </PwaProvider>
         </ClientOnly>
       </body>
