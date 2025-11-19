@@ -183,7 +183,8 @@ export function TabChart() {
                   y={refValue}
                   yAxisId="right"
                   label={refLabel}
-                  stroke={"var(--chart-3)"}
+                  stroke={"var(--primary)"}
+                  strokeDasharray={"3 3"}
                   position={"end"}
                 />
               )}
