@@ -6,6 +6,7 @@ import { ClientOnly } from "@/components/client-only";
 import { PwaProvider } from "@/providers/pwa";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,12 +35,10 @@ export default function RootLayout({
       >
         <Toaster richColors position={"top-center"} duration={1500} />
         <ClientOnly>
-          <PwaProvider>
-            {children}
-            <Analytics />
-            <SpeedInsights />
-          </PwaProvider>
+          <PwaProvider>{children}</PwaProvider>
         </ClientOnly>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
