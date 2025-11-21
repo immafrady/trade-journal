@@ -34,6 +34,7 @@ import {
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart/use-trade-record-chart";
 import { formatShares } from "@/lib/market-utils";
 import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { useTradeRecordSummary } from "@/lib/services/trade-records/use-trade-record-summary";
 
 const chartConfig = {
   price: {
@@ -49,6 +50,7 @@ const chartConfig = {
 export function TabChart() {
   const { id, data } = React.useContext(HoldingInfoContext)!;
   const list = useTradeRecordChart(id);
+  const summary = useTradeRecordSummary(id);
   const [records, setRecords] = React.useState<TradeRecordChart[]>([]);
   const onRangeChange = React.useCallback((record: TradeRecordChart[]) => {
     setRecords(record);
@@ -58,21 +60,26 @@ export function TabChart() {
   const [sharesYDomain, setSharesYDomain] = React.useState([0, 100]);
 
   React.useEffect(() => {
+    // 金额
     const prices = [
       data?.quote?.fundNav as number,
       data?.quote?.current as number,
       ...records.map((d) => +d.price),
     ].filter(Boolean);
-    const shares = records.map((d) => +d.shares);
     let min = Math.min(...prices);
     let max = Math.max(...prices);
     let padding = (max - min) * 0.1;
     setPriceYDomain([min - padding, max + padding]);
+    // 份额
+    const shares = [
+      summary.maxTotalShares,
+      ...records.map((d) => +d.shares),
+    ].filter(Boolean);
     min = Math.min(...shares);
     max = Math.max(...shares);
     padding = (max - min) * 0.1;
     setSharesYDomain([min - padding, max + padding]);
-  }, [data?.quote, records]);
+  }, [data?.quote, records, summary.maxTotalShares]);
 
   const [counter, setCounter] = React.useState(0);
   const [refValue, setRefValue] = React.useState<number | undefined>();
@@ -182,9 +189,21 @@ export function TabChart() {
                 <ReferenceLine
                   y={refValue}
                   yAxisId="right"
-                  label={refLabel}
-                  stroke={"var(--primary)"}
+                  label={{ value: refLabel, position: "insideTopRight" }}
+                  stroke={"var(--color-price)"}
                   strokeDasharray={"3 3"}
+                  position={"end"}
+                />
+              )}
+              {summary.maxTotalShares && (
+                <ReferenceLine
+                  y={summary.maxTotalShares}
+                  yAxisId="left"
+                  label={{
+                    value: `最高仓位: ${formatShares(summary.maxTotalShares)}`,
+                    position: "insideTopLeft",
+                  }}
+                  stroke={"var(--color-shares)"}
                   position={"end"}
                 />
               )}
