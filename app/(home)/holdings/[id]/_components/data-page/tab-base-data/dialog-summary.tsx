@@ -79,7 +79,7 @@ export const DialogSummary = ({
             },
             {
               title: "买入均价",
-              content: data?.quote?.formatter(summary.buy.price),
+              content: data?.ticker.formatter(summary.buy.price),
             },
           ]}
         />,
@@ -103,7 +103,7 @@ export const DialogSummary = ({
             },
             {
               title: "卖出均价",
-              content: data?.quote?.formatter(summary.sell.price),
+              content: data?.ticker.formatter(summary.sell.price),
             },
           ]}
         />,
@@ -121,7 +121,7 @@ export const DialogSummary = ({
               title: "做T差价",
               content: (
                 <div className={summary.t.className}>
-                  {data?.quote?.formatter(summary.t.gap)}
+                  {data?.ticker.formatter(summary.t.gap)}
                 </div>
               ),
             },

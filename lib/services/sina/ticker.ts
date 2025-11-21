@@ -1,4 +1,5 @@
 import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { formatStockValue, StockValueFormatter } from "@/lib/market-utils";
 
 export class SinaTicker {
   constructor(
@@ -16,8 +17,10 @@ export class SinaTicker {
       this.fundSymbol = "of" + this.code;
       this.searchCode = `${this.stockSymbol},${this.fundSymbol}`;
     }
+    this.formatter = formatStockValue(type);
   }
 
+  public readonly formatter: StockValueFormatter;
   public readonly stockSymbol: string;
   public readonly fundSymbol: string;
   public readonly searchCode: string;

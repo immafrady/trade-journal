@@ -83,17 +83,17 @@ export function TabChart() {
 
       if (data.ticker.type === SinaStockType.AShare) {
         setRefValue(data.quote?.current);
-        setRefLabel(`当前价格: ${data.quote?.formatter(data.quote.current)}`);
+        setRefLabel(`当前价格: ${data.ticker.formatter(data?.quote?.current)}`);
         return;
       }
 
       // 非 A 股的切换逻辑
       if (count % 2 === 0) {
         setRefValue(data.quote?.current);
-        setRefLabel(`场内价格: ${data.quote?.formatter(data.quote.current)}`);
+        setRefLabel(`场内价格: ${data.ticker.formatter(data?.quote?.current)}`);
       } else {
         setRefValue(data.quote?.fundNav);
-        setRefLabel(`场外价格: ${data.quote?.formatter(data.quote.fundNav)}`);
+        setRefLabel(`场外价格: ${data.ticker.formatter(data?.quote?.fundNav)}`);
       }
     },
     [data],
@@ -151,7 +151,7 @@ export function TabChart() {
                   <ChartTooltipContent
                     valueFormatterMap={{
                       shares: formatShares,
-                      price: data?.quote?.formatter,
+                      price: data?.ticker.formatter,
                     }}
                   />
                 }

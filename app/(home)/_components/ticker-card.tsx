@@ -59,7 +59,7 @@ export const TickerCard = ({
     carouselList.push(
       <SimpleDisplay
         title={isAShare ? "市场价格" : "场内价格"}
-        value={quote.formatter(quote.current!)}
+        value={ticker.formatter(quote.current!)}
         change={formatPercent(quote.pct!)}
         colorClass={getTickerChangeColorClass(quote.pct!)}
       />,
@@ -68,7 +68,7 @@ export const TickerCard = ({
       carouselList.push(
         <SimpleDisplay
           title={"场外价格"}
-          value={quote.formatter(quote.fundNav!)}
+          value={ticker.formatter(quote.fundNav!)}
           change={formatPercent(quote.fundNavPct!)}
           colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
         />,
@@ -104,7 +104,7 @@ export const TickerCard = ({
                 list={[
                   {
                     title: "成本价格",
-                    content: quote.formatter(summary.costPrice),
+                    content: ticker.formatter(summary.costPrice),
                   },
                   {
                     title: "仓位",

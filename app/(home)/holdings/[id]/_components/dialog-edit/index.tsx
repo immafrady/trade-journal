@@ -258,7 +258,7 @@ export const DialogEdit = ({
                       type={"number"}
                       placeholder={
                         shares && amount && data
-                          ? data?.quote?.formatter(
+                          ? data?.ticker.formatter(
                               calcPrice(amount, shares, fee),
                             )
                           : "请输入"

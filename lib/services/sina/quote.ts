@@ -1,16 +1,9 @@
 import { SinaTicker } from "@/lib/services/sina/ticker";
-import {
-  calculatePercent,
-  formatStockValue,
-  StockValueFormatter,
-} from "@/lib/market-utils";
+import { calculatePercent } from "@/lib/market-utils";
 
 export class SinaQuote {
-  constructor(public readonly ticker: SinaTicker) {
-    this.formatter = formatStockValue(ticker.type);
-  }
+  constructor(public readonly ticker: SinaTicker) {}
 
-  public formatter: StockValueFormatter;
   // 股票相关
   public time?: string;
   public open?: number;

@@ -44,19 +44,19 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
         title={
           <SimpleDisplay
             title={isAShare ? "市场价格" : "场内价格"}
-            value={quote.formatter(quote.current!)}
+            value={ticker.formatter(quote.current!)}
             colorClass={getTickerChangeColorClass(quote.pct!)}
           />
         }
         detail={
           <div className={"grid grid-cols-2"}>
             <div className={"col-span-full"}>时间：{quote.time}</div>
-            <div>涨跌：{quote.formatter(quote.diff!)}</div>
+            <div>涨跌：{ticker.formatter(quote.diff!)}</div>
             <div>涨幅：{formatPercent(quote.pct)}</div>
-            <div>最高：{quote.formatter(quote.high!)}</div>
-            <div>最低：{quote.formatter(quote.low!)}</div>
-            <div>今开：{quote.formatter(quote.open!)}</div>
-            <div>昨收：{quote.formatter(quote.prevClose!)}</div>
+            <div>最高：{ticker.formatter(quote.high!)}</div>
+            <div>最低：{ticker.formatter(quote.low!)}</div>
+            <div>今开：{ticker.formatter(quote.open!)}</div>
+            <div>昨收：{ticker.formatter(quote.prevClose!)}</div>
           </div>
         }
       />,
@@ -69,7 +69,7 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
           title={
             <SimpleDisplay
               title={"场外价格"}
-              value={quote.formatter(quote.fundNav!)}
+              value={ticker.formatter(quote.fundNav!)}
               colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
             />
           }
