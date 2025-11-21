@@ -38,7 +38,7 @@ export function StepPreviewData({
   onSubmit: () => Promise<void>;
 }) {
   const { data } = React.useContext(HoldingInfoContext);
-  const quote = data!.quote!;
+  const ticker = data!.ticker;
 
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
@@ -110,7 +110,7 @@ export function StepPreviewData({
                         },
                         {
                           title: TradeRecordConstants.Price,
-                          content: quote.formatter(record.derived.price),
+                          content: ticker.formatter(record.derived.price),
                         },
                         {
                           title: TradeRecordConstants.Amount,

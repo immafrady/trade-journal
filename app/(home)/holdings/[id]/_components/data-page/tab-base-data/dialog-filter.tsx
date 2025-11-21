@@ -39,19 +39,19 @@ export const DialogFilter = ({
     onSubmit: ({ value: form }) => {
       if (form.id) {
         const type = form.type as ActionType;
-        const min = +form.minValue;
-        const max = +form.maxValue;
+        const num1 = +form.num1;
+        const num2 = +form.num2;
         onColumnFiltersChange([
           {
             id: form.id,
             value:
               type === ActionType.Equal
-                ? [min, min]
+                ? [num1, num1]
                 : type === ActionType.InBetween
-                  ? [min, max]
+                  ? [num1, num2]
                   : type === ActionType.Less
-                    ? [min, null]
-                    : [null, max],
+                    ? [null, num1]
+                    : [num1, null],
           },
         ]);
       } else {
@@ -141,8 +141,8 @@ export const DialogFilter = ({
                     onClick={() => {
                       form.setFieldValue("id", "");
                       form.setFieldValue("type", "");
-                      form.setFieldValue("minValue", "");
-                      form.setFieldValue("maxValue", "");
+                      form.setFieldValue("num1", "");
+                      form.setFieldValue("num2", "");
                     }}
                   >
                     <Eraser />
@@ -190,9 +190,9 @@ export const DialogFilter = ({
                   </FieldLayout>
                 )}
               />
-              {type && type !== ActionType.More && (
+              {type && (
                 <form.Field
-                  name={"minValue"}
+                  name={"num1"}
                   validators={{
                     onChangeListenTo: ["id", "type"],
                     onChange: ({ value, fieldApi }) => {
@@ -215,7 +215,9 @@ export const DialogFilter = ({
                   }}
                   children={(field) => (
                     <FieldLayout
-                      label={type === ActionType.Equal ? "目标值" : "最小值"}
+                      label={
+                        type === ActionType.InBetween ? "最小值" : "目标值"
+                      }
                       field={field}
                     >
                       <Input
@@ -228,9 +230,9 @@ export const DialogFilter = ({
                   )}
                 />
               )}
-              {[ActionType.More, ActionType.InBetween].includes(type) && (
+              {ActionType.InBetween === type && (
                 <form.Field
-                  name={"maxValue"}
+                  name={"num2"}
                   validators={{
                     onChangeListenTo: ["id", "type"],
                     onChange: ({ value, fieldApi }) => {
@@ -278,14 +280,7 @@ enum ActionType {
 }
 
 function getDefaultValue(filters: ColumnFiltersState) {
-  if (filters.length === 0) {
-    return {
-      id: "",
-      type: "",
-      minValue: "",
-      maxValue: "",
-    };
-  } else {
+  if (filters.length > 0) {
     const filter = filters[0];
     const id = filter.id;
     const value = filter.value as [number, number];
@@ -293,25 +288,33 @@ function getDefaultValue(filters: ColumnFiltersState) {
     const max = value[1];
     let type: ActionType;
     if (min && max) {
-      type = min === max ? ActionType.InBetween : ActionType.Equal;
-    } else if (min) {
-      type = ActionType.Less;
-    } else if (max) {
-      type = ActionType.More;
-    } else {
-      // 异常，直接返回
       return {
-        id: "",
-        type: "",
-        minValue: "",
-        maxValue: "",
+        id,
+        type: min === max ? ActionType.Equal : ActionType.InBetween,
+        num1: min,
+        num2: max,
+      };
+    } else if (min) {
+      return {
+        id,
+        type: ActionType.More,
+        num1: min,
+        num2: "",
+      };
+    } else if (max) {
+      return {
+        id,
+        type: ActionType.Less,
+        num1: max,
+        num2: "",
       };
     }
-    return {
-      id,
-      type,
-      minValue: min,
-      maxValue: max,
-    };
   }
+
+  return {
+    id: "",
+    type: "",
+    num1: "",
+    num2: "",
+  };
 }

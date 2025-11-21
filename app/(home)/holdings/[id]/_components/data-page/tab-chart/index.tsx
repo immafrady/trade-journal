@@ -34,6 +34,7 @@ import {
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart/use-trade-record-chart";
 import { formatShares } from "@/lib/market-utils";
 import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { useTradeRecordSummary } from "@/lib/services/trade-records/use-trade-record-summary";
 
 const chartConfig = {
   price: {
@@ -49,8 +50,10 @@ const chartConfig = {
 export function TabChart() {
   const { id, data } = React.useContext(HoldingInfoContext)!;
   const list = useTradeRecordChart(id);
+  const summary = useTradeRecordSummary(id);
   const [records, setRecords] = React.useState<TradeRecordChart[]>([]);
   const onRangeChange = React.useCallback((record: TradeRecordChart[]) => {
+    console.log(record);
     setRecords(record);
   }, []);
 
@@ -58,21 +61,26 @@ export function TabChart() {
   const [sharesYDomain, setSharesYDomain] = React.useState([0, 100]);
 
   React.useEffect(() => {
+    // 金额
     const prices = [
       data?.quote?.fundNav as number,
       data?.quote?.current as number,
       ...records.map((d) => +d.price),
     ].filter(Boolean);
-    const shares = records.map((d) => +d.shares);
     let min = Math.min(...prices);
     let max = Math.max(...prices);
     let padding = (max - min) * 0.1;
     setPriceYDomain([min - padding, max + padding]);
+    // 份额
+    const shares = [
+      summary.maxTotalShares,
+      ...records.map((d) => +d.shares),
+    ].filter(Boolean);
     min = Math.min(...shares);
     max = Math.max(...shares);
     padding = (max - min) * 0.1;
-    setSharesYDomain([min - padding, max + padding]);
-  }, [data?.quote, records]);
+    setSharesYDomain([min - padding < 0 ? 0 : min - padding, max + padding]);
+  }, [data?.quote, records, summary.maxTotalShares]);
 
   const [counter, setCounter] = React.useState(0);
   const [refValue, setRefValue] = React.useState<number | undefined>();
@@ -83,17 +91,17 @@ export function TabChart() {
 
       if (data.ticker.type === SinaStockType.AShare) {
         setRefValue(data.quote?.current);
-        setRefLabel(`当前价格: ${data.quote?.formatter(data.quote.current)}`);
+        setRefLabel(`当前价格: ${data.ticker.formatter(data?.quote?.current)}`);
         return;
       }
 
       // 非 A 股的切换逻辑
       if (count % 2 === 0) {
         setRefValue(data.quote?.current);
-        setRefLabel(`场内价格: ${data.quote?.formatter(data.quote.current)}`);
+        setRefLabel(`场内价格: ${data.ticker.formatter(data?.quote?.current)}`);
       } else {
         setRefValue(data.quote?.fundNav);
-        setRefLabel(`场外价格: ${data.quote?.formatter(data.quote.fundNav)}`);
+        setRefLabel(`场外价格: ${data.ticker.formatter(data?.quote?.fundNav)}`);
       }
     },
     [data],
@@ -151,15 +159,14 @@ export function TabChart() {
                   <ChartTooltipContent
                     valueFormatterMap={{
                       shares: formatShares,
-                      price: data?.quote?.formatter,
+                      price: data?.ticker.formatter,
                     }}
                   />
                 }
               />
-              <YAxis yAxisId="left" scale={"log"} domain={sharesYDomain} />
+              <YAxis yAxisId="left" domain={sharesYDomain} />
               <YAxis
                 yAxisId="right"
-                scale={"log"}
                 orientation="right"
                 width={0}
                 domain={priceYDomain}
@@ -182,9 +189,21 @@ export function TabChart() {
                 <ReferenceLine
                   y={refValue}
                   yAxisId="right"
-                  label={refLabel}
-                  stroke={"var(--primary)"}
+                  label={{ value: refLabel, position: "insideTopRight" }}
+                  stroke={"var(--color-price)"}
                   strokeDasharray={"3 3"}
+                  position={"end"}
+                />
+              )}
+              {summary.maxTotalShares && (
+                <ReferenceLine
+                  y={summary.maxTotalShares}
+                  yAxisId="left"
+                  label={{
+                    value: `最高仓位: ${formatShares(summary.maxTotalShares)}`,
+                    position: "insideTopLeft",
+                  }}
+                  stroke={"var(--color-shares)"}
                   position={"end"}
                 />
               )}

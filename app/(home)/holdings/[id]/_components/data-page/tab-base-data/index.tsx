@@ -34,8 +34,8 @@ export const TabBaseData = () => {
   );
 
   const columns = React.useMemo(() => {
-    return getColumns(data?.quote?.formatter);
-  }, [data?.quote?.formatter]);
+    return getColumns(data?.ticker.formatter);
+  }, [data?.ticker.formatter]);
   const table = useReactTable({
     data: list,
     state: {

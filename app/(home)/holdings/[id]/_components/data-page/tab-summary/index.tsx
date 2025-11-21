@@ -58,7 +58,7 @@ export const TabSummary = () => {
                   title={"收益计算"}
                   costPrice={summary.costPrice}
                   currentPrice={data.quote.current!}
-                  formatter={data.quote.formatter}
+                  formatter={data.ticker.formatter}
                   shares={summary.totalShares}
                 />
               ) : (
@@ -69,7 +69,7 @@ export const TabSummary = () => {
                       title={"收益计算（场内计价）"}
                       costPrice={summary.costPrice}
                       currentPrice={data.quote.current!}
-                      formatter={data.quote.formatter}
+                      formatter={data.ticker.formatter}
                       shares={summary.totalShares}
                     />
                   ) : (
@@ -78,7 +78,7 @@ export const TabSummary = () => {
                       title={"收益计算（场外计价）"}
                       costPrice={summary.costPrice}
                       currentPrice={data.quote.fundNav!}
-                      formatter={data.quote.formatter}
+                      formatter={data.ticker.formatter}
                       shares={summary.totalShares}
                     />
                   )}
