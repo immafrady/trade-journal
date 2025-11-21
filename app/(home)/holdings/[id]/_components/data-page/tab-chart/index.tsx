@@ -53,6 +53,7 @@ export function TabChart() {
   const summary = useTradeRecordSummary(id);
   const [records, setRecords] = React.useState<TradeRecordChart[]>([]);
   const onRangeChange = React.useCallback((record: TradeRecordChart[]) => {
+    console.log(record);
     setRecords(record);
   }, []);
 
@@ -78,7 +79,7 @@ export function TabChart() {
     min = Math.min(...shares);
     max = Math.max(...shares);
     padding = (max - min) * 0.1;
-    setSharesYDomain([min - padding, max + padding]);
+    setSharesYDomain([min - padding < 0 ? 0 : min - padding, max + padding]);
   }, [data?.quote, records, summary.maxTotalShares]);
 
   const [counter, setCounter] = React.useState(0);
@@ -163,10 +164,9 @@ export function TabChart() {
                   />
                 }
               />
-              <YAxis yAxisId="left" scale={"log"} domain={sharesYDomain} />
+              <YAxis yAxisId="left" domain={sharesYDomain} />
               <YAxis
                 yAxisId="right"
-                scale={"log"}
                 orientation="right"
                 width={0}
                 domain={priceYDomain}
