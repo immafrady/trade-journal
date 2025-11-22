@@ -35,7 +35,7 @@ export const TableColumnToggler = ({
           children: (
             <div className={"flex items-center gap-0.5"}>
               <Gauge />
-              高阶数据
+              进阶数据
             </div>
           ),
           value: adjustVisibility,

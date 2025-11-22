@@ -4,6 +4,7 @@ import {
 } from "@/lib/enums/trade-record-type";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import dayjs, { Dayjs } from "dayjs";
+import { formatPercent } from "@/lib/market-utils";
 
 export class TradeRecord {
   constructor(public props: TradeRecordProps) {
@@ -55,6 +56,7 @@ export class TradeRecord {
     this.display = {
       tradedAt: dayjs(this.props.tradedAt).format("YYYY-MM-DD"),
       type: this.props.type.label,
+      feeRate: "",
     };
     const { price, shares, amount, fee, factor } = this.props;
     this.derived = {
@@ -68,12 +70,17 @@ export class TradeRecord {
       fee: this.derived.fee * factor,
       shares: this.derived.shares * factor,
     };
+    this.display.feeRate = formatPercent(
+      Math.abs((this.derived.fee / this.derived.amount) * 100),
+      3,
+    );
   }
 
   // 展示
   public display: {
     tradedAt: string;
     type: string;
+    feeRate: string;
   };
 
   // 调整后（怕参数不全）

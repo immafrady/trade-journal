@@ -53,7 +53,6 @@ export function TabChart() {
   const summary = useTradeRecordSummary(id);
   const [records, setRecords] = React.useState<TradeRecordChart[]>([]);
   const onRangeChange = React.useCallback((record: TradeRecordChart[]) => {
-    console.log(record);
     setRecords(record);
   }, []);
 
@@ -151,7 +150,8 @@ export function TabChart() {
                 dataKey="tradedAt"
                 tickLine={true}
                 axisLine={true}
-                tickMargin={8}
+                tickMargin={4}
+                interval={"preserveStartEnd"}
               />
               <ChartTooltip
                 cursor={true}
@@ -163,13 +163,6 @@ export function TabChart() {
                     }}
                   />
                 }
-              />
-              <YAxis yAxisId="left" domain={sharesYDomain} />
-              <YAxis
-                yAxisId="right"
-                orientation="right"
-                width={0}
-                domain={priceYDomain}
               />
               <Bar
                 yAxisId="left"
@@ -189,7 +182,7 @@ export function TabChart() {
                 <ReferenceLine
                   y={refValue}
                   yAxisId="right"
-                  label={{ value: refLabel, position: "insideTopRight" }}
+                  label={{ value: refLabel }}
                   stroke={"var(--color-price)"}
                   strokeDasharray={"3 3"}
                   position={"end"}
@@ -207,7 +200,19 @@ export function TabChart() {
                   position={"end"}
                 />
               )}
-
+              <YAxis
+                yAxisId="left"
+                domain={sharesYDomain}
+                mirror={true}
+                tickFormatter={(v) => formatShares(v)}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                mirror={true}
+                tickFormatter={(v) => data?.ticker.formatter(v) ?? v}
+                domain={priceYDomain}
+              />
               <ChartLegend content={<ChartLegendContent />} />
             </ComposedChart>
           </ChartContainer>
