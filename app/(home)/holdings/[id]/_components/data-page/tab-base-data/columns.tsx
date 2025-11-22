@@ -243,6 +243,23 @@ export function getColumns(
       },
     },
     {
+      id: TradeRecordConstants.FeeRate,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={TradeRecordConstants.FeeRate}
+          className={"text-right"}
+        />
+      ),
+      accessorFn: (row) => row.display.feeRate,
+      cell: (row) => {
+        const v = row.getValue() as number;
+        return (
+          <div className={cn("text-right", !v && "text-destructive")}>{v}</div>
+        );
+      },
+    },
+    {
       id: TradeRecordConstants.Factor,
       header: () => (
         <div className={"text-center"}>{TradeRecordConstants.Factor}</div>
@@ -299,6 +316,7 @@ export function getColumns(
 export const baseVisibility = {
   [TradeRecordConstants.AdjustedAmount]: false,
   [TradeRecordConstants.AdjustedFee]: false,
+  [TradeRecordConstants.FeeRate]: false,
   [TradeRecordConstants.AdjustedShares]: false,
   [TradeRecordConstants.CumulativeTotalAmount]: false,
   [TradeRecordConstants.CumulativeTotalShares]: false,
@@ -317,6 +335,7 @@ export const adjustVisibility = {
 export const cumulativeVisibility = {
   [TradeRecordConstants.Amount]: false,
   [TradeRecordConstants.Fee]: false,
+  [TradeRecordConstants.FeeRate]: false,
   [TradeRecordConstants.Shares]: false,
   [TradeRecordConstants.AdjustedAmount]: false,
   [TradeRecordConstants.AdjustedFee]: false,

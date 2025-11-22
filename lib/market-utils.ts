@@ -22,7 +22,8 @@ export function formatStockValue(type: SinaStockType): StockValueFormatter {
 }
 
 export const formatShares = (num?: number) => (num ? num.toFixed(2) : "--");
-export const formatPercent = (num?: number) => (num?.toFixed(2) ?? "--") + "%";
+export const formatPercent = (num?: number, fractionDigit = 2) =>
+  (num?.toFixed(fractionDigit) ?? "--") + "%";
 
 export const calculatePercent = (current: number, prev: number) =>
   ((current - prev) / prev) * 100;
