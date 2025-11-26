@@ -21,6 +21,21 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Trade Journal",
   description: "记录你的股市点点滴滴",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Trade Journal",
+    startupImage: [
+      {
+        url: "/splash-screen-ipad.png",
+        media: "(min-device-width: 1024px) and (orientation: portrait)",
+      },
+      {
+        url: "/splash-screen-iphone.png",
+        media: "(max-device-width: 1023px) and (orientation: portrait)",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
