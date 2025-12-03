@@ -50,14 +50,14 @@ export const TabSummary = () => {
             </SimpleDisplayVertical>
           </section>
           <Separator className={"my-2 md:my-4"} />
-          {data?.quote && (
+          {data && (
             <div>
               {data.ticker.type === SinaStockType.AShare ? (
                 <PriceCalculationBlock
                   key={0}
                   title={"收益计算"}
                   costPrice={summary.costPrice}
-                  currentPrice={data.quote.current!}
+                  currentPrice={data.quote?.current}
                   formatter={data.ticker.formatter}
                   shares={summary.totalShares}
                 />
@@ -68,7 +68,7 @@ export const TabSummary = () => {
                       key={1}
                       title={"收益计算（场内计价）"}
                       costPrice={summary.costPrice}
-                      currentPrice={data.quote.current!}
+                      currentPrice={data.quote?.current}
                       formatter={data.ticker.formatter}
                       shares={summary.totalShares}
                     />
@@ -77,7 +77,7 @@ export const TabSummary = () => {
                       key={2}
                       title={"收益计算（场外计价）"}
                       costPrice={summary.costPrice}
-                      currentPrice={data.quote.fundNav!}
+                      currentPrice={data.quote?.fundNav}
                       formatter={data.ticker.formatter}
                       shares={summary.totalShares}
                     />
@@ -148,17 +148,17 @@ const PriceCalculationBlock = ({
   formatter,
 }: {
   title: string;
-  currentPrice: number;
+  currentPrice?: number;
   costPrice: number;
   shares: number;
   formatter: (num: number) => string;
 }) => {
-  const diff = currentPrice - costPrice;
-  const pct = formatPercent(calculatePercent(currentPrice, costPrice));
-  const changeColorClassName = React.useMemo(
-    () => getTickerChangeColorClass(diff),
-    [diff],
-  );
+  const hasPrice = !!currentPrice;
+  const diff = hasPrice ? currentPrice - costPrice : null;
+  const pct = hasPrice
+    ? formatPercent(calculatePercent(currentPrice, costPrice))
+    : "--%";
+  const changeColorClassName = hasPrice ? getTickerChangeColorClass(diff!) : "";
   return (
     <MotionBlock
       title={title}
@@ -169,13 +169,13 @@ const PriceCalculationBlock = ({
         },
         {
           title: "市场价格",
-          content: formatter(currentPrice),
+          content: hasPrice ? formatter(currentPrice) : "--",
         },
         {
           title: "收益金额",
           content: (
             <span className={changeColorClassName}>
-              {formatMoney(diff * shares)}
+              {hasPrice ? formatMoney(diff! * shares) : "--"}
             </span>
           ),
         },
