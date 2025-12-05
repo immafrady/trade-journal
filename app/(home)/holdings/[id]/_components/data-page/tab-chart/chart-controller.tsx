@@ -1,9 +1,15 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Minus, Plus } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import React from "react";
 import { TradeRecordChart } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart/use-trade-record-chart";
+import { useElementWidth } from "@/hooks/use-element-width";
 
 export const ChartController = ({
   records = [],
@@ -12,92 +18,92 @@ export const ChartController = ({
   records: TradeRecordChart[];
   onRangeChange: (range: TradeRecordChart[]) => void;
 }) => {
-  const [size, setSize] = React.useState(10);
-  let maxPage = Math.floor(records.length / size);
-  const extra = records.length - maxPage * size;
-  if (extra < 5) {
-    maxPage--;
-  }
-
-  const [page, setPage] = React.useState(maxPage);
+  const cardRef = React.useRef<HTMLDivElement>(null);
+  const pageWidth = useElementWidth(cardRef);
+  const size = pageWidth ? Math.round(pageWidth / 30) : 20;
+  const max = records.length > size ? records.length - size : 0;
+  const [startIndex, setStartIndex] = React.useState(max);
 
   const filtered = React.useMemo(() => {
-    const min = page * size;
-    const max = size * (page + 1);
-    if (page === maxPage && extra < 5) {
-      return records.slice(min);
+    if (max > 0) {
+      const endIndex = startIndex + size - 1;
+      return records.slice(startIndex, endIndex);
     } else {
-      return records.slice(min, max);
+      return records;
     }
-  }, [page, size, maxPage, extra, records]);
+  }, [max, records, size, startIndex]);
 
   React.useEffect(() => {
     onRangeChange(filtered);
   }, [filtered, onRangeChange]);
 
-  const sizeChange = React.useCallback(
-    (change: number) => {
-      const s = size + change;
-      setSize(s);
-      const maxPage = Math.floor(records.length / s);
-      if (page > maxPage) {
-        setPage(maxPage);
-      }
-    },
-    [size, page, records],
-  );
+  const onIndexChange = (isUp: boolean, isFast = false) => {
+    let change = isFast ? Math.round((size * 2) / 3) : 1;
+    change = isUp ? change : -change;
+    const newStartIndex = startIndex + change;
+    if (newStartIndex < 0) {
+      setStartIndex(0);
+    } else if (newStartIndex > max) {
+      setStartIndex(max);
+    } else {
+      setStartIndex(newStartIndex);
+    }
+  };
 
   return (
-    <Card>
+    <Card ref={cardRef}>
       <CardContent>
         <div className="flex w-full items-center gap-2 text-sm">
           <Button
-            disabled={page <= 0}
+            disabled={startIndex <= 0}
             size={"sm"}
             onClick={() => {
-              setPage((p) => p - 1);
+              onIndexChange(false, true);
             }}
           >
-            <ArrowLeft />
+            <ChevronsLeft />
           </Button>
           <Button
-            disabled={size - 5 <= 0}
+            disabled={startIndex <= 0}
             variant={"secondary"}
             size={"sm"}
-            onClick={() => sizeChange(-5)}
+            onClick={() => {
+              onIndexChange(false);
+            }}
           >
-            <Minus />
+            <ChevronLeft />
           </Button>
           <Slider
             className={"flex-1"}
-            value={[page]}
-            onValueChange={([p]) => setPage(p)}
-            max={maxPage}
+            disabled={records.length <= size}
+            value={[startIndex]}
+            onValueChange={([p]) => setStartIndex(p)}
+            max={max}
             min={0}
             step={1}
           />
           <Button
-            disabled={size + 5 >= 50}
+            disabled={startIndex >= max}
             variant={"secondary"}
             size={"sm"}
             onClick={() => {
-              sizeChange(5);
+              onIndexChange(true);
             }}
           >
-            <Plus />
+            <ChevronRight />
           </Button>
           <Button
-            disabled={page >= maxPage}
+            disabled={startIndex >= max}
             size={"sm"}
             onClick={() => {
-              setPage((p) => p + 1);
+              onIndexChange(true, true);
             }}
           >
-            <ArrowRight />
+            <ChevronsRight />
           </Button>
         </div>
         <div className={"text-center text-muted-foreground text-sm mt-2"}>
-          第{page + 1}页，每页{size}条数据
+          展示第{startIndex + 1}~{startIndex + size}条，共{records.length}条数据
         </div>
       </CardContent>
     </Card>
