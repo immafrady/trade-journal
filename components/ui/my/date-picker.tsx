@@ -10,20 +10,26 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarCheckIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function DatePicker({
   date,
   onChange,
+  className,
 }: {
   date: Date | undefined;
   onChange: (d?: Date) => void;
+  className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-48 justify-between font-normal">
+        <Button
+          variant="outline"
+          className={cn("min-w-32 justify-between font-normal", className)}
+        >
           {date?.toLocaleDateString() ?? "选择日期"}
           <CalendarCheckIcon />
         </Button>

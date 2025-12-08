@@ -113,10 +113,22 @@ export const DialogFilter = ({
             name={"dateMin"}
             children={(field) => (
               <FieldLayout label={"开始日期"} field={field}>
-                <DatePicker
-                  date={field.state.value}
-                  onChange={(v) => field.handleChange(v)}
-                />
+                <div className={"flex gap-2"}>
+                  <DatePicker
+                    className={"flex-1"}
+                    date={field.state.value}
+                    onChange={(v) => field.handleChange(v)}
+                  />
+                  <Button
+                    disabled={!field.state.value}
+                    variant={"destructive"}
+                    onClick={() => {
+                      form.setFieldValue("dateMin", undefined);
+                    }}
+                  >
+                    <Eraser />
+                  </Button>
+                </div>
               </FieldLayout>
             )}
           />
@@ -124,10 +136,22 @@ export const DialogFilter = ({
             name={"dateMax"}
             children={(field) => (
               <FieldLayout label={"截止日期"} field={field}>
-                <DatePicker
-                  date={field.state.value}
-                  onChange={(v) => field.handleChange(v)}
-                />
+                <div className={"flex gap-2"}>
+                  <DatePicker
+                    className={"flex-1"}
+                    date={field.state.value}
+                    onChange={(v) => field.handleChange(v)}
+                  />
+                  <Button
+                    disabled={!field.state.value}
+                    variant={"destructive"}
+                    onClick={() => {
+                      form.setFieldValue("dateMax", undefined);
+                    }}
+                  >
+                    <Eraser />
+                  </Button>
+                </div>
               </FieldLayout>
             )}
           />
@@ -175,9 +199,6 @@ export const DialogFilter = ({
                       form.setFieldValue("type", "");
                       form.setFieldValue("num1", "");
                       form.setFieldValue("num2", "");
-                      form.setFieldValue("dateMin", undefined);
-                      form.setFieldValue("dateMax", undefined);
-                      console.log("erase", form.getFieldValue("dateMin"));
                     }}
                   >
                     <Eraser />
