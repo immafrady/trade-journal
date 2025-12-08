@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/select";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { DatePicker } from "@/components/ui/my/date-picker";
 
 export const DialogFilter = ({
   columnFilters,
@@ -32,31 +34,35 @@ export const DialogFilter = ({
   const dialogRef = React.useRef<ResponsiveDialogRef>(null);
 
   const form = useForm({
-    defaultValues: getDefaultValue(columnFilters),
+    defaultValues: getDefaultValue([]),
     onSubmitInvalid: () => {
       toast.error(`校验失败，无法提交`);
     },
     onSubmit: ({ value: form }) => {
+      const filters: ColumnFiltersState = [];
+      const dateMin = form.dateMin;
+      const dateMax = form.dateMax;
+      filters.push({
+        id: TradeRecordConstants.TradedAt,
+        value: [dateMin, dateMax],
+      });
       if (form.id) {
         const type = form.type as ActionType;
         const num1 = +form.num1;
         const num2 = +form.num2;
-        onColumnFiltersChange([
-          {
-            id: form.id,
-            value:
-              type === ActionType.Equal
-                ? [num1, num1]
-                : type === ActionType.InBetween
-                  ? [num1, num2]
-                  : type === ActionType.Less
-                    ? [null, num1]
-                    : [num1, null],
-          },
-        ]);
-      } else {
-        onColumnFiltersChange([]);
+        filters.push({
+          id: form.id,
+          value:
+            type === ActionType.Equal
+              ? [num1, num1]
+              : type === ActionType.InBetween
+                ? [num1, num2]
+                : type === ActionType.Less
+                  ? [null, num1]
+                  : [num1, null],
+        });
       }
+      onColumnFiltersChange(filters);
       dialogRef.current?.setOpen(false);
     },
   });
@@ -92,6 +98,9 @@ export const DialogFilter = ({
       onClosed={() => {
         form.reset();
       }}
+      onOpen={() => {
+        form.reset(getDefaultValue(columnFilters));
+      }}
     >
       <form
         onSubmit={(e) => {
@@ -100,6 +109,29 @@ export const DialogFilter = ({
         }}
       >
         <div className={"flex flex-col gap-4"}>
+          <form.Field
+            name={"dateMin"}
+            children={(field) => (
+              <FieldLayout label={"开始日期"} field={field}>
+                <DatePicker
+                  date={field.state.value}
+                  onChange={(v) => field.handleChange(v)}
+                />
+              </FieldLayout>
+            )}
+          />
+          <form.Field
+            name={"dateMax"}
+            children={(field) => (
+              <FieldLayout label={"截止日期"} field={field}>
+                <DatePicker
+                  date={field.state.value}
+                  onChange={(v) => field.handleChange(v)}
+                />
+              </FieldLayout>
+            )}
+          />
+          <Separator />
           <form.Field
             name={"id"}
             children={(field) => (
@@ -143,6 +175,9 @@ export const DialogFilter = ({
                       form.setFieldValue("type", "");
                       form.setFieldValue("num1", "");
                       form.setFieldValue("num2", "");
+                      form.setFieldValue("dateMin", undefined);
+                      form.setFieldValue("dateMax", undefined);
+                      console.log("erase", form.getFieldValue("dateMin"));
                     }}
                   >
                     <Eraser />
@@ -280,29 +315,46 @@ enum ActionType {
 }
 
 function getDefaultValue(filters: ColumnFiltersState) {
-  if (filters.length > 0) {
-    const filter = filters[0];
-    const id = filter.id;
-    const value = filter.value as [number, number];
+  // 处理日期
+  const dateFilter = filters[0];
+  let date: { dateMin?: Date; dateMax?: Date } = {
+    dateMin: undefined,
+    dateMax: undefined,
+  };
+  if (dateFilter) {
+    const [dateMin, dateMax] = dateFilter.value as [Date?, Date?];
+    date = { dateMin, dateMax };
+  }
+
+  // 处理别的
+  const otherFilter = filters[1];
+  let other = {
+    id: "",
+    type: "",
+    num1: "",
+    num2: "",
+  };
+  if (otherFilter) {
+    const id = otherFilter.id;
+    const value = otherFilter.value as [string, string];
     const min = value[0];
     const max = value[1];
-    let type: ActionType;
     if (min && max) {
-      return {
+      other = {
         id,
         type: min === max ? ActionType.Equal : ActionType.InBetween,
         num1: min,
         num2: max,
       };
     } else if (min) {
-      return {
+      other = {
         id,
         type: ActionType.More,
         num1: min,
         num2: "",
       };
     } else if (max) {
-      return {
+      other = {
         id,
         type: ActionType.Less,
         num1: max,
@@ -312,9 +364,7 @@ function getDefaultValue(filters: ColumnFiltersState) {
   }
 
   return {
-    id: "",
-    type: "",
-    num1: "",
-    num2: "",
+    ...date,
+    ...other,
   };
 }
