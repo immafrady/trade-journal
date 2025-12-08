@@ -53,6 +53,18 @@ export function getColumns(
           {(row.getValue() as Dayjs).format("YYYY-MM-DD")}
         </div>
       ),
+      filterFn: (row, columnId, filterValue, addMeta) => {
+        const target = row.getValue(columnId) as Dayjs;
+        let match = true;
+        const [min, max]: [Date?, Date?] = filterValue ?? [];
+        if (min) {
+          match = target.isAfter(min) || target.isSame(min);
+        }
+        if (max) {
+          match = target.isBefore(max) || target.isSame(max);
+        }
+        return match;
+      },
     },
     {
       id: TradeRecordConstants.Type,
