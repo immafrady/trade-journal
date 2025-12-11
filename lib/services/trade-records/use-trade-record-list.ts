@@ -16,7 +16,7 @@ export function useTradeRecordList(
       const response = await fetch(api);
       const csv = await response.text();
       const result = papa.parse(csv, {
-        delimiter: "|", // 分隔符
+        delimiter: ",", // 分隔符
         header: true,
       });
       console.error("result: ", result);
