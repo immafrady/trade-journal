@@ -21,7 +21,7 @@ export const GET = async (request: NextRequest) => {
     } else {
       try {
         const csv = papa.unparse(resp.data, {
-          delimiter: "|", // 分隔符
+          delimiter: ",", // 分隔符
           header: true, // 自动使用 keys 作为表头
         });
 
