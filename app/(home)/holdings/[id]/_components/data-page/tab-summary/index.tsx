@@ -48,6 +48,16 @@ export const TabSummary = () => {
             <SimpleDisplayVertical title={"交易次数"}>
               {summary.count}
             </SimpleDisplayVertical>
+            {!!summary.dividendCount && (
+              <>
+                <SimpleDisplayVertical title={"总分红金额"}>
+                  {formatMoney(summary.totalDividend)}
+                </SimpleDisplayVertical>
+                <SimpleDisplayVertical title={"分红次数"}>
+                  {summary.dividendCount}
+                </SimpleDisplayVertical>
+              </>
+            )}
           </section>
           <Separator className={"my-2 md:my-4"} />
           {data && (
