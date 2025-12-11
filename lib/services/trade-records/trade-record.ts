@@ -134,6 +134,27 @@ export class TradeRecord {
     });
   }
 
+  static fromCSV(model: TradeRecordCSVModel) {
+    const type = TradeRecordType.parseFromValue(+model.type);
+    if (!type) {
+      throw new Error(
+        `无法解析交易类型: ${model.type}, 原始数据: ${JSON.stringify(model)}`,
+      );
+    }
+    return new TradeRecord({
+      holdingId: +model.holding_id,
+      type,
+      factor: +model.factor,
+      shares: +model.shares,
+      price: +model.price,
+      amount: +model.amount,
+      fee: +model.fee,
+      comment: model.comment,
+      tradedAt: dayjs(model.traded_at),
+      id: +model.id,
+    });
+  }
+
   // 转化为json，默认使用数据库格式
   toJSON(): TradeRecordModel {
     return {
@@ -187,6 +208,20 @@ export interface TradeRecordModel {
   price?: number;
   amount?: number;
   fee: number;
+  comment: string;
+  traded_at: string;
+}
+
+// CSV解析
+export interface TradeRecordCSVModel {
+  id: string;
+  holding_id: string;
+  type: string;
+  factor: string;
+  shares: string;
+  price: string;
+  amount: string;
+  fee: string;
   comment: string;
   traded_at: string;
 }

@@ -1,4 +1,5 @@
 import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { TradeRecordType } from "@/lib/enums/trade-record-type";
 
 export const useTradeRecordSummary = (holdingId: string) => {
   const { data: list = [] } = useTradeRecordList(holdingId);
@@ -11,6 +12,8 @@ export const useTradeRecordSummary = (holdingId: string) => {
   let maxTotalShares = 0;
   let maxTotalAmountTradedAt: string | null = null;
   let maxTotalSharesTradedAt: string | null = null;
+  let dividendCount = 0;
+  let totalDividend = 0;
   if (list.length) {
     // 最新的值就是当前的成本
     totalAmount = list[0].cumulative.totalAmount;
@@ -27,6 +30,14 @@ export const useTradeRecordSummary = (holdingId: string) => {
       if (maxTotalShares === record.cumulative.totalShares) {
         maxTotalSharesTradedAt = record.display.tradedAt;
       }
+      if (
+        record.props.type === TradeRecordType.Dividend &&
+        record.props.amount
+      ) {
+        // 统计分红
+        dividendCount += 1;
+        totalDividend += record.props.amount;
+      }
     }
   }
 
@@ -42,6 +53,8 @@ export const useTradeRecordSummary = (holdingId: string) => {
     totalSharesPct: totalShares / maxTotalShares,
     maxTotalAmountTradedAt,
     maxTotalSharesTradedAt,
+    dividendCount,
+    totalDividend: -totalDividend,
   } as TradeRecordSummary;
 };
 
@@ -57,4 +70,6 @@ export interface TradeRecordSummary {
   maxTotalAmountTradedAt?: string; // 最高时的总交易费用发生日期
   totalSharesPct: number; // 总份额百分位
   maxTotalSharesTradedAt?: string; // 最高时的总份额发生日期
+  dividendCount: number; // 分红次数
+  totalDividend: number; // 分红金额
 }

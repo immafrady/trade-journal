@@ -2,6 +2,7 @@ import useSWR, { SWRResponse } from "swr";
 import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import React from "react";
 import { TradeRecordType } from "@/lib/enums/trade-record-type";
+import papa from "papaparse";
 
 export function useTradeRecordList(
   holdingId: string,
@@ -13,8 +14,13 @@ export function useTradeRecordList(
     key,
     async (api) => {
       const response = await fetch(api);
-      const { data } = await response.json();
-      return data;
+      const csv = await response.text();
+      const result = papa.parse(csv, {
+        delimiter: "|", // 分隔符
+        header: true,
+      });
+      console.error("result: ", result);
+      return result.data as any[];
     },
     {
       fallbackData: [],
@@ -28,7 +34,7 @@ export function useTradeRecordList(
       const result: TradeRecord[] = [];
 
       for (let i = list.length - 1; i >= 0; i--) {
-        const record = TradeRecord.fromDatabase(list[i]);
+        const record = TradeRecord.fromCSV(list[i]);
         totalAmount += record.adjusted.amount;
         if (
           [TradeRecordType.Split, TradeRecordType.Merge].includes(
