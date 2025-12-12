@@ -19,7 +19,6 @@ export function useTradeRecordList(
         delimiter: ",", // 分隔符
         header: true,
       });
-      console.error("result: ", result);
       return result.data as any[];
     },
     {
