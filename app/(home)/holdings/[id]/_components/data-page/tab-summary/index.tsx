@@ -102,7 +102,7 @@ export const TabSummary = () => {
             {count % 2 === 0 ? (
               <DataPeakDisplayBlock
                 key={4}
-                title={TradeRecordConstants.Amount}
+                title={TradeRecordConstants.CumulativeTotalAmount}
                 value={formatMoney(summary.totalAmount)}
                 maxValue={formatMoney(summary.maxTotalAmount)}
                 valuePct={summary.totalAmountPct}
@@ -111,7 +111,7 @@ export const TabSummary = () => {
             ) : (
               <DataPeakDisplayBlock
                 key={5}
-                title={TradeRecordConstants.Shares}
+                title={TradeRecordConstants.CumulativeTotalShares}
                 value={formatShares(summary.totalShares)}
                 maxValue={formatShares(summary.maxTotalShares)}
                 valuePct={summary.totalSharesPct}
