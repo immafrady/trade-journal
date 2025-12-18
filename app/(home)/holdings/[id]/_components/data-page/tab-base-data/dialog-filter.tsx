@@ -171,15 +171,16 @@ export const DialogFilter = ({
                     <SelectContent>
                       {[
                         TradeRecordConstants.Price,
-                        TradeRecordConstants.CumulativeCostPrice,
-                        null,
-                        TradeRecordConstants.Shares,
-                        TradeRecordConstants.AdjustedShares,
-                        TradeRecordConstants.CumulativeTotalShares,
-                        null,
                         TradeRecordConstants.Amount,
+                        TradeRecordConstants.Shares,
+                        null,
                         TradeRecordConstants.AdjustedAmount,
+                        TradeRecordConstants.AdjustedShares,
+                        null,
+                        TradeRecordConstants.CumulativeCostPrice,
                         TradeRecordConstants.CumulativeTotalAmount,
+                        TradeRecordConstants.CumulativeTotalShares,
+                        TradeRecordConstants.PositionCostEfficiency,
                       ].map((value, idx) =>
                         value ? (
                           <SelectItem key={idx} value={value}>

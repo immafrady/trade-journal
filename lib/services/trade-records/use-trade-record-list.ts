@@ -54,10 +54,12 @@ export function useTradeRecordList(
         } else {
           totalShares += record.adjusted.shares;
         }
+        const costPrice = totalShares > 0 ? totalAmount / totalShares : 0;
         record.cumulative = {
           totalAmount,
           totalShares,
-          costPrice: totalShares > 0 ? totalAmount / totalShares : 0,
+          costPrice,
+          positionCostEfficiency: costPrice ? totalShares / costPrice : 0,
         };
         result.unshift(record);
       }
