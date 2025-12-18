@@ -14,4 +14,5 @@ export const TradeRecordConstants = {
   CumulativeTotalAmount: "累计投入",
   CumulativeTotalShares: "当前持仓",
   CumulativeCostPrice: "持仓成本价",
+  PositionCostEfficiency: "仓位/成本",
 } as const;
