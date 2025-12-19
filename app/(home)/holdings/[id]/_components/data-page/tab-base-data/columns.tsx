@@ -3,8 +3,8 @@ import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import {
   formatMoney,
+  formatPercent,
   formatShares,
-  formatStock,
   StockValueFormatter,
 } from "@/lib/market-utils";
 import { DataTableColumnHeader } from "@/components/ui/my/data-table/column-header";
@@ -167,19 +167,19 @@ export function getColumns(
       ),
     },
     {
-      id: TradeRecordConstants.PositionCostEfficiency,
+      id: TradeRecordConstants.PositionCostScore,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={TradeRecordConstants.PositionCostEfficiency}
+          title={TradeRecordConstants.PositionCostScore}
           className={"text-right"}
         />
       ),
-      accessorFn: (row) => row.cumulative.positionCostEfficiency,
+      accessorFn: (row) => row.cumulative.positionCostScore,
       filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
-          {formatStock(row.getValue() as number)}
+          {formatPercent(row.getValue() as number)}
         </div>
       ),
     },
@@ -351,7 +351,7 @@ export const baseVisibility = {
   [TradeRecordConstants.CumulativeTotalAmount]: false,
   [TradeRecordConstants.CumulativeTotalShares]: false,
   [TradeRecordConstants.CumulativeCostPrice]: false,
-  [TradeRecordConstants.PositionCostEfficiency]: false,
+  [TradeRecordConstants.PositionCostScore]: false,
 } as const;
 
 export const adjustVisibility = {
@@ -361,7 +361,7 @@ export const adjustVisibility = {
   [TradeRecordConstants.CumulativeTotalAmount]: false,
   [TradeRecordConstants.CumulativeTotalShares]: false,
   [TradeRecordConstants.CumulativeCostPrice]: false,
-  [TradeRecordConstants.PositionCostEfficiency]: false,
+  [TradeRecordConstants.PositionCostScore]: false,
 } as const;
 
 export const cumulativeVisibility = {

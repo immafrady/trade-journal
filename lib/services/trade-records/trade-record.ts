@@ -103,12 +103,12 @@ export class TradeRecord {
     totalAmount: number;
     totalShares: number;
     costPrice: number;
-    positionCostEfficiency: number;
+    positionCostScore: number;
   } = {
     totalAmount: 0,
     totalShares: 0,
     costPrice: 0,
-    positionCostEfficiency: 0,
+    positionCostScore: 0,
   };
 
   /**

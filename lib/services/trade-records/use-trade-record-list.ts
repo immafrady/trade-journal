@@ -54,16 +54,37 @@ export function useTradeRecordList(
         } else {
           totalShares += record.adjusted.shares;
         }
-        const costPrice = totalShares > 0 ? totalAmount / totalShares : 0;
         record.cumulative = {
           totalAmount,
           totalShares,
-          costPrice,
-          positionCostEfficiency: costPrice ? totalShares / costPrice : 0,
+          costPrice: totalShares > 0 ? totalAmount / totalShares : 0,
+          positionCostScore: 0,
         };
         result.unshift(record);
       }
-      return result;
+
+      // 计算打分
+      let maxPositionCostScore = 0;
+      return result
+        .map((item) => {
+          // 先计算一下基础值
+          const { costPrice, totalShares } = item.cumulative;
+          item.cumulative.positionCostScore = costPrice
+            ? totalShares / costPrice
+            : 0;
+          maxPositionCostScore = Math.max(
+            maxPositionCostScore,
+            item.cumulative.positionCostScore,
+          );
+          return item;
+        })
+        .map((item) => {
+          // 取和最大的百分比做比较
+          item.cumulative.positionCostScore = maxPositionCostScore
+            ? (item.cumulative.positionCostScore / maxPositionCostScore) * 100
+            : 0;
+          return item;
+        });
     } catch (e) {
       console.error(key, e);
       return [];
