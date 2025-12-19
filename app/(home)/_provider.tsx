@@ -49,7 +49,6 @@ export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
     })
     .sort((a, b) => b.proportion - a.proportion);
 
-  console.log("list:", list);
   return (
     <HomeContext.Provider
       value={{
