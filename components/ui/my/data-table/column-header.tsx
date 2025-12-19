@@ -19,15 +19,19 @@ export function DataTableColumnHeader<TData, TValue>({
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
+  const isSorted = column.getIsSorted();
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <Button
         variant="ghost"
         size="sm"
-        className="data-[state=open]:bg-accent -mx-3 h-8"
+        className={cn(
+          "data-[state=open]:bg-accent -mx-3 h-8",
+          isSorted && "bg-secondary",
+        )}
         onClick={() => {
-          switch (column.getIsSorted()) {
+          switch (isSorted) {
             case "desc":
               column.toggleSorting(false);
               break;
@@ -39,9 +43,9 @@ export function DataTableColumnHeader<TData, TValue>({
           }
         }}
       >
-        {column.getIsSorted() === "desc" ? (
+        {isSorted === "desc" ? (
           <ArrowDown />
-        ) : column.getIsSorted() === "asc" ? (
+        ) : isSorted === "asc" ? (
           <ArrowUp />
         ) : (
           <ChevronsUpDown />
