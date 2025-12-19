@@ -1,13 +1,11 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { HoldingSummaryContext } from "@/app/(home)/_components/holding-summary-provider";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { formatMoney, formatPercent } from "@/lib/market-utils";
+import { HomeContext } from "@/app/(home)/_provider";
 
 export const HoldingSummary = () => {
-  const { totalAmount, maxTotalAmount } = React.useContext(
-    HoldingSummaryContext,
-  );
+  const { totalAmount, maxTotalAmount } = React.useContext(HomeContext);
   return (
     <Card className={"py-4"}>
       <CardContent>

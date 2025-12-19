@@ -22,9 +22,9 @@ import {
   TradeRecordSummary,
   useTradeRecordSummary,
 } from "@/lib/services/trade-records/use-trade-record-summary";
-import { HoldingSummaryContext } from "@/app/(home)/_components/holding-summary-provider";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { useRouter } from "next/navigation";
+import { HomeContext } from "@/app/(home)/_provider";
 
 export const TickerCard = ({
   id,
@@ -32,16 +32,18 @@ export const TickerCard = ({
   quote,
   loadingId,
   onLinkClick,
+  proportion = 0,
 }: {
   id: string;
   ticker: SinaTicker;
   quote?: SinaQuote;
+  proportion?: number;
   loadingId: string;
   onLinkClick: (id: string) => void;
 }) => {
   // 计算汇总的逻辑
   const summary = useTradeRecordSummary(id);
-  const { updateData } = React.useContext(HoldingSummaryContext);
+  const { updateData } = React.useContext(HomeContext);
   const prevRef = React.useRef<TradeRecordSummary | null>(null);
   React.useEffect(() => {
     if (!summary) return;
@@ -109,6 +111,10 @@ export const TickerCard = ({
                   {
                     title: "仓位",
                     content: formatMoney(summary.totalAmount),
+                  },
+                  {
+                    title: "仓位占比",
+                    content: formatPercent(proportion),
                   },
                 ]}
               />
