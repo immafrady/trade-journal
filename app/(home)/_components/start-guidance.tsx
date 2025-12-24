@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function StartGuidance() {
   const title = "Add Your First Asset.";
@@ -81,16 +82,19 @@ export default function StartGuidance() {
                 text-primary-foreground transition-all duration-300
                 group-hover:-translate-y-0.5 border border-primary-foreground/10
                 hover:shadow-md dark:hover:shadow-neutral-800/50"
+              asChild
             >
-              <span className="opacity-90 group-hover:opacity-100 transition-opacity">
-                立刻开始
-              </span>
-              <span
-                className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5
+              <Link href={"/holdings/add"}>
+                <span className="opacity-90 group-hover:opacity-100 transition-opacity">
+                  立刻开始
+                </span>
+                <span
+                  className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5
                   transition-all duration-300"
-              >
-                →
-              </span>
+                >
+                  →
+                </span>
+              </Link>
             </Button>
           </div>
         </motion.div>
