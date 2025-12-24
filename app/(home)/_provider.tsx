@@ -41,10 +41,10 @@ export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
       const summary = map[item.id];
       return {
         ...item,
-        summary,
-        proportion: data.totalAmount
-          ? (summary.totalAmount / data.totalAmount) * 100
-          : 0,
+        proportion:
+          data.totalAmount && summary
+            ? (summary.totalAmount / data.totalAmount) * 100
+            : 0,
       };
     })
     .sort((a, b) => b.proportion - a.proportion);
@@ -66,6 +66,5 @@ export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export interface HoldingWithQuoteExtend extends HoldingWithQuote {
-  summary: TradeRecordSummary;
   proportion: number;
 }
