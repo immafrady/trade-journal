@@ -35,6 +35,7 @@ interface SummaryData {
     gap: number;
     amount: number;
     className: string;
+    netShares: number;
   };
 }
 
@@ -114,8 +115,12 @@ export const DialogSummary = ({
         <InlineDisplay
           list={[
             {
-              title: "做T份额",
-              content: formatShares(summary.t.shares),
+              title: "做T收益",
+              content: (
+                <div className={summary.t.className}>
+                  {formatMoney(summary.t.amount)}
+                </div>
+              ),
             },
             {
               title: "做T差价",
@@ -126,12 +131,14 @@ export const DialogSummary = ({
               ),
             },
             {
-              title: "做T收益",
-              content: (
-                <div className={summary.t.className}>
-                  {formatMoney(summary.t.amount)}
-                </div>
-              ),
+              title: "做T份额",
+              content: formatShares(summary.t.shares),
+            },
+            {
+              title: "T后份额",
+              content:
+                (summary.t.netShares > 0 ? "+" : "") +
+                formatShares(summary.t.netShares),
             },
           ]}
         />,
@@ -177,7 +184,7 @@ export const DialogSummary = ({
           ].includes(r.props.type),
         );
 
-        const result = {
+        const result: SummaryData = {
           buy: {
             count: 0,
             amount: 0,
@@ -199,6 +206,7 @@ export const DialogSummary = ({
             gap: 0,
             amount: 0,
             className: "",
+            netShares: 0,
           },
         };
         filteredRecords.forEach((r) => {
@@ -224,6 +232,7 @@ export const DialogSummary = ({
         result.t.gap = result.sell.price - result.buy.price;
         result.t.amount = result.t.gap * result.t.shares;
         result.t.className = getTickerChangeColorClass(result.t.gap);
+        result.t.netShares = result.buy.shares + result.sell.shares;
 
         setSummary(result);
       }}
