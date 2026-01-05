@@ -24,7 +24,7 @@ import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { AppBar, AppContainer } from "@/components/ui/my/app-container";
+import { AppBar, AppContainer } from "@/components/layout/app-shell";
 
 export default function Page() {
   const router = useRouter();

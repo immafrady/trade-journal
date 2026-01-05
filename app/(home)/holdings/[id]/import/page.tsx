@@ -16,7 +16,7 @@ import {
   AppBarExtra,
   AppBarTitle,
   AppContainer,
-} from "@/components/ui/my/app-container";
+} from "@/components/layout/app-shell";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 
 export default function Page() {
