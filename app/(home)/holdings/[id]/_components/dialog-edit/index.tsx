@@ -76,7 +76,7 @@ export const DialogEdit = ({
         amount: requireAmount(type) && value.amount ? +value.amount : undefined,
         comment: value.comment,
         factor: +value.factor,
-        fee: requireFee(type) && value.fee ? +value.fee : undefined,
+        fee: value.fee ? +value.fee : undefined,
         price: requirePrice(type) && value.price ? +value.price : undefined,
         shares: requireShares(type) && value.shares ? +value.shares : 0,
       });

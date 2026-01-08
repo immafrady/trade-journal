@@ -50,15 +50,13 @@ export class TradeRecord {
     }
 
     this.props.factor ??= 1;
-    this.props.fee ??= 0;
-    this.props.comment ??= "";
     this.props.comment ??= "";
     this.display = {
       tradedAt: dayjs(this.props.tradedAt).format("YYYY-MM-DD"),
       type: this.props.type.label,
       feeRate: "",
     };
-    const { price, shares, amount, fee, factor } = this.props;
+    const { price, shares, amount, fee = 0, factor } = this.props;
     this.derived = {
       price: price || (amount && shares ? (amount - fee) / shares : 0),
       amount: amount || (price && shares ? price * shares + fee : 0),
@@ -163,7 +161,7 @@ export class TradeRecord {
       amount: this.props.amount!,
       comment: this.props.comment!,
       factor: this.props.factor!,
-      fee: this.props.fee!,
+      fee: this.props.fee,
       holding_id: this.props.holdingId,
       price: this.props.price,
       shares: this.props.shares,
@@ -209,7 +207,7 @@ export interface TradeRecordModel {
   shares?: number;
   price?: number;
   amount?: number;
-  fee: number;
+  fee?: number;
   comment: string;
   traded_at: string;
 }
