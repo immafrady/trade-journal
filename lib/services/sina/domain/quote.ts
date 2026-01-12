@@ -1,4 +1,4 @@
-import { SinaTicker } from "@/lib/services/sina/ticker";
+import { SinaTicker } from "@/lib/services/sina";
 import { calculatePercent } from "@/lib/market-utils";
 
 export class SinaQuote {

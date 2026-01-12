@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { SinaTicker } from "@/lib/services/sina/ticker";
+import { SinaTicker } from "@/lib/services/sina";
 import React from "react";
 
 // 获取查询结果

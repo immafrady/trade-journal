@@ -1,8 +1,6 @@
 "use client";
-import { SinaTicker } from "@/lib/services/sina/ticker";
+import { SinaQuote, SinaStockType, SinaTicker } from "@/lib/services/sina";
 import useSWR from "swr";
-import { SinaQuote } from "@/lib/services/sina/quote";
-import { SinaStockType } from "@/lib/enums/sina-stock-type";
 import React from "react";
 
 export function useRealtimeQuotes(tickers: SinaTicker[]) {

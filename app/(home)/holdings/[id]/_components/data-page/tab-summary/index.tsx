@@ -14,7 +14,7 @@ import {
 import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
 import { Separator } from "@/components/ui/separator";
 import { AnimatePresence, motion } from "motion/react";
-import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { SinaStockType } from "@/lib/services/sina";
 import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary/bottom-bar";
 
 export const TabSummary = () => {

@@ -1,8 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { SinaQuote, SinaStockType, SinaTicker } from "@/lib/services/sina";
 import React from "react";
-import { SinaTicker } from "@/lib/services/sina/ticker";
-import { SinaQuote } from "@/lib/services/sina/quote";
 import {
   Carousel,
   CarouselContent,

@@ -33,7 +33,7 @@ import {
   useTradeRecordChart,
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart/use-trade-record-chart";
 import { formatShares } from "@/lib/market-utils";
-import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { SinaStockType } from "@/lib/services/sina";
 import { useTradeRecordSummary } from "@/lib/services/trade-records";
 
 const chartConfig = {
