@@ -1,10 +1,12 @@
 import { LoadingButton } from "@/components/ui/my/button";
 import { FileSpreadsheet } from "lucide-react";
-import { TradeRecordType } from "@/lib/enums/trade-record-type";
+import {
+  TradeRecord,
+  TradeRecordConstants,
+  TradeRecordType,
+} from "@/lib/services/trade-records";
 import React from "react";
 import { parseFromCsv } from "@/lib/services/trade-records/parse-from-csv";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { FragmentTemplate } from "@/app/(home)/holdings/[id]/import/_components/fragment-template";
 import { motion } from "motion/react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";

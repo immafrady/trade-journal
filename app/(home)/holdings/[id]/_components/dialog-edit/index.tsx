@@ -5,10 +5,13 @@ import {
   ResponsiveDialogRef,
 } from "@/components/ui/my/responsive-dialog";
 import React from "react";
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { useForm, useStore } from "@tanstack/react-form";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+import {
+  TradeRecord,
+  TradeRecordConstants,
+  TradeRecordType,
+} from "@/lib/services/trade-records";
 import { DatePicker } from "@/components/ui/my/date-picker";
 import {
   Select,
@@ -17,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TradeRecordType } from "@/lib/enums/trade-record-type";
 import dayjs from "dayjs";
 import { FieldLayout } from "@/components/ui/my/field-layout";
 import { Input } from "@/components/ui/input";

@@ -12,7 +12,7 @@ import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
 import { Separator } from "@/components/ui/separator";
 import { AnimatePresence, motion } from "motion/react";
 import { SinaStockType } from "@/lib/enums/sina-stock-type";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+import { TradeRecordConstants } from "@/lib/services/trade-records";
 import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary/bottom-bar";
 
 export const TabSummary = () => {

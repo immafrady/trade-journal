@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TradeRecordModel } from "@/lib/services/trade-records/trade-record";
+import { TradeRecordModel } from "@/lib/services/trade-records/domain/trade-record";
 import { createClient } from "@/lib/supabase/server-client";
 
 // 新增

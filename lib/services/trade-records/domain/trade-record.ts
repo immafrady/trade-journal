@@ -1,8 +1,8 @@
 import {
+  TradeRecordConstants,
   TradeRecordType,
   TradeRecordTypeValue,
-} from "@/lib/enums/trade-record-type";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+} from "@/lib/services/trade-records";
 import dayjs, { Dayjs } from "dayjs";
 import { formatPercent } from "@/lib/market-utils";
 

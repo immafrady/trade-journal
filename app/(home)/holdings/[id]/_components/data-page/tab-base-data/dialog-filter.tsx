@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+import { TradeRecordConstants } from "@/lib/services/trade-records";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { DatePicker } from "@/components/ui/my/date-picker";

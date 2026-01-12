@@ -1,4 +1,4 @@
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
+import { TradeRecord } from "@/lib/services/trade-records/domain/trade-record";
 
 // 新增记录
 export const addTradeRecords = async (records: TradeRecord[]) => {

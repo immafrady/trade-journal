@@ -1,6 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+import {
+  TradeRecord,
+  TradeRecordConstants,
+} from "@/lib/services/trade-records";
 import {
   formatMoney,
   formatShares,
