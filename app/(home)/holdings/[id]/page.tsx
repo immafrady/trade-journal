@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { BaseInfo } from "@/app/(home)/holdings/[id]/_components/base-info";
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { useTradeRecordList } from "@/lib/services/trade-records";
 import Loading from "@/components/ui/my/loading";
 import { BlankPage } from "@/app/(home)/holdings/[id]/_components/blank-page";
 import { DataPage } from "@/app/(home)/holdings/[id]/_components/data-page";

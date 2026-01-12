@@ -21,7 +21,7 @@ import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import {
   TradeRecordSummary,
   useTradeRecordSummary,
-} from "@/lib/services/trade-records/use-trade-record-summary";
+} from "@/lib/services/trade-records";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { useRouter } from "next/navigation";
 import { HomeContext } from "@/app/(home)/_provider";

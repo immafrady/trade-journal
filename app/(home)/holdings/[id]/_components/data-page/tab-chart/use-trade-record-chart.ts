@@ -1,4 +1,4 @@
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { useTradeRecordList } from "@/lib/services/trade-records";
 import React from "react";
 
 export interface TradeRecordChart {

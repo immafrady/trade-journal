@@ -1,5 +1,7 @@
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
-import { TradeRecordType } from "@/lib/services/trade-records";
+import {
+  TradeRecordType,
+  useTradeRecordList,
+} from "@/lib/services/trade-records";
 
 export const useTradeRecordSummary = (holdingId: string) => {
   const { data: list = [] } = useTradeRecordList(holdingId);

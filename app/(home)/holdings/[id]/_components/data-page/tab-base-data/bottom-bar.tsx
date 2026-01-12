@@ -5,7 +5,7 @@ import { exportAsCSV } from "@/lib/utils";
 import { MyAlertDialog } from "@/components/ui/my/alert-dialog";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { useTradeRecordList } from "@/lib/services/trade-records";
 import { BottomBarContainer } from "@/components/ui/my/bottom-bar-container";
 import { ClipboardPlus, FileDown, Trash2 } from "lucide-react";
 

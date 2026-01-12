@@ -1,5 +1,5 @@
 import React from "react";
-import { TradeRecordSummary } from "@/lib/services/trade-records/use-trade-record-summary";
+import { TradeRecordSummary } from "@/lib/services/trade-records/hooks/use-trade-record-summary";
 import {
   HoldingWithQuote,
   useHoldingsWithQuote,

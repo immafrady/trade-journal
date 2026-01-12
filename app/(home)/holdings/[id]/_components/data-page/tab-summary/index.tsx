@@ -1,4 +1,7 @@
-import { useTradeRecordSummary } from "@/lib/services/trade-records/use-trade-record-summary";
+import {
+  TradeRecordConstants,
+  useTradeRecordSummary,
+} from "@/lib/services/trade-records";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import {
@@ -12,7 +15,6 @@ import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
 import { Separator } from "@/components/ui/separator";
 import { AnimatePresence, motion } from "motion/react";
 import { SinaStockType } from "@/lib/enums/sina-stock-type";
-import { TradeRecordConstants } from "@/lib/services/trade-records";
 import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary/bottom-bar";
 
 export const TabSummary = () => {
