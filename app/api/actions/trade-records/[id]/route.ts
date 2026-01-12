@@ -1,8 +1,8 @@
-// 更新
 import { NextRequest, NextResponse } from "next/server";
 import { TradeRecordModel } from "@/lib/services/trade-records/trade-record";
 import { createClient } from "@/lib/supabase/server-client";
 
+// 更新
 export const PUT = async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },

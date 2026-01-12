@@ -34,7 +34,14 @@ export const AppBar = ({
         )}
       >
         <AppBarSlogan isLargeAvatar={isLargeAvatar} />
+        {/*{isLargeAvatar ? (*/}
         <AppBarAvatar isLargeAvatar={isLargeAvatar} />
+        {/*) : (*/}
+        {/*  <div className={"flex items-center justify-end-safe gap-1"}>*/}
+        {/*    <AppBarAlert />*/}
+        {/*    <AppBarAvatar isLargeAvatar={isLargeAvatar} />*/}
+        {/*  </div>*/}
+        {/*)}*/}
       </nav>
       {children}
     </motion.header>
