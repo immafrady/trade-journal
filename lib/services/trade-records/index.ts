@@ -14,6 +14,7 @@ export { parseFromCsv } from "./parsers/parse-from-csv";
 export { useTradeRecordList } from "./hooks/use-trade-record-list";
 export {
   useTradeRecordSummary,
+  computeTradeRecordSummary,
   type TradeRecordSummary,
 } from "./hooks/use-trade-record-summary";
 
@@ -23,3 +24,5 @@ export {
   clearAllTradeRecords,
   deleteSelectedTradeRecord,
 } from "./trade-record-apis";
+
+export { TradeRecordProvider } from "./provider/trade-record-provider";
