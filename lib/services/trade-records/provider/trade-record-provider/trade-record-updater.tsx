@@ -1,30 +1,20 @@
 import React from "react";
-import {
-  computeTradeRecordSummary,
-  type TradeRecord,
-  TradeRecordSummary,
-  useTradeRecordList,
-} from "@/lib/services/trade-records";
+import { useTradeRecordList } from "@/lib/services/trade-records";
+import { useTradeRecordStore } from "@/lib/services/trade-records/provider/trade-record-provider/trade-record-store";
 
 export type TradeRecordUpdaterHandle = {
   update: () => void;
 };
-
-export interface TradeRecordData {
-  records: TradeRecord[];
-  summary: TradeRecordSummary;
-}
 
 export const TradeRecordUpdater = React.memo(
   React.forwardRef<
     TradeRecordUpdaterHandle,
     {
       holdingId: string;
-      onUpdate: (holdingId: string, data: TradeRecordData) => void;
     }
-  >(({ holdingId, onUpdate }, ref) => {
+  >(({ holdingId }, ref) => {
     const { mutate, data = [] } = useTradeRecordList(holdingId);
-    const summary = computeTradeRecordSummary(data);
+    const updateStore = useTradeRecordStore((s) => s.updateStore);
     React.useImperativeHandle(
       ref,
       () => ({
@@ -33,11 +23,8 @@ export const TradeRecordUpdater = React.memo(
       [mutate],
     );
     React.useEffect(() => {
-      onUpdate(holdingId, {
-        records: data,
-        summary,
-      });
-    }, [data, summary, holdingId, onUpdate]);
+      updateStore?.(holdingId, data);
+    }, [data, holdingId, updateStore]);
     return null;
   }),
 );

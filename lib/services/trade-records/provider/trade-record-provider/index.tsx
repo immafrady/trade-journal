@@ -1,60 +1,47 @@
+"use client";
 import React from "react";
-import type {
-  TradeRecord,
-  TradeRecordSummary,
+import {
+  createTradeRecordStore,
+  TradeRecordStore,
 } from "@/lib/services/trade-records";
 import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import {
-  TradeRecordData,
   TradeRecordUpdater,
   TradeRecordUpdaterHandle,
 } from "./trade-record-updater";
 
-interface TradeRecordProviderProps {
-  map: { [holdingId: string]: TradeRecordData };
-  update: (holdingId: string, data: TradeRecordData) => void;
-}
-
-export const TradeRecordContext = React.createContext<TradeRecordProviderProps>(
-  {
-    map: {},
-    update: () => {},
-  },
+// 上下文
+export const TradeRecordContext = React.createContext<TradeRecordStore | null>(
+  null,
 );
+export const TradeRecordUpdaterContext = React.createContext<
+  (holdingId: string) => void
+>(() => {});
+
+// 真正的provider
 export const TradeRecordProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
+  const storeRef = React.useRef<TradeRecordStore>(null);
+  if (!storeRef.current) {
+    storeRef.current = createTradeRecordStore();
+  }
   const holdingWithQuotes = useHoldingsWithQuote();
   const updaterRefs = React.useRef<
     Record<string, TradeRecordUpdaterHandle | null>
   >({});
 
-  const [map, setMap] = React.useState<{
-    [holdingId: string]: TradeRecordData;
-  }>({});
-
   // 更新器
-  const onUpdate = React.useCallback(
-    (
-      holdingId: string,
-      data: { records: TradeRecord[]; summary: TradeRecordSummary },
-    ) => {
-      setMap((m) => ({
-        ...m,
-        [holdingId]: data,
-      }));
+  const updater = React.useCallback(
+    (holdingId: string) => {
+      updaterRefs.current[holdingId]?.update();
     },
-    [],
+    [updaterRefs],
   );
   return (
-    <TradeRecordContext.Provider
-      value={{
-        map,
-        update: (holdingId) => updaterRefs.current[holdingId]?.update(),
-      }}
-    >
+    <TradeRecordContext.Provider value={storeRef.current}>
       {holdingWithQuotes.map((holdingWithQuote) => {
         return (
           <TradeRecordUpdater
@@ -63,11 +50,12 @@ export const TradeRecordProvider = ({
               updaterRefs.current[holdingWithQuote.id] = el;
             }}
             holdingId={holdingWithQuote.id}
-            onUpdate={onUpdate}
           />
         );
       })}
-      {children}
+      <TradeRecordUpdaterContext.Provider value={updater}>
+        {children}
+      </TradeRecordUpdaterContext.Provider>
     </TradeRecordContext.Provider>
   );
 };

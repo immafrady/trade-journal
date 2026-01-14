@@ -1,44 +1,47 @@
 import React from "react";
-import { TradeRecordSummary } from "@/lib/services/trade-records/hooks/use-trade-record-summary";
 import {
   HoldingWithQuote,
   useHoldingsWithQuote,
 } from "@/lib/services/composed/use-holdings-with-quote";
+import { useTradeRecordStore } from "@/lib/services/trade-records/provider/trade-record-provider/trade-record-store";
 
 interface HomeProviderProps {
   list: HoldingWithQuoteExtend[];
   totalAmount: number;
   maxTotalAmount: number;
-  updateData: (id: string, summary: TradeRecordSummary) => void;
 }
 
 export const HomeContext = React.createContext<HomeProviderProps>({
   list: [],
   totalAmount: 0,
   maxTotalAmount: 0,
-  updateData: () => {},
 });
 
 export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
+  const store = useTradeRecordStore((s) => s.store) ?? {};
   const raws = useHoldingsWithQuote();
-  const [map, setMap] = React.useState<Record<string, TradeRecordSummary>>({});
 
-  const data = Object.values(map).reduce(
-    (prev, curr) => {
-      return {
-        totalAmount: prev.totalAmount + curr.totalAmount,
-        maxTotalAmount: prev.maxTotalAmount + curr.maxTotalAmount,
-      };
-    },
-    {
-      totalAmount: 0,
-      maxTotalAmount: 0,
-    },
-  );
+  const data = Object.values(store)
+    .map((item) => item.summary)
+    .reduce(
+      (prev, curr) => {
+        return {
+          totalAmount: prev.totalAmount + curr.totalAmount,
+          maxTotalAmount: prev.maxTotalAmount + curr.maxTotalAmount,
+        };
+      },
+      {
+        totalAmount: 0,
+        maxTotalAmount: 0,
+      },
+    );
 
   const list: HoldingWithQuoteExtend[] = raws
+    .filter((item) => {
+      return !!store[item.id];
+    })
     .map((item) => {
-      const summary = map[item.id];
+      const summary = store[item.id].summary;
       return {
         ...item,
         proportion:
@@ -55,9 +58,6 @@ export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
         list,
         totalAmount: data.totalAmount,
         maxTotalAmount: data.maxTotalAmount,
-        updateData: (id, summary) => {
-          setMap((m) => ({ ...m, [id]: summary }));
-        },
       }}
     >
       {children}

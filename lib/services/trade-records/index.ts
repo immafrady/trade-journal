@@ -25,4 +25,21 @@ export {
   deleteSelectedTradeRecord,
 } from "./trade-record-apis";
 
-export { TradeRecordProvider } from "./provider/trade-record-provider";
+export {
+  TradeRecordProvider,
+  TradeRecordContext,
+  TradeRecordUpdaterContext,
+} from "./provider/trade-record-provider";
+export {
+  TradeRecordUpdater,
+  type TradeRecordUpdaterHandle,
+} from "./provider/trade-record-provider/trade-record-updater";
+export {
+  useTradeRecordDataById,
+  createTradeRecordStore,
+} from "./provider/trade-record-provider/trade-record-store";
+export type {
+  TradeRecordData,
+  TradeRecordStore,
+  TradeRecordStoreState,
+} from "./provider/trade-record-provider/trade-record-store";
