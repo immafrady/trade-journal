@@ -4,7 +4,8 @@ import {
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/columns";
 import {
   deleteSelectedTradeRecord,
-  useTradeRecordList,
+  TradeRecordUpdaterContext,
+  useTradeRecordDataById,
 } from "@/lib/services/trade-records";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
@@ -28,7 +29,8 @@ import {
 
 export const TabBaseData = () => {
   const { id, data } = React.useContext(HoldingInfoContext);
-  const { data: list = [], mutate } = useTradeRecordList(id);
+  const { records } = useTradeRecordDataById(id);
+  const updater = React.useContext(TradeRecordUpdaterContext);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>(baseVisibility);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -39,7 +41,7 @@ export const TabBaseData = () => {
     return getColumns(data?.ticker.formatter);
   }, [data?.ticker.formatter]);
   const table = useReactTable({
-    data: list,
+    data: records,
     state: {
       columnVisibility,
       columnFilters,
@@ -81,7 +83,7 @@ export const TabBaseData = () => {
           await deleteSelectedTradeRecord(
             selectedRows.map((row) => String(row.props.id!)),
           );
-          await mutate();
+          await updater(id);
           table.resetRowSelection();
           toast.success(`成功删除${count}条数据`);
         }}

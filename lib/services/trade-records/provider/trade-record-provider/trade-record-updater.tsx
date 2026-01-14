@@ -1,9 +1,9 @@
 import React from "react";
-import { useTradeRecordList } from "@/lib/services/trade-records";
-import { useTradeRecordStore } from "@/lib/services/trade-records/provider/trade-record-provider/trade-record-store";
+import { useTradeRecordList } from "@/lib/services/trade-records/hooks/use-trade-record-list";
+import { useTradeRecordStore } from "@/lib/services/trade-records";
 
 export type TradeRecordUpdaterHandle = {
-  update: () => void;
+  update: () => Promise<any>;
 };
 
 export const TradeRecordUpdater = React.memo(
@@ -18,7 +18,7 @@ export const TradeRecordUpdater = React.memo(
     React.useImperativeHandle(
       ref,
       () => ({
-        update: async () => await mutate(),
+        update: () => mutate(),
       }),
       [mutate],
     );

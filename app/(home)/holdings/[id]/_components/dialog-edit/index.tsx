@@ -12,8 +12,8 @@ import {
   TradeRecord,
   TradeRecordConstants,
   TradeRecordType,
+  TradeRecordUpdaterContext,
   updateTradeRecord,
-  useTradeRecordList,
 } from "@/lib/services/trade-records";
 import { DatePicker } from "@/components/ui/my/date-picker";
 import {
@@ -50,7 +50,7 @@ export const DialogEdit = ({
 }) => {
   const dialogRef = React.useRef<ResponsiveDialogRef>(null);
   const { id: holdingId, data } = React.useContext(HoldingInfoContext);
-  const { mutate } = useTradeRecordList(holdingId);
+  const updater = React.useContext(TradeRecordUpdaterContext);
   const editType = record ? "编辑" : "新增";
 
   const form = useForm({
@@ -87,7 +87,7 @@ export const DialogEdit = ({
       }
       toast.success(`${editType}成功`);
       dialogRef.current?.setOpen(false);
-      await mutate();
+      await updater(holdingId);
     },
   });
 

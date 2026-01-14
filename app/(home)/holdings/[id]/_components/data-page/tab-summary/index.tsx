@@ -1,6 +1,6 @@
 import {
   TradeRecordConstants,
-  useTradeRecordSummary,
+  useTradeRecordDataById,
 } from "@/lib/services/trade-records";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
@@ -19,7 +19,7 @@ import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-
 
 export const TabSummary = () => {
   const { id, data } = React.useContext(HoldingInfoContext)!;
-  const summary = useTradeRecordSummary(id);
+  const { summary } = useTradeRecordDataById(id);
   const [count, setCount] = React.useState(0);
   React.useEffect(() => {
     const timer = setInterval(() => {

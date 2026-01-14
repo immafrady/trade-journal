@@ -9,14 +9,11 @@ export {
   TradeRecordTypeValue,
 } from "./domain/trade-record-type";
 
-export { parseFromCsv } from "./parsers/parse-from-csv";
-
-export { useTradeRecordList } from "./hooks/use-trade-record-list";
+export { parseFromCsv } from "./utils/parse-from-csv";
 export {
-  useTradeRecordSummary,
   computeTradeRecordSummary,
   type TradeRecordSummary,
-} from "./hooks/use-trade-record-summary";
+} from "./utils/compute-trade-record-summary";
 
 export {
   addTradeRecords,
@@ -37,6 +34,7 @@ export {
 export {
   useTradeRecordDataById,
   createTradeRecordStore,
+  useTradeRecordStore,
 } from "./provider/trade-record-provider/trade-record-store";
 export type {
   TradeRecordData,

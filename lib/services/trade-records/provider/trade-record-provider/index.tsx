@@ -15,8 +15,8 @@ export const TradeRecordContext = React.createContext<TradeRecordStore | null>(
   null,
 );
 export const TradeRecordUpdaterContext = React.createContext<
-  (holdingId: string) => void
->(() => {});
+  (holdingId: string) => Promise<any>
+>(() => Promise.resolve());
 
 // 真正的provider
 export const TradeRecordProvider = ({
@@ -36,7 +36,7 @@ export const TradeRecordProvider = ({
   // 更新器
   const updater = React.useCallback(
     (holdingId: string) => {
-      updaterRefs.current[holdingId]?.update();
+      return updaterRefs.current[holdingId]?.update() ?? Promise.resolve();
     },
     [updaterRefs],
   );

@@ -36,7 +36,7 @@ export class SinaQuote {
     }
   }
 
-  parseFundNav(text: string) {
+  parseFundNav(text: string = "") {
     const match = text.match(/"([^"]*)"/);
     const raw = match ? match[1] : "";
     if (raw) {

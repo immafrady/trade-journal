@@ -34,7 +34,7 @@ import {
 } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart/use-trade-record-chart";
 import { formatShares } from "@/lib/market-utils";
 import { SinaStockType } from "@/lib/services/sina";
-import { useTradeRecordSummary } from "@/lib/services/trade-records";
+import { useTradeRecordDataById } from "@/lib/services/trade-records";
 
 const chartConfig = {
   price: {
@@ -50,7 +50,7 @@ const chartConfig = {
 export function TabChart() {
   const { id, data } = React.useContext(HoldingInfoContext)!;
   const list = useTradeRecordChart(id);
-  const summary = useTradeRecordSummary(id);
+  const { summary } = useTradeRecordDataById(id);
   const [records, setRecords] = React.useState<TradeRecordChart[]>([]);
   const onRangeChange = React.useCallback((record: TradeRecordChart[]) => {
     setRecords(record);
