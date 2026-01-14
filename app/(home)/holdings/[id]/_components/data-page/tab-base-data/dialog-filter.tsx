@@ -44,10 +44,12 @@ export const DialogFilter = ({
       const filters: ColumnFiltersState = [];
       const dateMin = form.dateMin;
       const dateMax = form.dateMax;
-      filters.push({
-        id: TradeRecordConstants.TradedAt,
-        value: [dateMin, dateMax],
-      });
+      if (dateMin || dateMax) {
+        filters.push({
+          id: TradeRecordConstants.TradedAt,
+          value: [dateMin, dateMax],
+        });
+      }
       if (form.id) {
         const type = form.type as ActionType;
         const num1 = +form.num1;
@@ -96,12 +98,6 @@ export const DialogFilter = ({
       }
       onSubmit={async () => {
         await form.handleSubmit();
-      }}
-      onClosed={() => {
-        form.reset();
-      }}
-      onOpen={() => {
-        form.reset(getDefaultValue(columnFilters));
       }}
     >
       <form
@@ -360,9 +356,9 @@ function getDefaultValue(filters: ColumnFiltersState) {
   };
   if (otherFilter) {
     const id = otherFilter.id;
-    const value = otherFilter.value as [string, string];
-    const min = value[0];
-    const max = value[1];
+    const value = otherFilter.value as [number, number];
+    const min = value[0] + "";
+    const max = value[1] + "";
     if (min && max) {
       other = {
         id,
