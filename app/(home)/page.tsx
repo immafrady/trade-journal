@@ -9,7 +9,7 @@ import {
   AppBar,
   AppBarExtraContent,
   AppContainer,
-} from "@/components/ui/my/app-container";
+} from "@/components/layout/app-shell";
 import { HoldingSummary } from "@/app/(home)/_components/holding-summary";
 import { HomeContext, HomeProvider } from "@/app/(home)/_provider";
 

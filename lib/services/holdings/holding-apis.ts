@@ -1,4 +1,4 @@
-import { SinaTicker } from "@/lib/services/sina/ticker";
+import { SinaTicker } from "@/lib/services/sina";
 
 // 新增
 export async function addHolding(ticker: SinaTicker) {

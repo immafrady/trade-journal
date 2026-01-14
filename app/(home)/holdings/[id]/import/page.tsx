@@ -3,27 +3,28 @@ import { StepChooseFile } from "@/app/(home)/holdings/[id]/import/_components/st
 import React from "react";
 import { StepParseError } from "@/app/(home)/holdings/[id]/import/_components/step-parse-error";
 import {
+  addTradeRecords,
   TradeRecord,
   TradeRecordModel,
-} from "@/lib/services/trade-records/trade-record";
+  TradeRecordUpdaterContext,
+} from "@/lib/services/trade-records";
 import { StepPreviewData } from "@/app/(home)/holdings/[id]/import/_components/step-preview-data";
-import { addTradeRecords } from "@/lib/services/trade-records/trade-record-apis";
 import { toast } from "sonner";
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 import { useRouter } from "next/navigation";
 import {
   AppBar,
   AppBarExtra,
   AppBarTitle,
   AppContainer,
-} from "@/components/ui/my/app-container";
+} from "@/components/layout/app-shell";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 
 export default function Page() {
   const { id, data } = React.useContext(HoldingInfoContext);
+  const updater = React.useContext(TradeRecordUpdaterContext);
   const [errors, setErrors] = React.useState<Error[]>([]);
   const [records, setRecords] = React.useState<TradeRecord[]>([]);
-  const { data: list, mutate } = useTradeRecordList(id);
+
   const router = useRouter();
   return (
     <AppContainer
@@ -50,21 +51,7 @@ export default function Page() {
                 const newRecords = data.map((d: TradeRecordModel) =>
                   TradeRecord.fromDatabase(d),
                 );
-                await mutate(
-                  [...(list ?? []), ...newRecords].sort(
-                    // 首先按照日期倒序，其次按照id倒序
-                    (a: TradeRecord, b: TradeRecord) => {
-                      if (!a.props.tradedAt.isSame(b.props.tradedAt)) {
-                        return (
-                          b.props.tradedAt.valueOf() -
-                          a.props.tradedAt.valueOf()
-                        );
-                      }
-                      return b.props.id! - a.props.id!;
-                    },
-                  ),
-                  false,
-                );
+                await updater(id);
                 toast.success(`成功插入${newRecords.length}条数据`);
                 router.replace(`/holdings/${id}`);
               }

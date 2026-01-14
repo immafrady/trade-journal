@@ -1,7 +1,7 @@
 import React from "react";
-import { UserMetaProvider } from "@/providers/user-meta";
 import { ClientOnly } from "@/components/client-only";
 import { SWRStorageProvider } from "@/providers/swr-storage-provider";
+import { ServiceLayout } from "./_service-layout";
 
 export default function BaseLayout({
   children,
@@ -10,7 +10,7 @@ export default function BaseLayout({
     <>
       <ClientOnly>
         <SWRStorageProvider>
-          <UserMetaProvider>{children}</UserMetaProvider>
+          <ServiceLayout>{children}</ServiceLayout>
         </SWRStorageProvider>
       </ClientOnly>
     </>

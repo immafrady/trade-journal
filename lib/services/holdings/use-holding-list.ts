@@ -1,6 +1,6 @@
 /// 查列表
 import useSWR from "swr";
-import { SinaTicker } from "@/lib/services/sina/ticker";
+import { SinaTicker } from "@/lib/services/sina";
 import React from "react";
 import { persistSWRCache } from "@/providers/swr-storage-provider";
 

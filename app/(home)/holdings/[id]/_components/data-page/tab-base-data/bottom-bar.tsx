@@ -5,7 +5,7 @@ import { exportAsCSV } from "@/lib/utils";
 import { MyAlertDialog } from "@/components/ui/my/alert-dialog";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { useTradeRecordDataById } from "@/lib/services/trade-records";
 import { BottomBarContainer } from "@/components/ui/my/bottom-bar-container";
 import { ClipboardPlus, FileDown, Trash2 } from "lucide-react";
 
@@ -17,7 +17,7 @@ export const BottomBar = ({
   onDeleteConfirm: () => Promise<void>;
 }) => {
   const { id, data } = React.useContext(HoldingInfoContext)!;
-  const { data: records } = useTradeRecordList(id);
+  const { records } = useTradeRecordDataById(id);
   const [exportLoading, setExportLoading] = React.useState(false);
   const [clearLoading, setClearLoading] = React.useState(false);
   return (

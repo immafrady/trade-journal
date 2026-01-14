@@ -1,4 +1,4 @@
-import { SinaTicker } from "@/lib/services/sina/ticker";
+import { SinaTicker } from "@/lib/services/sina";
 import { calculatePercent } from "@/lib/market-utils";
 
 export class SinaQuote {
@@ -36,7 +36,7 @@ export class SinaQuote {
     }
   }
 
-  parseFundNav(text: string) {
+  parseFundNav(text: string = "") {
     const match = text.match(/"([^"]*)"/);
     const raw = match ? match[1] : "";
     if (raw) {

@@ -1,4 +1,7 @@
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
+import {
+  TradeRecord,
+  TradeRecordConstants,
+} from "@/lib/services/trade-records";
 import { FragmentTemplate } from "@/app/(home)/holdings/[id]/import/_components/fragment-template";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
@@ -22,7 +25,6 @@ import {
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
 import { formatMoney, formatShares } from "@/lib/market-utils";
 import { Separator } from "@/components/ui/separator";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";

@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+import { TradeRecordConstants } from "@/lib/services/trade-records";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { DatePicker } from "@/components/ui/my/date-picker";
@@ -27,9 +27,11 @@ import { DatePicker } from "@/components/ui/my/date-picker";
 export const DialogFilter = ({
   columnFilters,
   onColumnFiltersChange,
+  filterCount,
 }: {
   columnFilters: ColumnFiltersState;
   onColumnFiltersChange: (state: ColumnFiltersState) => void;
+  filterCount?: number;
 }) => {
   const dialogRef = React.useRef<ResponsiveDialogRef>(null);
 
@@ -42,10 +44,12 @@ export const DialogFilter = ({
       const filters: ColumnFiltersState = [];
       const dateMin = form.dateMin;
       const dateMax = form.dateMax;
-      filters.push({
-        id: TradeRecordConstants.TradedAt,
-        value: [dateMin, dateMax],
-      });
+      if (dateMin || dateMax) {
+        filters.push({
+          id: TradeRecordConstants.TradedAt,
+          value: [dateMin, dateMax],
+        });
+      }
       if (form.id) {
         const type = form.type as ActionType;
         const num1 = +form.num1;
@@ -82,7 +86,7 @@ export const DialogFilter = ({
           {columnFilters.length ? (
             <>
               <FunnelPlus />
-              过滤中
+              过滤中({filterCount ?? 0}条)
             </>
           ) : (
             <>
@@ -94,12 +98,6 @@ export const DialogFilter = ({
       }
       onSubmit={async () => {
         await form.handleSubmit();
-      }}
-      onClosed={() => {
-        form.reset();
-      }}
-      onOpen={() => {
-        form.reset(getDefaultValue(columnFilters));
       }}
     >
       <form
@@ -358,9 +356,9 @@ function getDefaultValue(filters: ColumnFiltersState) {
   };
   if (otherFilter) {
     const id = otherFilter.id;
-    const value = otherFilter.value as [string, string];
-    const min = value[0];
-    const max = value[1];
+    const value = otherFilter.value as [number, number];
+    const min = value[0] + "";
+    const max = value[1] + "";
     if (min && max) {
       other = {
         id,

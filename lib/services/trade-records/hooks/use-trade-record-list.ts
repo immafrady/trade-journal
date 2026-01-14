@@ -1,7 +1,7 @@
 import useSWR, { SWRResponse } from "swr";
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
+import { TradeRecord } from "@/lib/services/trade-records/domain/trade-record";
 import React from "react";
-import { TradeRecordType } from "@/lib/enums/trade-record-type";
+import { TradeRecordType } from "@/lib/services/trade-records/domain/trade-record-type";
 import papa from "papaparse";
 
 export function useTradeRecordList(

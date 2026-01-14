@@ -1,8 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { SinaQuote, SinaStockType, SinaTicker } from "@/lib/services/sina";
 import React from "react";
-import { SinaTicker } from "@/lib/services/sina/ticker";
-import { SinaQuote } from "@/lib/services/sina/quote";
 import {
   Carousel,
   CarouselContent,
@@ -18,13 +16,9 @@ import { ArrowRight } from "lucide-react";
 import { LoadingButton } from "@/components/ui/my/button";
 import { SimpleDisplay } from "@/components/ui/my/quote-display";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
-import {
-  TradeRecordSummary,
-  useTradeRecordSummary,
-} from "@/lib/services/trade-records/use-trade-record-summary";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { useRouter } from "next/navigation";
-import { HomeContext } from "@/app/(home)/_provider";
+import { useTradeRecordDataById } from "@/lib/services/trade-records";
 
 export const TickerCard = ({
   id,
@@ -42,17 +36,8 @@ export const TickerCard = ({
   onLinkClick: (id: string) => void;
 }) => {
   // 计算汇总的逻辑
-  const summary = useTradeRecordSummary(id);
-  const { updateData } = React.useContext(HomeContext);
-  const prevRef = React.useRef<TradeRecordSummary | null>(null);
-  React.useEffect(() => {
-    if (!summary) return;
-    const prev = prevRef.current;
-    if (!prev || JSON.stringify(prev) !== JSON.stringify(summary)) {
-      prevRef.current = summary;
-      updateData(id, summary);
-    }
-  }, [id, summary, updateData]);
+  const data = useTradeRecordDataById(id);
+  const summary = data?.summary;
 
   const router = useRouter();
   const isAShare = ticker.type === SinaStockType.AShare;

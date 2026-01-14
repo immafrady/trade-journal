@@ -1,7 +1,9 @@
 import Papa from "papaparse";
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
-import { TradeRecordType } from "@/lib/enums/trade-record-type";
+import {
+  TradeRecord,
+  TradeRecordConstants,
+  TradeRecordType,
+} from "@/lib/services/trade-records";
 import dayjs from "dayjs";
 
 export function parseFromCsv(

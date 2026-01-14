@@ -3,18 +3,20 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LoadingButton } from "@/components/ui/my/button";
 import { MyAlertDialog } from "@/components/ui/my/alert-dialog";
-import { clearAllTradeRecords } from "@/lib/services/trade-records/trade-record-apis";
+import {
+  clearAllTradeRecords,
+  TradeRecordUpdaterContext,
+} from "@/lib/services/trade-records";
 import { toast } from "sonner";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 import { usePathname } from "next/navigation";
 import { BottomBarContainer } from "@/components/ui/my/bottom-bar-container";
 import { ClipboardPlus, FileUp, Trash } from "lucide-react";
 
 export const BottomBar = () => {
   const { id } = React.useContext(HoldingInfoContext)!;
-  const { mutate } = useTradeRecordList(id);
+  const updater = React.useContext(TradeRecordUpdaterContext);
   const [loading, setLoading] = React.useState(false);
   const pathname = usePathname(); // 例如 /holdings/10
   return (
@@ -55,7 +57,7 @@ export const BottomBar = () => {
           try {
             const response = await clearAllTradeRecords(id);
             const { message } = await response.json();
-            await mutate([], false);
+            await updater(id);
             toast.success(message);
           } catch (e) {
             console.error("clear data fail:", e);

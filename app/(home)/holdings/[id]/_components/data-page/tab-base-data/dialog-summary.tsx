@@ -1,7 +1,6 @@
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
+import { TradeRecord, TradeRecordType } from "@/lib/services/trade-records";
 import React from "react";
 import { ResponsiveDialog } from "@/components/ui/my/responsive-dialog";
-import { TradeRecordType } from "@/lib/enums/trade-record-type";
 import { Separator } from "@/components/ui/separator";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import {

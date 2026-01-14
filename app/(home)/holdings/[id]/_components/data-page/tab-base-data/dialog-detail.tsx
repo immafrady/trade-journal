@@ -2,7 +2,10 @@ import { ResponsiveDialog } from "@/components/ui/my/responsive-dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { View } from "lucide-react";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+import {
+  TradeRecord,
+  TradeRecordConstants,
+} from "@/lib/services/trade-records";
 import {
   formatMoney,
   formatShares,
@@ -10,7 +13,6 @@ import {
 } from "@/lib/market-utils";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 
 export const DialogDetail = ({
   record,

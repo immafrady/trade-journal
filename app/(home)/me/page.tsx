@@ -6,7 +6,7 @@ import ListItem from "@/app/(home)/me/_components/list-item";
 import { LogOut, MailIcon, User2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/browser-client";
-import { AppBar, AppContainer } from "@/components/ui/my/app-container";
+import { AppBar, AppContainer } from "@/components/layout/app-shell";
 
 export default function Page() {
   const userMeta = React.useContext(UserMetaContext);

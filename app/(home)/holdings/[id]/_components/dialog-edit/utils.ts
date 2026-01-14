@@ -1,4 +1,4 @@
-import { TradeRecordType } from "@/lib/enums/trade-record-type";
+import { TradeRecordType } from "@/lib/services/trade-records";
 
 export const requireAmount = (type?: TradeRecordType) =>
   type &&

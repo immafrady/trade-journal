@@ -1,6 +1,6 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import iconv from "iconv-lite";
-import { SINA_SEARCH_VALUES } from "@/lib/enums/sina-stock-type";
+import { SINA_SEARCH_VALUES } from "@/lib/services/sina";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;

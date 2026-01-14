@@ -5,10 +5,16 @@ import {
   ResponsiveDialogRef,
 } from "@/components/ui/my/responsive-dialog";
 import React from "react";
-import { TradeRecord } from "@/lib/services/trade-records/trade-record";
 import { useForm, useStore } from "@tanstack/react-form";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
-import { TradeRecordConstants } from "@/lib/services/trade-records/constants";
+import {
+  addTradeRecords,
+  TradeRecord,
+  TradeRecordConstants,
+  TradeRecordType,
+  TradeRecordUpdaterContext,
+  updateTradeRecord,
+} from "@/lib/services/trade-records";
 import { DatePicker } from "@/components/ui/my/date-picker";
 import {
   Select,
@@ -17,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TradeRecordType } from "@/lib/enums/trade-record-type";
 import dayjs from "dayjs";
 import { FieldLayout } from "@/components/ui/my/field-layout";
 import { Input } from "@/components/ui/input";
@@ -34,11 +39,6 @@ import {
 } from "./utils";
 import { formatMoney, formatShares } from "@/lib/market-utils";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  addTradeRecords,
-  updateTradeRecord,
-} from "@/lib/services/trade-records/trade-record-apis";
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
 import { toast } from "sonner";
 
 export const DialogEdit = ({
@@ -50,7 +50,7 @@ export const DialogEdit = ({
 }) => {
   const dialogRef = React.useRef<ResponsiveDialogRef>(null);
   const { id: holdingId, data } = React.useContext(HoldingInfoContext);
-  const { mutate } = useTradeRecordList(holdingId);
+  const updater = React.useContext(TradeRecordUpdaterContext);
   const editType = record ? "编辑" : "新增";
 
   const form = useForm({
@@ -76,7 +76,7 @@ export const DialogEdit = ({
         amount: requireAmount(type) && value.amount ? +value.amount : undefined,
         comment: value.comment,
         factor: +value.factor,
-        fee: requireFee(type) && value.fee ? +value.fee : undefined,
+        fee: value.fee ? +value.fee : undefined,
         price: requirePrice(type) && value.price ? +value.price : undefined,
         shares: requireShares(type) && value.shares ? +value.shares : 0,
       });
@@ -87,7 +87,7 @@ export const DialogEdit = ({
       }
       toast.success(`${editType}成功`);
       dialogRef.current?.setOpen(false);
-      await mutate();
+      await updater(holdingId);
     },
   });
 

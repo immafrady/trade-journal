@@ -1,8 +1,7 @@
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
-import { TradeRecordType } from "@/lib/enums/trade-record-type";
+// 实际计算方法
+import { TradeRecord, TradeRecordType } from "@/lib/services/trade-records";
 
-export const useTradeRecordSummary = (holdingId: string) => {
-  const { data: list = [] } = useTradeRecordList(holdingId);
+export const computeTradeRecordSummary = (list: TradeRecord[]) => {
   // 汇总操作次数、金额合计
   let totalFee = 0;
   let totalAmount = 0;

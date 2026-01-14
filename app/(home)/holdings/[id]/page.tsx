@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 import { BaseInfo } from "@/app/(home)/holdings/[id]/_components/base-info";
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
-import Loading from "@/components/ui/my/loading";
+import { useTradeRecordDataById } from "@/lib/services/trade-records";
 import { BlankPage } from "@/app/(home)/holdings/[id]/_components/blank-page";
 import { DataPage } from "@/app/(home)/holdings/[id]/_components/data-page";
 import { cn } from "@/lib/utils";
@@ -12,12 +11,12 @@ import {
   AppBarExtraContent,
   AppBarTitle,
   AppContainer,
-} from "@/components/ui/my/app-container";
+} from "@/components/layout/app-shell";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 
 export default function Page() {
   const { id, data } = React.useContext(HoldingInfoContext);
-  const { isLoading, data: records } = useTradeRecordList(id);
+  const { records } = useTradeRecordDataById(id);
   const [moreInfo, setMoreInfo] = React.useState(true);
 
   return (
@@ -40,12 +39,11 @@ export default function Page() {
       }
     >
       <div className={cn("h-full common-layout", moreInfo && "pt-10")}>
-        {records?.length ? (
+        {records.length ? (
           <DataPage onTabChange={setMoreInfo} />
         ) : (
           <BlankPage />
         )}
-        <Loading isLoading={isLoading} fullScreen={true} />
       </div>
     </AppContainer>
   );

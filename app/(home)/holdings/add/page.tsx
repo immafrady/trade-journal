@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
-import { useSuggestion } from "@/lib/services/sina/use-suggestion";
 import {
   getSinaStockTypeColor,
   getSinaStockTypeLabel,
-} from "@/lib/enums/sina-stock-type";
+  SinaTicker,
+  useSuggestion,
+} from "@/lib/services/sina";
 import { LoadingButton } from "@/components/ui/my/button";
 import { Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -18,13 +19,12 @@ import {
   ChoiceboxItemTitle,
 } from "@/components/ui/shadcn-io/choicebox";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
-import { SinaTicker } from "@/lib/services/sina/ticker";
 import { addHolding } from "@/lib/services/holdings/holding-apis";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { AppBar, AppContainer } from "@/components/ui/my/app-container";
+import { AppBar, AppContainer } from "@/components/layout/app-shell";
 
 export default function Page() {
   const router = useRouter();

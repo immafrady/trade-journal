@@ -1,4 +1,4 @@
-import { useTradeRecordList } from "@/lib/services/trade-records/use-trade-record-list";
+import { useTradeRecordDataById } from "@/lib/services/trade-records";
 import React from "react";
 
 export interface TradeRecordChart {
@@ -8,9 +8,9 @@ export interface TradeRecordChart {
 }
 
 export const useTradeRecordChart = (holdingId: string) => {
-  const { data: list = [] } = useTradeRecordList(holdingId);
+  const { records } = useTradeRecordDataById(holdingId);
   return React.useMemo(() => {
-    return [...list]
+    return [...records]
       .map(
         (r) =>
           ({
@@ -20,5 +20,5 @@ export const useTradeRecordChart = (holdingId: string) => {
           }) satisfies TradeRecordChart,
       )
       .reverse();
-  }, [list]);
+  }, [records]);
 };

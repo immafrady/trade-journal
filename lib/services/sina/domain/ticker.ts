@@ -1,4 +1,4 @@
-import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { SinaStockType } from "@/lib/services/sina";
 import { formatStockValue, StockValueFormatter } from "@/lib/market-utils";
 
 export class SinaTicker {

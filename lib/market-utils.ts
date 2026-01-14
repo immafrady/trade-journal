@@ -1,4 +1,4 @@
-import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { SinaStockType } from "@/lib/services/sina";
 
 export type StockValueFormatter = (num?: number) => string;
 

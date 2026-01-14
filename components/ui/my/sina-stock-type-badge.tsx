@@ -2,7 +2,7 @@ import {
   getSinaStockTypeColor,
   getSinaStockTypeLabel,
   SinaStockType,
-} from "@/lib/enums/sina-stock-type";
+} from "@/lib/services/sina";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
 

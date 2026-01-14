@@ -1,7 +1,7 @@
 "use client";
 import { HoldingWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SinaStockType } from "@/lib/enums/sina-stock-type";
+import { SinaStockType } from "@/lib/services/sina";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, Trash } from "lucide-react";
 import React from "react";
