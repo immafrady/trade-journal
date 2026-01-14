@@ -20,17 +20,23 @@ export type TradeRecordStoreState = {
 
 export type TradeRecordStore = UseBoundStore<StoreApi<TradeRecordStoreState>>;
 
+// ------ //
+
+const genTradeRecordData = (records: TradeRecord[]) => {
+  return {
+    records: records,
+    summary: computeTradeRecordSummary(records),
+  };
+};
+
 export const createTradeRecordStore = (): TradeRecordStore =>
   create<TradeRecordStoreState>((set) => ({
     store: {},
-    updateStore: (id: string, list: TradeRecord[]) =>
+    updateStore: (id: string, records: TradeRecord[]) =>
       set((state) => ({
         store: {
           ...state.store,
-          [id]: {
-            records: list,
-            summary: computeTradeRecordSummary(list),
-          },
+          [id]: genTradeRecordData(records),
         },
       })),
   }));
@@ -44,5 +50,7 @@ export const useTradeRecordStore = <T>(
 };
 // 从store拿具体数据
 export const useTradeRecordDataById = (holdingId: string) => {
-  return useTradeRecordStore((s) => s.store[holdingId]);
+  return (
+    useTradeRecordStore((s) => s.store[holdingId]) ?? genTradeRecordData([])
+  );
 };
