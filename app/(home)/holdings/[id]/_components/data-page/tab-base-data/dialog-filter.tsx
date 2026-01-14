@@ -27,9 +27,11 @@ import { DatePicker } from "@/components/ui/my/date-picker";
 export const DialogFilter = ({
   columnFilters,
   onColumnFiltersChange,
+  filterCount,
 }: {
   columnFilters: ColumnFiltersState;
   onColumnFiltersChange: (state: ColumnFiltersState) => void;
+  filterCount?: number;
 }) => {
   const dialogRef = React.useRef<ResponsiveDialogRef>(null);
 
@@ -82,7 +84,7 @@ export const DialogFilter = ({
           {columnFilters.length ? (
             <>
               <FunnelPlus />
-              过滤中
+              过滤中({filterCount ?? 0}条)
             </>
           ) : (
             <>

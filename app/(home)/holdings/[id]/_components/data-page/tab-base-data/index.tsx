@@ -62,6 +62,7 @@ export const TabBaseData = () => {
         <DialogSummary disabled={!selectedRows.length} records={selectedRows} />
         <TableColumnToggler onVisibilityChange={setColumnVisibility} />
         <DialogFilter
+          filterCount={table.getFilteredRowModel().rows?.length ?? 0}
           columnFilters={columnFilters}
           onColumnFiltersChange={setColumnFilters}
         />
