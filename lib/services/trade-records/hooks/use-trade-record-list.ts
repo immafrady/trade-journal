@@ -61,6 +61,19 @@ export function useTradeRecordList(
           costPrice,
           positionCostEfficiency: costPrice ? totalShares / costPrice : 0,
         };
+
+        // 标记手续费未填写完
+        if (
+          [
+            TradeRecordType.Buy,
+            TradeRecordType.Sell,
+            TradeRecordType.Redeem,
+            TradeRecordType.Subscribe,
+          ].includes(record.props.type)
+        ) {
+          record.meta.isDraft = !record.derived.fee;
+        }
+
         result.unshift(record);
       }
       return result;

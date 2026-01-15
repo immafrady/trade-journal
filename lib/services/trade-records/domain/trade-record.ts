@@ -109,6 +109,13 @@ export class TradeRecord {
     positionCostEfficiency: 0,
   };
 
+  // 额外参数
+  public meta: {
+    isDraft: boolean; // 是否未完成（手续费不能算出来）
+  } = {
+    isDraft: false,
+  };
+
   /**
    * 数据库解析
    * @param model

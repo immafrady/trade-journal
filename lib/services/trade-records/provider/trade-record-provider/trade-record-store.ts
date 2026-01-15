@@ -15,6 +15,7 @@ export interface TradeRecordData {
 
 export type TradeRecordStoreState = {
   store: Record<string, TradeRecordData>;
+  draftList: { holdingId: string; records: TradeRecord[] }[];
   updateStore: (id: string, list: TradeRecord[]) => void;
 };
 
@@ -30,15 +31,32 @@ const genTradeRecordData = (records: TradeRecord[]) => {
 };
 
 export const createTradeRecordStore = (): TradeRecordStore =>
-  create<TradeRecordStoreState>((set) => ({
+  create<TradeRecordStoreState>((set, get) => ({
     store: {},
+    // 待完成清单
+    draftList: [],
     updateStore: (id: string, records: TradeRecord[]) =>
-      set((state) => ({
-        store: {
+      set((state) => {
+        const store = {
           ...state.store,
           [id]: genTradeRecordData(records),
-        },
-      })),
+        };
+        const draftList: TradeRecordStoreState["draftList"] = [];
+        Object.entries(store).forEach(([holdingId, data]) => {
+          const drafts = data.records.filter((r) => r.meta.isDraft);
+          if (drafts.length) {
+            draftList.push({
+              holdingId,
+              records: drafts,
+            });
+          }
+        });
+
+        return {
+          store,
+          draftList,
+        };
+      }),
   }));
 
 // 通用方法
