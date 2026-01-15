@@ -13,9 +13,14 @@ export interface TradeRecordData {
   summary: TradeRecordSummary;
 }
 
+export interface TradeRecordDraft {
+  holdingId: string;
+  records: TradeRecord[];
+}
+
 export type TradeRecordStoreState = {
   store: Record<string, TradeRecordData>;
-  draftList: { holdingId: string; records: TradeRecord[] }[];
+  draftList: TradeRecordDraft[];
   updateStore: (id: string, list: TradeRecord[]) => void;
 };
 

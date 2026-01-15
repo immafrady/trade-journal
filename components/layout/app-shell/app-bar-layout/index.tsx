@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { AppBarAvatar } from "../app-bar-element/avatar";
 import { AppBarSlogan } from "../app-bar-element/slogan";
+import { AppBarAlert } from "@/components/layout/app-shell/app-bar-element/alert";
 
 export const AppBar = ({
   children,
@@ -34,14 +35,14 @@ export const AppBar = ({
         )}
       >
         <AppBarSlogan isLargeAvatar={isLargeAvatar} />
-        {/*{isLargeAvatar ? (*/}
-        <AppBarAvatar isLargeAvatar={isLargeAvatar} />
-        {/*) : (*/}
-        {/*  <div className={"flex items-center justify-end-safe gap-1"}>*/}
-        {/*    <AppBarAlert />*/}
-        {/*    <AppBarAvatar isLargeAvatar={isLargeAvatar} />*/}
-        {/*  </div>*/}
-        {/*)}*/}
+        {isLargeAvatar ? (
+          <AppBarAvatar isLargeAvatar={isLargeAvatar} />
+        ) : (
+          <div className={"flex items-center justify-end-safe gap-1"}>
+            <AppBarAlert />
+            <AppBarAvatar isLargeAvatar={isLargeAvatar} />
+          </div>
+        )}
       </nav>
       {children}
     </motion.header>
