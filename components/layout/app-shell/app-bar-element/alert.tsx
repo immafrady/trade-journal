@@ -6,7 +6,6 @@ import { useTradeRecordStore } from "@/lib/services/trade-records";
 
 export const AppBarAlert = () => {
   const draftList = useTradeRecordStore((s) => s.draftList) ?? [];
-  console.log("list:", draftList);
 
   if (draftList.length) {
     return (

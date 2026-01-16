@@ -57,14 +57,20 @@ export const TabBaseData = () => {
   const selectedRows = table
     .getFilteredSelectedRowModel()
     .rows.map((row) => row.original);
+  const filteredRows = table
+    .getFilteredRowModel()
+    .rows.map((row) => row.original);
 
   return (
     <>
       <div className={"flex justify-between my-2"}>
-        <DialogSummary disabled={!selectedRows.length} records={selectedRows} />
+        <DialogSummary
+          disabled={!selectedRows.length && !filteredRows.length}
+          records={selectedRows.length ? selectedRows : filteredRows}
+        />
         <TableColumnToggler onVisibilityChange={setColumnVisibility} />
         <DialogFilter
-          filterCount={table.getFilteredRowModel().rows?.length ?? 0}
+          filterCount={filteredRows.length}
           columnFilters={columnFilters}
           onColumnFiltersChange={setColumnFilters}
         />
