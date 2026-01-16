@@ -164,7 +164,7 @@ export const DialogSummary = ({
 
   return (
     <ResponsiveDialog
-      title={"汇总展示"}
+      title={`汇总展示(${records.length}条)`}
       description={description}
       trigger={
         <Button disabled={disabled} variant={"outline"} size={"sm"}>
