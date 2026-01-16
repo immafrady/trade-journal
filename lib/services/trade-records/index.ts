@@ -40,4 +40,5 @@ export type {
   TradeRecordData,
   TradeRecordStore,
   TradeRecordStoreState,
+  TradeRecordDraft,
 } from "./provider/trade-record-provider/trade-record-store";
