@@ -7,10 +7,11 @@ import React from "react";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import { LoadingButton } from "@/components/ui/my/button";
 import { ArrowRight } from "lucide-react";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 export const AlertMessageItem = ({ draft }: { draft: TradeRecordDraft }) => {
   const { holdingId, records } = draft;
+  const router = useRouter();
   const list = useHoldingsWithQuote();
   const data = React.useMemo(
     () => list?.find((item) => item.id === holdingId),
@@ -34,7 +35,15 @@ export const AlertMessageItem = ({ draft }: { draft: TradeRecordDraft }) => {
             />
           </CardTitle>
         </CardHeader>
-        <CardContent>1</CardContent>
+        <CardContent>
+          <ol className={"font-mono"}>
+            {records.map((record, idx) => (
+              <li key={record.props.id}>
+                {idx + 1}. {record.display.tradedAt} - {record.display.type}
+              </li>
+            ))}
+          </ol>
+        </CardContent>
       </Card>
     );
   }

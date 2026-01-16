@@ -16,7 +16,7 @@ export default function Page() {
       appBar={
         <AppBar>
           <AppBarExtra>
-            <AppBarTitle>警告消息</AppBarTitle>
+            <AppBarTitle>警告消息 · 以下记录未录入完全</AppBarTitle>
           </AppBarExtra>
         </AppBar>
       }
