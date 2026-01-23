@@ -9,7 +9,6 @@ export const HoldingSummary = () => {
   return (
     <Card className={"py-4"}>
       <CardContent>
-        <h3 className={"font-medium text-lg mb-2"}>账户总览</h3>
         <InlineDisplay
           className={"gap-0.5"}
           list={[

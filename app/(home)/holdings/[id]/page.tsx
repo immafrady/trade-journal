@@ -9,7 +9,6 @@ import {
   AppBar,
   AppBarExtra,
   AppBarExtraContent,
-  AppBarTitle,
   AppContainer,
 } from "@/components/layout/app-shell";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
@@ -32,7 +31,9 @@ export default function Page() {
                   <BaseInfo data={data} />
                 </AppBarExtraContent>
               ) : (
-                <AppBarTitle>{data.ticker.label} · 详情</AppBarTitle>
+                <AppBarExtraContent
+                  title={`${data.ticker.label} · 详情`}
+                ></AppBarExtraContent>
               ))}
           </AppBarExtra>
         </AppBar>
