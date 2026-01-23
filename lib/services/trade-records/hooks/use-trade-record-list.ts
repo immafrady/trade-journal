@@ -55,11 +55,13 @@ export function useTradeRecordList(
           totalShares += record.adjusted.shares;
         }
         const costPrice = totalShares > 0 ? totalAmount / totalShares : 0;
+        const totalMarketValue = totalShares * record.derived.price;
         record.cumulative = {
           totalAmount,
           totalShares,
           costPrice,
-          positionCostEfficiency: costPrice ? totalShares / costPrice : 0,
+          totalMarketValue,
+          valueIndex: totalMarketValue / totalAmount,
         };
 
         // 标记手续费未填写完
