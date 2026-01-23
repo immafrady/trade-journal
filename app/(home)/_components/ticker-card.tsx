@@ -24,16 +24,12 @@ export const TickerCard = ({
   id,
   ticker,
   quote,
-  loadingId,
-  onLinkClick,
   proportion = 0,
 }: {
   id: string;
   ticker: SinaTicker;
   quote?: SinaQuote;
   proportion?: number;
-  loadingId: string;
-  onLinkClick: (id: string) => void;
 }) => {
   // 计算汇总的逻辑
   const data = useTradeRecordDataById(id);
@@ -71,12 +67,9 @@ export const TickerCard = ({
             {ticker.label}
           </div>
           <LoadingButton
-            loading={!!loadingId && loadingId === id}
-            disabled={!!loadingId && loadingId !== id}
             variant={"ghost"}
             icon={<ArrowRight />}
             onClick={() => {
-              onLinkClick(id);
               router.push(`/holdings/${id}`);
             }}
           />

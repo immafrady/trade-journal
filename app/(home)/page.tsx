@@ -28,7 +28,6 @@ function InnerPage() {
   const { list } = React.useContext(HomeContext);
 
   const { isLoading } = useHoldingList();
-  const [loadingId, setLoadingId] = React.useState<string>("");
 
   return isLoading ? (
     <Loading isLoading={true} />
@@ -64,11 +63,9 @@ function InnerPage() {
                 <TickerCard
                   key={ticker.key}
                   id={id}
-                  loadingId={loadingId}
                   ticker={ticker}
                   quote={quote}
                   proportion={proportion}
-                  onLinkClick={setLoadingId}
                 />
               );
             })}
