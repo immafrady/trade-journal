@@ -14,7 +14,6 @@ import { useRouter } from "next/navigation";
 import {
   AppBar,
   AppBarExtra,
-  AppBarExtraContent,
   AppContainer,
 } from "@/components/layout/app-shell";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
@@ -31,11 +30,7 @@ export default function Page() {
       appBar={
         <AppBar>
           {data?.ticker.label && (
-            <AppBarExtra>
-              <AppBarExtraContent
-                title={`${data.ticker.label} · 导入`}
-              ></AppBarExtraContent>
-            </AppBarExtra>
+            <AppBarExtra title={`${data.ticker.label} · 导入`}></AppBarExtra>
           )}
         </AppBar>
       }

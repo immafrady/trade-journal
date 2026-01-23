@@ -1,16 +1,8 @@
 import React from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
-export const AppBarExtra = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <motion.div layout layoutId={"app-bar-extra"}>
-      <AnimatePresence>{children}</AnimatePresence>
-    </motion.div>
-  );
-};
-
-export const AppBarExtraContent = ({
+export const AppBarExtra = ({
   children,
   action,
   title,
@@ -25,7 +17,7 @@ export const AppBarExtraContent = ({
     <motion.div
       layout={"preserve-aspect"}
       className={cn("p-2 pt-0 ", className)}
-      layoutId={"app-bar-extra-content"}
+      layoutId={"app-bar-extra"}
     >
       {title ? (
         <div className={"flex justify-between items-center"}>

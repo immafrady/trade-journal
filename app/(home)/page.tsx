@@ -8,7 +8,6 @@ import Loading from "@/components/ui/my/loading";
 import {
   AppBar,
   AppBarExtra,
-  AppBarExtraContent,
   AppContainer,
 } from "@/components/layout/app-shell";
 import { HomeContext, HomeProvider } from "@/app/(home)/_provider";
@@ -38,21 +37,19 @@ function InnerPage() {
       appBar={
         <AppBar bgGradient={!!list.length}>
           {!!list.length && (
-            <AppBarExtra>
-              <AppBarExtraContent
-                className={"-mb-8 relative z-50 pointer-events-auto"}
-                title={"账户总览"}
-                action={
-                  <Button variant={"link"} size={"sm"} asChild>
-                    <Link href={"/group"}>
-                      分组视图
-                      <ArrowRight />
-                    </Link>
-                  </Button>
-                }
-              >
-                <HoldingSummary />
-              </AppBarExtraContent>
+            <AppBarExtra
+              className={"-mb-8 relative z-50 pointer-events-auto"}
+              title={"账户总览"}
+              action={
+                <Button variant={"link"} size={"sm"} asChild>
+                  <Link href={"/group"}>
+                    分组视图
+                    <ArrowRight />
+                  </Link>
+                </Button>
+              }
+            >
+              <HoldingSummary />
             </AppBarExtra>
           )}
         </AppBar>

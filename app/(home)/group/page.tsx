@@ -2,7 +2,6 @@
 import {
   AppBar,
   AppBarExtra,
-  AppBarExtraContent,
   AppContainer,
 } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
@@ -15,20 +14,18 @@ export default function Page() {
     <AppContainer
       appBar={
         <AppBar>
-          <AppBarExtra>
-            <AppBarExtraContent
-              className={"relative z-50 pointer-events-auto"}
-              title={"分组视图"}
-              action={
-                <Button variant={"link"} size={"sm"} asChild>
-                  <Link href={"/"}>
-                    账户总览
-                    <ArrowRight />
-                  </Link>
-                </Button>
-              }
-            ></AppBarExtraContent>
-          </AppBarExtra>
+          <AppBarExtra
+            className={"relative z-50 pointer-events-auto"}
+            title={"分组视图"}
+            action={
+              <Button variant={"link"} size={"sm"} asChild>
+                <Link href={"/"}>
+                  账户总览
+                  <ArrowRight />
+                </Link>
+              </Button>
+            }
+          ></AppBarExtra>
         </AppBar>
       }
     >

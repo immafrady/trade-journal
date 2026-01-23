@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { AppBarAvatar } from "../app-bar-element/avatar";
 import { AppBarSlogan } from "../app-bar-element/slogan";
@@ -44,7 +44,9 @@ export const AppBar = ({
           </div>
         )}
       </nav>
-      {children}
+      <motion.div layout layoutId={"app-bar-extra-container"}>
+        <AnimatePresence>{children}</AnimatePresence>
+      </motion.div>
     </motion.header>
   );
 };
