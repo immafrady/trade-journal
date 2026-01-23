@@ -98,15 +98,17 @@ export class TradeRecord {
 
   // 截止至今（后续计算）
   public cumulative: {
-    totalAmount: number;
+    totalAmount: number; // 实际支出
     totalShares: number;
-    costPrice: number;
-    positionCostScore: number;
+    costPrice: number; // 当前成本
+    totalMarketValue: number; // 市值
+    valueIndex: number; // “市值 / 实际支出” 算出来的净值
   } = {
     totalAmount: 0,
     totalShares: 0,
     costPrice: 0,
-    positionCostScore: 0,
+    totalMarketValue: 0,
+    valueIndex: 0,
   };
 
   // 额外参数

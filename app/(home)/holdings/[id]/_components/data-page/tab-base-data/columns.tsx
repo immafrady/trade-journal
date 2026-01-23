@@ -5,7 +5,6 @@ import {
 } from "@/lib/services/trade-records";
 import {
   formatMoney,
-  formatPercent,
   formatShares,
   StockValueFormatter,
 } from "@/lib/market-utils";
@@ -113,6 +112,23 @@ export function getColumns(
       ),
     },
     {
+      id: TradeRecordConstants.CumulativeValueIndex,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={TradeRecordConstants.CumulativeValueIndex}
+          className={"text-right"}
+        />
+      ),
+      accessorFn: (row) => row.cumulative.valueIndex,
+      filterFn: "inNumberRange",
+      cell: (row) => (
+        <div className={"text-right"}>
+          {formatter(row.getValue() as number)}
+        </div>
+      ),
+    },
+    {
       id: TradeRecordConstants.Shares,
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -164,23 +180,6 @@ export function getColumns(
       ),
     },
     {
-      id: TradeRecordConstants.PositionCostScore,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.PositionCostScore}
-          className={"text-right"}
-        />
-      ),
-      accessorFn: (row) => row.cumulative.positionCostScore,
-      filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatPercent(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
       id: TradeRecordConstants.Amount,
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -224,6 +223,23 @@ export function getColumns(
         />
       ),
       accessorFn: (row) => row.cumulative.totalAmount,
+      filterFn: "inNumberRange",
+      cell: (row) => (
+        <div className={"text-right"}>
+          {formatMoney(row.getValue() as number)}
+        </div>
+      ),
+    },
+    {
+      id: TradeRecordConstants.CumulativeTotalMarketValue,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={TradeRecordConstants.CumulativeTotalMarketValue}
+          className={"text-right"}
+        />
+      ),
+      accessorFn: (row) => row.cumulative.totalMarketValue,
       filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
@@ -348,7 +364,8 @@ export const baseVisibility = {
   [TradeRecordConstants.CumulativeTotalAmount]: false,
   [TradeRecordConstants.CumulativeTotalShares]: false,
   [TradeRecordConstants.CumulativeCostPrice]: false,
-  [TradeRecordConstants.PositionCostScore]: false,
+  [TradeRecordConstants.CumulativeTotalMarketValue]: false,
+  [TradeRecordConstants.CumulativeValueIndex]: false,
 } as const;
 
 export const adjustVisibility = {
@@ -358,7 +375,8 @@ export const adjustVisibility = {
   [TradeRecordConstants.CumulativeTotalAmount]: false,
   [TradeRecordConstants.CumulativeTotalShares]: false,
   [TradeRecordConstants.CumulativeCostPrice]: false,
-  [TradeRecordConstants.PositionCostScore]: false,
+  [TradeRecordConstants.CumulativeTotalMarketValue]: false,
+  [TradeRecordConstants.CumulativeValueIndex]: false,
 } as const;
 
 export const cumulativeVisibility = {

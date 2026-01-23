@@ -8,8 +8,6 @@ import { cn } from "@/lib/utils";
 import {
   AppBar,
   AppBarExtra,
-  AppBarExtraContent,
-  AppBarTitle,
   AppContainer,
 } from "@/components/layout/app-shell";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
@@ -23,18 +21,16 @@ export default function Page() {
     <AppContainer
       appBar={
         <AppBar bgGradient={moreInfo}>
-          <AppBarExtra>
-            {data &&
-              (moreInfo ? (
-                <AppBarExtraContent
-                  className={"px-2 -mb-6 relative z-50 pointer-events-auto"}
-                >
-                  <BaseInfo data={data} />
-                </AppBarExtraContent>
-              ) : (
-                <AppBarTitle>{data.ticker.label} · 详情</AppBarTitle>
-              ))}
-          </AppBarExtra>
+          {!!data &&
+            (moreInfo ? (
+              <AppBarExtra
+                className={"px-2 -mb-6 relative z-50 pointer-events-auto"}
+              >
+                <BaseInfo data={data} />
+              </AppBarExtra>
+            ) : (
+              <AppBarExtra title={`${data.ticker.label} · 详情`}></AppBarExtra>
+            ))}
         </AppBar>
       }
     >

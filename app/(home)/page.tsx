@@ -7,11 +7,14 @@ import { NavigateToHoldingsAdd } from "@/app/(home)/_components/navigate-to-hold
 import Loading from "@/components/ui/my/loading";
 import {
   AppBar,
-  AppBarExtraContent,
+  AppBarExtra,
   AppContainer,
 } from "@/components/layout/app-shell";
-import { HoldingSummary } from "@/app/(home)/_components/holding-summary";
 import { HomeContext, HomeProvider } from "@/app/(home)/_provider";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { HoldingSummary } from "@/app/(home)/_components/holding-summary";
 
 export default function Page() {
   return (
@@ -25,7 +28,6 @@ function InnerPage() {
   const { list } = React.useContext(HomeContext);
 
   const { isLoading } = useHoldingList();
-  const [loadingId, setLoadingId] = React.useState<string>("");
 
   return isLoading ? (
     <Loading isLoading={true} />
@@ -34,11 +36,20 @@ function InnerPage() {
       appBar={
         <AppBar bgGradient={!!list.length}>
           {!!list.length && (
-            <AppBarExtraContent
-              className={"px-2 -mb-6 relative z-50 pointer-events-auto"}
+            <AppBarExtra
+              className={"-mb-8 relative z-50 pointer-events-auto"}
+              title={"账户总览"}
+              action={
+                <Button variant={"link"} size={"sm"} asChild>
+                  <Link href={"/group"}>
+                    分组视图
+                    <ArrowRight />
+                  </Link>
+                </Button>
+              }
             >
               <HoldingSummary />
-            </AppBarExtraContent>
+            </AppBarExtra>
           )}
         </AppBar>
       }
@@ -52,11 +63,9 @@ function InnerPage() {
                 <TickerCard
                   key={ticker.key}
                   id={id}
-                  loadingId={loadingId}
                   ticker={ticker}
                   quote={quote}
                   proportion={proportion}
-                  onLinkClick={setLoadingId}
                 />
               );
             })}

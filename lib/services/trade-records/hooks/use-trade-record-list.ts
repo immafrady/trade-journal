@@ -54,11 +54,14 @@ export function useTradeRecordList(
         } else {
           totalShares += record.adjusted.shares;
         }
+        const costPrice = totalShares > 0 ? totalAmount / totalShares : 0;
+        const totalMarketValue = totalShares * record.derived.price;
         record.cumulative = {
           totalAmount,
           totalShares,
-          costPrice: totalShares > 0 ? totalAmount / totalShares : 0,
-          positionCostScore: 0,
+          costPrice,
+          totalMarketValue,
+          valueIndex: totalMarketValue / totalAmount,
         };
 
         // 标记手续费未填写完
@@ -75,29 +78,7 @@ export function useTradeRecordList(
 
         result.unshift(record);
       }
-
-      // 计算打分
-      let maxPositionCostScore = 0;
-      return result
-        .map((item) => {
-          // 先计算一下基础值
-          const { costPrice, totalShares } = item.cumulative;
-          item.cumulative.positionCostScore = costPrice
-            ? totalShares / costPrice
-            : 0;
-          maxPositionCostScore = Math.max(
-            maxPositionCostScore,
-            item.cumulative.positionCostScore,
-          );
-          return item;
-        })
-        .map((item) => {
-          // 取和最大的百分比做比较
-          item.cumulative.positionCostScore = maxPositionCostScore
-            ? (item.cumulative.positionCostScore / maxPositionCostScore) * 100
-            : 0;
-          return item;
-        });
+      return result;
     } catch (e) {
       console.error(key, e);
       return [];
