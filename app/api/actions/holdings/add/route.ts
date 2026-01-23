@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server-client";
 import { SinaTicker } from "@/lib/services/sina";
+import { MyResponse } from "@/app/api/_my-response";
 
 export const POST = async (request: NextRequest) => {
   const body = await request.json();
@@ -13,14 +14,7 @@ export const POST = async (request: NextRequest) => {
     .select("*", { count: "exact", head: true })
     .eq("code", code);
   if (count && count > 0) {
-    return NextResponse.json(
-      {
-        error: "重复的插入",
-      },
-      {
-        status: 400,
-      },
-    );
+    return MyResponse.validFail("重复的插入");
   }
   const { data, error } = await supabase
     .from("user_holdings")
@@ -33,16 +27,9 @@ export const POST = async (request: NextRequest) => {
     .single();
 
   if (error) {
-    return NextResponse.json(
-      {
-        error: error.message,
-      },
-      {
-        status: 500,
-      },
-    );
+    return MyResponse.serverFail(error.message);
   } else {
-    return NextResponse.json({
+    return MyResponse.anyOk({
       data,
     });
   }

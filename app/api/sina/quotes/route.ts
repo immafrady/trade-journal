@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import iconv from "iconv-lite";
+import { MyResponse } from "@/app/api/_my-response";
 
 export const GET = (request: NextRequest) => {
   const searchParams = request.nextUrl.searchParams;
@@ -15,13 +16,6 @@ export const GET = (request: NextRequest) => {
       return new NextResponse(iconv.decode(buffer, "gbk"));
     });
   } else {
-    return NextResponse.json(
-      {
-        error: "No suggestions found",
-      },
-      {
-        status: 400,
-      },
-    );
+    return MyResponse.validFail("No suggestions found");
   }
 };

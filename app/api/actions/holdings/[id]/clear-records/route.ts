@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server-client";
+import { MyResponse } from "@/app/api/_my-response";
 
 export const DELETE = async (
   request: NextRequest,
@@ -13,11 +14,8 @@ export const DELETE = async (
     .eq("holding_id", id);
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return MyResponse.serverFail(error.message);
   } else {
-    return NextResponse.json(
-      { message: "成功清除所有记录！" },
-      { status: 200 },
-    );
+    return MyResponse.msgOk("成功清除所有记录！");
   }
 };
