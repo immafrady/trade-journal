@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server-client";
-import papa from "papaparse";
 
 export const GET = async (request: NextRequest) => {
   const supabase = await createClient();
   const holdingId = +(request.nextUrl.searchParams.get("holdingId") ?? 0);
+
   if (holdingId && !Number.isNaN(holdingId)) {
     const resp = await supabase
       .from("trade_records")
@@ -15,41 +15,17 @@ export const GET = async (request: NextRequest) => {
       .order("traded_at", {
         ascending: false,
       })
-      .order("id", { ascending: false });
-    if (resp.error) {
-      return NextResponse.json(resp);
-    } else {
-      try {
-        const csv = papa.unparse(resp.data, {
-          delimiter: ",", // 分隔符
-          header: true, // 自动使用 keys 作为表头
-        });
-
-        return new NextResponse(csv, {
-          status: 200,
-          headers: {
-            "Content-Type": "text/csv; charset=utf-8",
-          },
-        });
-      } catch (e) {
-        return NextResponse.json(
-          {
-            status: -1,
-            statusText: "数据解析错误",
-            error: e,
-          },
-          {
-            status: 500,
-          },
-        );
-      }
-    }
+      .order("id", { ascending: false })
+      .csv();
+    return new NextResponse(resp.data, {
+      headers: {
+        "Content-Type": "text/csv; charset=utf-8",
+      },
+    });
   } else {
-    // todo 处理异常流
     return NextResponse.json(
       {
-        status: -1,
-        statusText: "入参错误",
+        error: "入参错误",
       },
       {
         status: 400,
