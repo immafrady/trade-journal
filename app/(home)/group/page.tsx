@@ -8,8 +8,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import React from "react";
 import Link from "next/link";
+import { useGroupList } from "@/lib/services/group/hooks/use-group-list";
+import { BlankPage } from "@/app/(home)/group/_components/blank-page";
 
 export default function Page() {
+  const { data: list = [] } = useGroupList();
   return (
     <AppContainer
       appBar={
@@ -29,7 +32,7 @@ export default function Page() {
         </AppBar>
       }
     >
-      123
+      {list.length ? "11" : <BlankPage />}
     </AppContainer>
   );
 }
