@@ -1,14 +1,31 @@
-import { NextRequest } from "next/server";
-import { GroupModel } from "@/lib/services/group";
 import { createClient } from "@/lib/supabase/server-client";
 import { MyResponse } from "@/app/api/_my-response";
+import { NextRequest } from "next/server";
+import { GroupModel } from "@/lib/services/group";
 
+// 查询分组视图
+export const GET = async () => {
+  const supabase = await createClient();
+  return MyResponse.anyOk(
+    await supabase.from("groups").select(`
+    id,
+    label,
+    budget,
+    group_holdings (
+      holding_id
+    )
+  `),
+  );
+};
+
+// 新增/编辑 分组
 export const POST = async (request: NextRequest) => {
   const body: GroupModel = await request.json();
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("groups")
-    .insert({
+    .upsert({
+      id: body.id,
       label: body.label,
       budget: body.budget,
     })
@@ -18,19 +35,6 @@ export const POST = async (request: NextRequest) => {
   if (error) {
     return MyResponse.serverFail(error.message);
   } else {
-    if (
-      data &&
-      Array.isArray(body.group_holding) &&
-      body.group_holding.length
-    ) {
-      const group_id = data.id;
-      const { error } = await supabase.from("group_holdings").insert(
-        body.group_holding.map((item) => ({
-          group_id,
-          holding_id: item.holding_id,
-        })),
-      );
-    }
+    return MyResponse.anyOk(data);
   }
-  // return NextResponse.json();
 };
