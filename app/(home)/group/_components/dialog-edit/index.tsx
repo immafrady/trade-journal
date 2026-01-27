@@ -35,7 +35,9 @@ export const DialogEdit = ({
     onSubmitInvalid: () => {
       toast.error(`校验失败，无法提交`);
     },
-    onSubmit: async ({ value }) => {},
+    onSubmit: async ({ value }) => {
+      console.log(value);
+    },
   });
 
   return (
@@ -43,7 +45,12 @@ export const DialogEdit = ({
       ref={dialogRef}
       title={editType}
       trigger={trigger}
-      onSubmit={async () => {}}
+      onSubmit={async () => {
+        await form.handleSubmit();
+      }}
+      onClosed={() => {
+        form.reset();
+      }}
     >
       <form
         onSubmit={(e) => {
