@@ -1,8 +1,6 @@
 export interface GroupModel {
-  id?: number;
+  id?: string;
   label: string;
   budget: number;
-  group_holding: {
-    holding_id: number;
-  }[];
+  holdingIds: string[];
 }

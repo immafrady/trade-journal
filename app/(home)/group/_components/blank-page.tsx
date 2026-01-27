@@ -8,8 +8,8 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { BookOpen } from "lucide-react";
-import { DialogEdit } from "@/app/(home)/holdings/[id]/_components/dialog-edit";
 import React from "react";
+import { DialogEdit } from "@/app/(home)/group/_components/dialog-edit";
 
 export const BlankPage = () => {
   return (
