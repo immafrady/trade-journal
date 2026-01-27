@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import iconv from "iconv-lite";
 import { SINA_SEARCH_VALUES } from "@/lib/services/sina";
+import { MyResponse } from "@/app/api/_my-response";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -14,13 +15,6 @@ export async function GET(request: NextRequest) {
       return new NextResponse(iconv.decode(buffer, "gbk"));
     });
   } else {
-    return NextResponse.json(
-      {
-        error: "No suggestions found",
-      },
-      {
-        status: 400,
-      },
-    );
+    return MyResponse.validFail("No suggestions found");
   }
 }

@@ -4,7 +4,12 @@ import {
   TradeRecordTypeValue,
 } from "@/lib/services/trade-records";
 import dayjs, { Dayjs } from "dayjs";
-import { formatPercent } from "@/lib/market-utils";
+import {
+  formatMoney,
+  formatPercent,
+  formatShares,
+  StockValueFormatter,
+} from "@/lib/market-utils";
 
 export class TradeRecord {
   constructor(public props: TradeRecordProps) {
@@ -180,14 +185,14 @@ export class TradeRecord {
     };
   }
 
-  toCSVObject() {
+  toCSVObject(formatter: StockValueFormatter) {
     return {
       [TradeRecordConstants.TradedAt]: this.display.tradedAt,
       [TradeRecordConstants.Type]: this.display.type,
-      [TradeRecordConstants.Shares]: this.props.shares,
-      [TradeRecordConstants.Price]: this.props.price,
-      [TradeRecordConstants.Amount]: this.props.amount,
-      [TradeRecordConstants.Fee]: this.props.fee,
+      [TradeRecordConstants.Shares]: formatShares(this.derived.shares),
+      [TradeRecordConstants.Price]: formatter(this.derived.price),
+      [TradeRecordConstants.Amount]: formatMoney(this.derived.amount),
+      [TradeRecordConstants.Fee]: formatMoney(this.derived.fee),
       [TradeRecordConstants.Factor]: this.props.factor,
       [TradeRecordConstants.Comment]: this.props.comment,
     };

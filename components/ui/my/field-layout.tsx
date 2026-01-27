@@ -1,21 +1,29 @@
 import React from "react";
 import { AnyFieldApi } from "@tanstack/react-form";
 import { Info, Loader, TriangleAlert } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const FieldLayout = ({
   label,
   description,
   field,
   children,
+  orientation = "horizontal",
 }: {
   label: React.ReactNode;
   description?: React.ReactNode;
   field: AnyFieldApi;
   children: React.ReactNode;
+  orientation?: "horizontal" | "vertical";
 }) => {
   return (
     <div className={"flex flex-col gap-1"}>
-      <div className={"flex gap-2"}>
+      <div
+        className={cn(
+          "flex",
+          orientation === "vertical" ? "flex-col" : "gap-2",
+        )}
+      >
         <div className={"font-medium leading-9"}>{label}</div>
         <div className={"flex-1 flex [&>*]:flex-1"}>{children}</div>
       </div>

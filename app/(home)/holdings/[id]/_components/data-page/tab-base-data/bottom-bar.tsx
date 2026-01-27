@@ -40,7 +40,9 @@ export const BottomBar = ({
           setExportLoading(true);
           exportAsCSV(
             `${data!.ticker.label}-操作记录`,
-            records!.map((item) => item.toCSVObject()),
+            records!
+              .reverse()
+              .map((item) => item.toCSVObject(data!.ticker.formatter)),
           );
           setExportLoading(false);
         }}

@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server-client";
-import { NextResponse } from "next/server";
+import { MyResponse } from "@/app/api/_my-response";
 
 export const GET = async () => {
   const supabase = await createClient();
-  return NextResponse.json(await supabase.auth.getUser());
+  return MyResponse.anyOk(await supabase.auth.getUser());
 };
