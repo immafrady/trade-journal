@@ -4,6 +4,7 @@ import {
   TradeRecordConstants,
 } from "@/lib/services/trade-records";
 import {
+  formatFund,
   formatMoney,
   formatShares,
   StockValueFormatter,
@@ -124,7 +125,7 @@ export function getColumns(
       filterFn: "inNumberRange",
       cell: (row) => (
         <div className={"text-right"}>
-          {formatter(row.getValue() as number)}
+          {formatFund(row.getValue() as number)}
         </div>
       ),
     },
