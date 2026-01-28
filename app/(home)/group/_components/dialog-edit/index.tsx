@@ -137,7 +137,7 @@ export const DialogEdit = ({
               <FieldLayout
                 label={GroupConstants.Holdings}
                 field={field}
-                description={"该分组包含的资产列表"}
+                description={"该组合包含的资产列表"}
                 orientation={"vertical"}
               >
                 <FieldGroup className={"gap-1"}>

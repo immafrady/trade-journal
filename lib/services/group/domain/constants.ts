@@ -1,5 +1,5 @@
 export const GroupConstants = {
-  Label: "分组名称",
-  Budget: "分组预算",
-  Holdings: "分组持仓",
+  Label: "组合名称",
+  Budget: "组合预算",
+  Holdings: "组合持仓",
 };

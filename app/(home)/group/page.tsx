@@ -20,7 +20,7 @@ export default function Page() {
         <AppBar>
           <AppBarExtra
             className={"relative z-50 pointer-events-auto"}
-            title={"分组视图"}
+            title={"组合视图"}
             action={
               <Button variant={"link"} size={"sm"} asChild>
                 <Link href={"/"}>

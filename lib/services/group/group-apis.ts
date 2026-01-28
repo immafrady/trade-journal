@@ -1,6 +1,6 @@
 import { GroupModel } from "@/lib/services/group/domain/group";
 
-// 新增分组
+// 新增组合
 export async function addOrEditGroup(group: GroupModel) {
   return await fetch("/api/actions/groups", {
     method: "POST",
@@ -13,7 +13,7 @@ export async function addOrEditGroup(group: GroupModel) {
   });
 }
 
-// 编辑分组持仓
+// 编辑组合持仓
 export async function editGroupHoldings(groupId: string, holdingIds: string[]) {
   return await fetch(`/api/actions/groups/${groupId}/holdings`, {
     method: "POST",
@@ -22,7 +22,7 @@ export async function editGroupHoldings(groupId: string, holdingIds: string[]) {
   });
 }
 
-// 删除分组
+// 删除组合
 export async function deleteGroup(id: string) {
   return await fetch(`/api/actions/groups/${id}`, {
     method: "DELETE",

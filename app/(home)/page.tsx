@@ -42,7 +42,7 @@ function InnerPage() {
               action={
                 <Button variant={"link"} size={"sm"} asChild>
                   <Link href={"/group"}>
-                    分组视图
+                    组合视图
                     <ArrowRight />
                   </Link>
                 </Button>

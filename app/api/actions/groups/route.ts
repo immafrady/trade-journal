@@ -3,7 +3,7 @@ import { MyResponse } from "@/app/api/_my-response";
 import { NextRequest } from "next/server";
 import { GroupModel } from "@/lib/services/group";
 
-// 查询分组视图
+// 查询组合视图
 export const GET = async () => {
   const supabase = await createClient();
   return MyResponse.anyOk(
@@ -18,7 +18,7 @@ export const GET = async () => {
   );
 };
 
-// 新增/编辑 分组
+// 新增/编辑 组合
 export const POST = async (request: NextRequest) => {
   const body: GroupModel = await request.json();
   const supabase = await createClient();

@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server-client";
 import { MyResponse } from "@/app/api/_my-response";
 
-// 删除分组
+// 删除组合
 export const DELETE = async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
