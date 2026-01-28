@@ -36,7 +36,7 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
               content: formatMoney(model.budget),
             },
             {
-              title: "支出",
+              title: "投入",
               content: formatMoney(),
             },
             {
