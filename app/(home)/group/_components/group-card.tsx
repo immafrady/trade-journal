@@ -23,7 +23,7 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
             variant={"ghost"}
             icon={<ArrowRight />}
             onClick={() => {
-              router.push(`/holdings/${model.id!}`);
+              router.push(`/group/${model.id!}`);
             }}
           />
         </CardTitle>
