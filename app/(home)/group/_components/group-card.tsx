@@ -4,15 +4,15 @@ import { LoadingButton } from "@/components/ui/my/button";
 import { ArrowRight } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import { Separator } from "@/components/ui/separator";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { formatMoney } from "@/lib/market-utils";
+import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 
 export const GroupCard = ({ model }: { model: GroupModel }) => {
   const router = useRouter();
-  const holdingWithQuotes = useHoldingsWithQuote();
+  const { data: holdingList } = useHoldingList() ?? [];
 
   return (
     <Card>
@@ -48,7 +48,7 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
         <Separator className={"my-2"}></Separator>
         <div className={"flex flex-col gap-1"}>
           {model.holdingIds?.map((holdingId) => {
-            const hwq = holdingWithQuotes.find((hwq) => hwq.id === holdingId);
+            const hwq = holdingList.find((h) => h.id === holdingId);
             if (hwq) {
               return (
                 <div key={holdingId} className={"flex items-center gap-1"}>
