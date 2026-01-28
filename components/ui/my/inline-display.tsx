@@ -9,7 +9,12 @@ export const InlineDisplay = ({
   className?: string;
 }) => {
   return (
-    <div className={cn("w-full grid gap-2 grid-cols-[auto_1fr]", className)}>
+    <div
+      className={cn(
+        "w-full grid gap-2 grid-cols-[auto_1fr] text-sm",
+        className,
+      )}
+    >
       {list.map((item, i) => (
         <React.Fragment key={i}>
           <div className={"font-medium whitespace-nowrap"}>{item.title}</div>

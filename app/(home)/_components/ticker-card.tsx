@@ -59,7 +59,7 @@ export const TickerCard = ({
     }
   }
   return (
-    <Card key={ticker.key} className={"gap-3 py-3"}>
+    <Card key={ticker.key}>
       <CardHeader>
         <CardTitle className={"flex items-center justify-between"}>
           <div className={"flex items-center gap-1"}>

@@ -10,6 +10,7 @@ import React from "react";
 import Link from "next/link";
 import { useGroupList } from "@/lib/services/group/hooks/use-group-list";
 import { BlankPage } from "@/app/(home)/group/_components/blank-page";
+import { GroupCard } from "@/app/(home)/group/_components/group-card";
 
 export default function Page() {
   const { data: list = [] } = useGroupList();
@@ -32,7 +33,15 @@ export default function Page() {
         </AppBar>
       }
     >
-      {list.length ? "11" : <BlankPage />}
+      {list.length ? (
+        <div className={"common-layout flex flex-col gap-2 pt-10 pb-20"}>
+          {list.map((model) => (
+            <GroupCard key={model.id!} model={model}></GroupCard>
+          ))}
+        </div>
+      ) : (
+        <BlankPage />
+      )}
     </AppContainer>
   );
 }
