@@ -9,7 +9,6 @@ import {
   formatShares,
   StockValueFormatter,
 } from "@/lib/market-utils";
-import { DataTableColumnHeader } from "@/components/ui/my/data-table/column-header";
 import { Dayjs } from "dayjs";
 import {
   DropdownMenu,
@@ -21,8 +20,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Edit, MoreHorizontal } from "lucide-react";
 import { DialogDetail } from "./dialog-detail";
-import { cn } from "@/lib/utils";
 import {
+  genColumnDef,
   genNoColumnDef,
   genSelectableColumn,
 } from "@/components/ui/my/data-table/selectable-column";
@@ -35,21 +34,10 @@ export function getColumns(
   return [
     genSelectableColumn(),
     genNoColumnDef(),
-    {
+    genColumnDef({
       id: TradeRecordConstants.TradedAt,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.TradedAt}
-          className={"text-center"}
-        />
-      ),
       accessorFn: (row) => row.props.tradedAt,
-      cell: (row) => (
-        <div className={"text-center"}>
-          {(row.getValue() as Dayjs).format("YYYY-MM-DD")}
-        </div>
-      ),
+      cell: (row) => (row.getValue() as Dayjs).format("YYYY-MM-DD"),
       filterFn: (row, columnId, filterValue, addMeta) => {
         const target = row.getValue(columnId) as Dayjs;
         const [min, max]: [Date?, Date?] = filterValue ?? [];
@@ -57,264 +45,130 @@ export function getColumns(
         if (min && target.isBefore(min)) return false;
         return !(max && target.isAfter(max));
       },
-    },
-    {
+    }),
+    genColumnDef({
       id: TradeRecordConstants.Type,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.Type}
-          className={"text-center"}
-        />
-      ),
       accessorFn: (row) => row.display.type,
-      cell: (row) => (
-        <div className={"text-center"}>{row.getValue() as string}</div>
-      ),
-    },
-    {
+      cell: (row) => row.getValue() as string,
+    }),
+    genColumnDef({
       id: TradeRecordConstants.Price,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.Price}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.derived.price,
       filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatter(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
+      cell: (row) => formatter(row.getValue() as number),
+    }),
+    genColumnDef({
       id: TradeRecordConstants.CumulativeCostPrice,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.CumulativeCostPrice}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.cumulative.costPrice,
       filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatter(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
+      cell: (row) => formatter(row.getValue() as number),
+    }),
+    genColumnDef({
       id: TradeRecordConstants.CumulativeValueIndex,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.CumulativeValueIndex}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.cumulative.valueIndex,
       filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatFund(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
+      cell: (row) => formatFund(row.getValue() as number),
+    }),
+    genColumnDef({
       id: TradeRecordConstants.Shares,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.Shares}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.derived.shares,
       filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatShares(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
+      cell: (row) => formatShares(row.getValue() as number),
+    }),
+    genColumnDef({
       id: TradeRecordConstants.AdjustedShares,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.AdjustedShares}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.adjusted.shares,
       filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatShares(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
+      cell: (row) => formatShares(row.getValue() as number),
+    }),
+    genColumnDef({
       id: TradeRecordConstants.CumulativeTotalShares,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.CumulativeTotalShares}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.cumulative.totalShares,
       filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatShares(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
+      cell: (row) => formatShares(row.getValue() as number),
+    }),
+    genColumnDef({
       id: TradeRecordConstants.Amount,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.Amount}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.derived.amount,
       filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatMoney(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
+      cell: (row) => formatMoney(row.getValue() as number),
+    }),
+    genColumnDef({
       id: TradeRecordConstants.AdjustedAmount,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.AdjustedAmount}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.adjusted.amount,
       filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatMoney(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
+      cell: (row) => formatMoney(row.getValue() as number),
+    }),
+    genColumnDef({
       id: TradeRecordConstants.CumulativeTotalAmount,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.CumulativeTotalAmount}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.cumulative.totalAmount,
       filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatMoney(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
+      cell: (row) => formatMoney(row.getValue() as number),
+    }),
+    genColumnDef({
       id: TradeRecordConstants.CumulativeTotalMarketValue,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.CumulativeTotalMarketValue}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.cumulative.totalMarketValue,
       filterFn: "inNumberRange",
-      cell: (row) => (
-        <div className={"text-right"}>
-          {formatMoney(row.getValue() as number)}
-        </div>
-      ),
-    },
-    {
+      cell: (row) => formatMoney(row.getValue() as number),
+    }),
+    genColumnDef({
       id: TradeRecordConstants.Fee,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.Fee}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.derived.fee,
       cell: (row) => {
         const v = row.getValue() as number;
         return (
-          <div className={cn("text-right", !v && "text-destructive")}>
+          <span className={!v ? "text-destructive" : undefined}>
             {formatMoney(v)}
-          </div>
+          </span>
         );
       },
-    },
-    {
+    }),
+    genColumnDef({
       id: TradeRecordConstants.AdjustedFee,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.AdjustedFee}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.adjusted.fee,
       cell: (row) => {
         const v = row.getValue() as number;
         return (
-          <div className={cn("text-right", !v && "text-destructive")}>
+          <span className={!v ? "text-destructive" : undefined}>
             {formatMoney(v)}
-          </div>
+          </span>
         );
       },
-    },
-    {
+    }),
+    genColumnDef({
       id: TradeRecordConstants.FeeRate,
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={TradeRecordConstants.FeeRate}
-          className={"text-right"}
-        />
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.display.feeRate,
       cell: (row) => {
         const v = row.getValue() as number;
-        return (
-          <div className={cn("text-right", !v && "text-destructive")}>{v}</div>
-        );
+        return <span className={!v ? "text-destructive" : undefined}>{v}</span>;
       },
-    },
-    {
+    }),
+    genColumnDef({
       id: TradeRecordConstants.Factor,
-      header: () => (
-        <div className={"text-center"}>{TradeRecordConstants.Factor}</div>
-      ),
+      isNumeric: true,
       accessorFn: (row) => row.props.factor,
-      cell: (row) => (
-        <div className={"text-center"}>{row.getValue() as number}</div>
-      ),
-    },
-    {
+      cell: (row) => row.getValue() as number,
+    }),
+    genColumnDef({
       id: TradeRecordConstants.Comment,
-      header: TradeRecordConstants.Comment,
       accessorFn: (row) => row.props.comment,
       cell: (row) => (
-        <div className={"max-w-20 truncate"}>{row.getValue() as string}</div>
+        <span className="max-w-20 truncate">{row.getValue() as string}</span>
       ),
-    },
+    }),
     {
       id: "action",
       header: "操作",

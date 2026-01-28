@@ -1,5 +1,6 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
+import { DataTableColumnHeader } from "@/components/ui/my/data-table/column-header";
 
 export function genSelectableColumn<T>(): ColumnDef<T> {
   return {
@@ -37,5 +38,29 @@ export function genNoColumnDef<T>(): ColumnDef<T> {
     ),
     enableColumnFilter: false,
     enableGlobalFilter: false,
+  };
+}
+
+export function genColumnDef<T>({
+  id,
+  isNumeric = false,
+  cell,
+  ...props
+}: {
+  id: string;
+  isNumeric?: boolean;
+} & ColumnDef<T>): ColumnDef<T> {
+  const align = isNumeric ? "text-right" : "text-center";
+  return {
+    id,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title={id!} className={align} />
+    ),
+    cell: (row) => (
+      <div className={"text-center"}>
+        {typeof cell === "function" ? cell(row) : cell}
+      </div>
+    ),
+    ...props,
   };
 }
