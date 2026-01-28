@@ -3,7 +3,7 @@ import {
   adjustVisibility,
   baseVisibility,
   cumulativeVisibility,
-} from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/columns";
+} from "./columns";
 import { Archive, Database, Gauge } from "lucide-react";
 import { ToggleButton } from "@/components/ui/my/button";
 

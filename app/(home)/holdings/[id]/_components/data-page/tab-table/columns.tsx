@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Edit, MoreHorizontal } from "lucide-react";
-import { DialogDetail } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-detail";
+import { DialogDetail } from "./dialog-detail";
 import { cn } from "@/lib/utils";
 import { getSelectableColumn } from "@/components/ui/my/data-table/selectable-column";
 import { DialogEdit } from "@/app/(home)/holdings/[id]/_components/dialog-edit";
