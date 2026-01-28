@@ -1,7 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 
-export function getSelectableColumn<T>(): ColumnDef<T> {
+export function genSelectableColumn<T>(): ColumnDef<T> {
   return {
     id: "select",
     header: ({ table }) => (
@@ -23,5 +23,19 @@ export function getSelectableColumn<T>(): ColumnDef<T> {
     ),
     enableSorting: false,
     enableHiding: false,
+  };
+}
+
+// “No.”的标准配置
+export function genNoColumnDef<T>(): ColumnDef<T> {
+  return {
+    id: "no",
+    header: "No.",
+    accessorFn: (row, index) => index + 1,
+    cell: (row) => (
+      <div className={"text-center"}>{row.getValue() as number}</div>
+    ),
+    enableColumnFilter: false,
+    enableGlobalFilter: false,
   };
 }

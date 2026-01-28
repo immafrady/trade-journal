@@ -22,7 +22,10 @@ import { Button } from "@/components/ui/button";
 import { Edit, MoreHorizontal } from "lucide-react";
 import { DialogDetail } from "./dialog-detail";
 import { cn } from "@/lib/utils";
-import { getSelectableColumn } from "@/components/ui/my/data-table/selectable-column";
+import {
+  genNoColumnDef,
+  genSelectableColumn,
+} from "@/components/ui/my/data-table/selectable-column";
 import { DialogEdit } from "@/app/(home)/holdings/[id]/_components/dialog-edit";
 
 export function getColumns(
@@ -30,17 +33,8 @@ export function getColumns(
 ): ColumnDef<TradeRecord>[] {
   formatter ??= (num) => num + "";
   return [
-    getSelectableColumn(),
-    {
-      id: "no",
-      header: "No.",
-      accessorFn: (row, index) => index + 1,
-      cell: (row) => (
-        <div className={"text-center"}>{row.getValue() as number}</div>
-      ),
-      enableColumnFilter: false,
-      enableGlobalFilter: false,
-    },
+    genSelectableColumn(),
+    genNoColumnDef(),
     {
       id: TradeRecordConstants.TradedAt,
       header: ({ column }) => (
