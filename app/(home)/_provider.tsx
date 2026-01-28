@@ -18,7 +18,7 @@ export const HomeContext = React.createContext<HomeProviderProps>({
 });
 
 export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
-  const store = useTradeRecordStore((s) => s.store) ?? {};
+  const store = useTradeRecordStore((s) => s.store);
   const raws = useHoldingsWithQuote();
 
   const data = Object.values(store)

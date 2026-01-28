@@ -68,8 +68,8 @@ export const createTradeRecordStore = (): TradeRecordStore =>
 export const useTradeRecordStore = <T>(
   selector: (state: TradeRecordStoreState) => T,
 ) => {
-  const store = React.useContext(TradeRecordContext);
-  return store?.(selector);
+  const store = React.useContext(TradeRecordContext)!;
+  return store(selector);
 };
 // 从store拿具体数据
 export const useTradeRecordDataById = (holdingId: string) => {
