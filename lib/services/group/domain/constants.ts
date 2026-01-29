@@ -5,7 +5,7 @@ export const GroupConstants = {
 };
 
 export const TradeRecordExtendConstants = {
-  Label: "标的名称",
+  Label: "交易标的",
   TradedAt: "交易日期",
   Type: "交易类型",
   ValueIndex: "盈亏指数",
