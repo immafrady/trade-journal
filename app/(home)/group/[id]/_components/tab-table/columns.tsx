@@ -9,7 +9,7 @@ import { Dayjs } from "dayjs";
 import { TradeRecordExtendConstants } from "@/lib/services/group/domain/constants";
 import { formatFund, formatMoney, formatShares } from "@/lib/market-utils";
 
-export function getColumns(): ColumnDef<TradeRecordExtend>[] {
+function getColumns(): ColumnDef<TradeRecordExtend>[] {
   return [
     genSelectableColumn(),
     genNoColumnDef(),
@@ -106,3 +106,5 @@ export function getColumns(): ColumnDef<TradeRecordExtend>[] {
     }),
   ];
 }
+
+export const columns = getColumns();

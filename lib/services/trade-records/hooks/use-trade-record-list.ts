@@ -61,7 +61,7 @@ export function useTradeRecordList(
           totalShares,
           costPrice,
           totalMarketValue,
-          valueIndex: totalMarketValue / totalAmount,
+          valueIndex: totalAmount === 0 ? 0 : totalMarketValue / totalAmount,
         };
 
         // 标记手续费未填写完
