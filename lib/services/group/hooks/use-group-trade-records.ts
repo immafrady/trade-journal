@@ -1,21 +1,9 @@
-import { TradeRecord, useTradeRecordStore } from "@/lib/services/trade-records";
-import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import React from "react";
 import { TradeRecordExtend } from "@/lib/services/group/domain/trade-record-extend";
+import { useGroupHoldings } from "@/lib/services/group/hooks/use-group-holdings";
 
 export const useGroupTradeRecords = (holdingIds: string[]) => {
-  const store = useTradeRecordStore((s) => s.store);
-  const { data: holdingList } = useHoldingList();
-  const tickerMap = React.useMemo(() => {
-    return new Map(holdingList.map((holding) => [holding.id, holding.ticker]));
-  }, [holdingList]);
-  const holdingRecordMap = React.useMemo(() => {
-    const result: Record<string, TradeRecord[]> = {};
-    for (const id of holdingIds) {
-      if (store[id]) result[id] = store[id].records;
-    }
-    return result;
-  }, [holdingIds, store]);
+  const { tickerMap, holdingRecordMap } = useGroupHoldings(holdingIds);
 
   return React.useMemo(() => {
     const result: TradeRecordExtend[] = [];
