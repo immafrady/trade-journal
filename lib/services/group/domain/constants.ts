@@ -9,7 +9,7 @@ export const TradeRecordExtendConstants = {
   TradedAt: "交易日期",
   Type: "交易类型",
   ValueIndex: "盈亏指数",
-  TotalMarketValue: "当前市值",
+  MarketValue: "当前市值",
   TotalAmount: "当前投入",
   Price: "成交价格",
   Shares: "单笔数量",

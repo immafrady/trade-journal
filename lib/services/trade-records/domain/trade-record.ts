@@ -106,13 +106,13 @@ export class TradeRecord {
     totalAmount: number; // 实际支出
     totalShares: number;
     costPrice: number; // 当前成本
-    totalMarketValue: number; // 市值
+    marketValue: number; // 市值
     valueIndex: number; // “市值 / 实际支出” 算出来的净值
   } = {
     totalAmount: 0,
     totalShares: 0,
     costPrice: 0,
-    totalMarketValue: 0,
+    marketValue: 0,
     valueIndex: 0,
   };
 

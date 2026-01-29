@@ -115,9 +115,9 @@ export function getColumns(
       cell: (row) => formatMoney(row.getValue() as number),
     }),
     genColumnDef({
-      id: TradeRecordConstants.CumulativeTotalMarketValue,
+      id: TradeRecordConstants.CumulativeMarketValue,
       isNumeric: true,
-      accessorFn: (row) => row.cumulative.totalMarketValue,
+      accessorFn: (row) => row.cumulative.marketValue,
       filterFn: "inNumberRange",
       cell: (row) => formatMoney(row.getValue() as number),
     }),
@@ -213,7 +213,7 @@ export const baseVisibility = {
   [TradeRecordConstants.CumulativeTotalAmount]: false,
   [TradeRecordConstants.CumulativeTotalShares]: false,
   [TradeRecordConstants.CumulativeCostPrice]: false,
-  [TradeRecordConstants.CumulativeTotalMarketValue]: false,
+  [TradeRecordConstants.CumulativeMarketValue]: false,
   [TradeRecordConstants.CumulativeValueIndex]: false,
 } as const;
 
@@ -224,7 +224,7 @@ export const adjustVisibility = {
   [TradeRecordConstants.CumulativeTotalAmount]: false,
   [TradeRecordConstants.CumulativeTotalShares]: false,
   [TradeRecordConstants.CumulativeCostPrice]: false,
-  [TradeRecordConstants.CumulativeTotalMarketValue]: false,
+  [TradeRecordConstants.CumulativeMarketValue]: false,
   [TradeRecordConstants.CumulativeValueIndex]: false,
 } as const;
 

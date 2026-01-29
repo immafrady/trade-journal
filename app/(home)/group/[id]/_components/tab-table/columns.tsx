@@ -43,9 +43,9 @@ function getColumns(): ColumnDef<TradeRecordExtend>[] {
       cell: (row) => formatFund(row.getValue() as number),
     }),
     genColumnDef({
-      id: TradeRecordExtendConstants.TotalMarketValue,
+      id: TradeRecordExtendConstants.MarketValue,
       isNumeric: true,
-      accessorFn: (row) => row.group.totalMarketValue,
+      accessorFn: (row) => row.group.marketValue,
       filterFn: "inNumberRange",
       cell: (row) => formatMoney(row.getValue() as number),
     }),

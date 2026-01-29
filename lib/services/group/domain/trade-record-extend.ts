@@ -9,11 +9,11 @@ export class TradeRecordExtend {
   ) {}
 
   group: {
-    totalMarketValue: number;
+    marketValue: number;
     totalAmount: number; // 实际支出
     valueIndex: number;
   } = {
-    totalMarketValue: 0,
+    marketValue: 0,
     totalAmount: 0,
     valueIndex: 0,
   };
