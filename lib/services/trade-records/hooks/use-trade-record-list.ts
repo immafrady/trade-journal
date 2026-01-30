@@ -15,11 +15,14 @@ export function useTradeRecordList(
     async (api) => {
       const response = await fetch(api);
       const csv = await response.text();
-      const result = papa.parse(csv, {
-        delimiter: ",", // 分隔符
-        header: true,
-      });
-      return result.data as any[];
+      if (csv.trim()) {
+        const result = papa.parse(csv, {
+          delimiter: ",", // 分隔符
+          header: true,
+        });
+        return result.data as any[];
+      }
+      return [];
     },
     {
       fallbackData: [],
