@@ -11,6 +11,7 @@ import {
 } from "@/lib/market-utils";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { HoldingCard } from "@/app/(home)/group/[id]/_components/tab-summary/holding-card";
 
 export const TabSummary = () => {
   const group = React.useContext(GroupInfoContext)!;
@@ -84,6 +85,13 @@ export const TabSummary = () => {
               },
             ]}
           ></SectionLayout>
+          <Separator className={"my-2 md:my-4"} />
+          <h5 className={"text-center my-2"}>持仓明细</h5>
+          <div className={"flex flex-col gap-2"}>
+            {summary.summaries.map((s) => (
+              <HoldingCard key={s.id} summary={s}></HoldingCard>
+            ))}
+          </div>
         </div>
       </div>
       <BottomBar></BottomBar>

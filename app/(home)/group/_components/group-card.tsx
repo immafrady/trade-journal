@@ -59,17 +59,12 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
         ></InlineDisplay>
         <Separator className={"my-2"}></Separator>
         <div className={"flex flex-col gap-1"}>
-          {model.holdingIds?.map((holdingId) => {
-            const hwq = holdingList.find((h) => h.id === holdingId);
-            if (hwq) {
-              return (
-                <div key={holdingId} className={"flex items-center gap-1"}>
-                  <SinaStockTypeBadge type={hwq.ticker.type} />
-                  {hwq.ticker.label}
-                </div>
-              );
-            }
-          })}
+          {summary.summaries.map((s) => (
+            <div key={s.id} className={"flex items-center gap-1"}>
+              <SinaStockTypeBadge type={s.ticker.type} />
+              {s.ticker.label}
+            </div>
+          ))}
         </div>
       </CardContent>
     </Card>

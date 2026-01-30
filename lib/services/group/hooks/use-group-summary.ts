@@ -9,7 +9,7 @@ export const useGroupSummary = (model: GroupModel) => {
   const { tickerMap, holdingRecordMap } = useGroupHoldings(model.holdingIds!);
   const holdingsWithQuotes = useHoldingsWithQuote();
 
-  const summaries: DynamicSummary[] = [];
+  const summaries: GroupHoldingSummary[] = [];
 
   let totalMarketValue = 0;
   let totalAmount = 0;
@@ -54,12 +54,7 @@ export const useGroupSummary = (model: GroupModel) => {
     summary.ratio = (summary.marketValue / totalMarketValue) * 100;
   }
   summaries.sort((a, b) => {
-    const diff = b.marketValue - a.marketValue;
-    if (!diff) return diff;
-    return (
-      (a.latest?.cumulative.totalAmount ?? 0) -
-      (b.latest?.cumulative.totalAmount ?? 0)
-    );
+    return b.marketValue - a.marketValue;
   });
 
   const valueDiff = totalMarketValue - totalAmount;
@@ -78,7 +73,7 @@ export const useGroupSummary = (model: GroupModel) => {
   };
 };
 
-interface DynamicSummary {
+export interface GroupHoldingSummary {
   id: string;
   ticker: SinaTicker;
   latest?: TradeRecord;
