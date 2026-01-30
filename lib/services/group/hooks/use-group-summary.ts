@@ -1,21 +1,88 @@
 import { GroupModel } from "@/lib/services/group";
-import { useGroupTradeRecords } from "@/lib/services/group/hooks/use-group-trade-records";
+import { useGroupHoldings } from "@/lib/services/group/hooks/use-group-holdings";
+import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
+import { SinaTicker } from "@/lib/services/sina";
+import { TradeRecord } from "@/lib/services/trade-records";
 
+// 统计
 export const useGroupSummary = (model: GroupModel) => {
-  const records = useGroupTradeRecords(model.holdingIds!);
-  const latest = records[0];
+  const { tickerMap, holdingRecordMap } = useGroupHoldings(model.holdingIds!);
+  const holdingsWithQuotes = useHoldingsWithQuote();
 
-  const totalAmount = latest?.group.totalAmount ?? 0;
-  const marketValue = latest?.group.marketValue ?? 0;
-  const valueDiff = marketValue - totalAmount;
+  const summaries: DynamicSummary[] = [];
+
+  let totalMarketValue = 0;
+  let totalAmount = 0;
+  let allRealtime = true;
+  for (const id of model.holdingIds!) {
+    const ticker = tickerMap.get(id)!;
+    const holdingRecords = holdingRecordMap[id];
+    let latest: TradeRecord | undefined = undefined;
+    if (holdingRecords?.length > 0) {
+      latest = holdingRecords[0];
+      totalAmount += latest.cumulative.totalAmount;
+      const quote = holdingsWithQuotes.find((hwq) => hwq.id === id)?.quote;
+      const realtime = !!(quote && quote.current);
+      if (!realtime) allRealtime = false;
+      const marketValue = realtime
+        ? quote!.current! * latest.cumulative.totalShares
+        : latest.cumulative.marketValue;
+      totalMarketValue += marketValue;
+
+      summaries.push({
+        id,
+        ticker,
+        latest,
+        ratio: 0,
+        marketValue,
+        realtime,
+      });
+    } else {
+      allRealtime = false;
+      summaries.push({
+        id,
+        ticker,
+        latest,
+        ratio: 0,
+        marketValue: 0,
+        realtime: false,
+      });
+    }
+  }
+
+  for (const summary of summaries) {
+    summary.ratio = (summary.marketValue / totalMarketValue) * 100;
+  }
+  summaries.sort((a, b) => {
+    const diff = b.marketValue - a.marketValue;
+    if (!diff) return diff;
+    return (
+      (a.latest?.cumulative.totalAmount ?? 0) -
+      (b.latest?.cumulative.totalAmount ?? 0)
+    );
+  });
+
+  const valueDiff = totalMarketValue - totalAmount;
+
   return {
     budget: model.budget,
     budgetDiff: model.budget ? model.budget - totalAmount : 0,
-    budgetPct: model.budget ? totalAmount / model.budget : 0,
-    marketValue,
+    budgetPct: model.budget ? (totalAmount / model.budget) * 100 : 0,
     totalAmount,
-    valueIndex: marketValue / totalAmount,
+    valueIndex: totalMarketValue / totalAmount,
     valueDiff,
     valuePct: (valueDiff / totalAmount) * 100,
+    marketValue: totalMarketValue,
+    realtime: allRealtime,
+    summaries,
   };
 };
+
+interface DynamicSummary {
+  id: string;
+  ticker: SinaTicker;
+  latest?: TradeRecord;
+  ratio: number;
+  marketValue: number;
+  realtime: boolean;
+}
