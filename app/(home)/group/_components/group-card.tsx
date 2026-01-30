@@ -7,12 +7,18 @@ import { useRouter } from "next/navigation";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import { Separator } from "@/components/ui/separator";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
-import { formatMoney } from "@/lib/market-utils";
+import {
+  formatMoney,
+  formatPercent,
+  getTickerChangeColorClass,
+} from "@/lib/market-utils";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
+import { useGroupSummary } from "@/lib/services/group/hooks/use-group-summary";
 
 export const GroupCard = ({ model }: { model: GroupModel }) => {
   const router = useRouter();
   const { data: holdingList } = useHoldingList() ?? [];
+  const summary = useGroupSummary(model);
 
   return (
     <Card>
@@ -32,16 +38,22 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
         <InlineDisplay
           list={[
             {
-              title: "预算",
-              content: formatMoney(model.budget),
+              title: "投入/预算",
+              content: `${formatMoney(summary.totalAmount)}/${formatMoney(model.budget)}`,
             },
             {
-              title: "投入",
-              content: formatMoney(),
-            },
-            {
-              title: "市值",
-              content: formatMoney(),
+              title: "市值(收益率)",
+              content: (
+                <div>
+                  {formatMoney(summary.marketValue)}(
+                  <span
+                    className={getTickerChangeColorClass(summary.valueDiff!)}
+                  >
+                    {formatPercent(summary.valuePct)}
+                  </span>
+                  )
+                </div>
+              ),
             },
           ]}
         ></InlineDisplay>

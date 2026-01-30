@@ -1,19 +1,21 @@
 import { GroupModel } from "@/lib/services/group";
-import { useGroupHoldings } from "@/lib/services/group/hooks/use-group-holdings";
+import { useGroupTradeRecords } from "@/lib/services/group/hooks/use-group-trade-records";
 
 export const useGroupSummary = (model: GroupModel) => {
-  const { tickerMap, holdingRecordMap } = useGroupHoldings(model.holdingIds!);
+  const records = useGroupTradeRecords(model.holdingIds!);
+  const latest = records[0];
 
-  const totalAmount = 0;
-  const marketValue = 0;
+  const totalAmount = latest?.group.totalAmount ?? 0;
+  const marketValue = latest?.group.marketValue ?? 0;
+  const valueDiff = marketValue - totalAmount;
   return {
     budget: model.budget,
-    budgetDiff: 0,
-    budgetPct: 0,
-    marketValue: 0,
-    totalAmount: 0,
-    valueIndex: 0,
-    valueDiff: 0,
-    valuePct: 0,
+    budgetDiff: model.budget ? model.budget - totalAmount : 0,
+    budgetPct: model.budget ? totalAmount / model.budget : 0,
+    marketValue,
+    totalAmount,
+    valueIndex: marketValue / totalAmount,
+    valueDiff,
+    valuePct: (valueDiff / totalAmount) * 100,
   };
 };
