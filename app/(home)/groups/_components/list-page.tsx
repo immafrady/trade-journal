@@ -1,7 +1,7 @@
-import { GroupCard } from "@/app/(home)/group/_components/group-card";
+import { GroupCard } from "@/app/(home)/groups/_components/group-card";
 import React from "react";
 import { GroupModel } from "@/lib/services/group";
-import { DialogEdit } from "@/app/(home)/group/_components/dialog-edit";
+import { DialogEdit } from "@/app/(home)/groups/_components/dialog-edit";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 

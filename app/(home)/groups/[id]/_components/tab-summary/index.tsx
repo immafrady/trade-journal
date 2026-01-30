@@ -1,7 +1,7 @@
 import { BottomBar } from "./bottom-bar";
 import { useGroupSummary } from "@/lib/services/group/hooks/use-group-summary";
 import React from "react";
-import { GroupInfoContext } from "@/app/(home)/group/[id]/_providers/group-info";
+import { GroupInfoContext } from "@/app/(home)/groups/[id]/_providers/group-info";
 import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
 import {
   formatFund,
@@ -11,7 +11,7 @@ import {
 } from "@/lib/market-utils";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { HoldingCard } from "@/app/(home)/group/[id]/_components/tab-summary/holding-card";
+import { HoldingCard } from "@/app/(home)/groups/[id]/_components/tab-summary/holding-card";
 
 export const TabSummary = () => {
   const group = React.useContext(GroupInfoContext)!;

@@ -29,7 +29,7 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
             variant={"ghost"}
             icon={<ArrowRight />}
             onClick={() => {
-              router.push(`/group/${model.id!}`);
+              router.push(`/groups/${model.id!}`);
             }}
           />
         </CardTitle>
