@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/empty";
 import { BookOpen } from "lucide-react";
 import React from "react";
-import { DialogEdit } from "@/app/(home)/group/_components/dialog-edit";
+import { DialogEdit } from "@/app/(home)/groups/_components/dialog-edit";
 
 export const BlankPage = () => {
   return (
@@ -18,9 +18,9 @@ export const BlankPage = () => {
         <EmptyMedia variant="icon">
           <BookOpen />
         </EmptyMedia>
-        <EmptyTitle>(｡•̀ᴗ-)✧ 没有分组记录～</EmptyTitle>
+        <EmptyTitle>(｡•̀ᴗ-)✧ 没有组合记录～</EmptyTitle>
         <EmptyDescription>
-          快来新建第一个分组吧！
+          快来新建第一个组合吧！
           <br />
           <ul className={"flex flex-col items-start mt-10"}>
             <li>
@@ -30,7 +30,7 @@ export const BlankPage = () => {
               <b>📈设定指数：</b>用一个指数反映整组资产的真实表现
             </li>
             <li>
-              <b>🔄联合做T：</b>分组内协同操作，提高资金使用效率
+              <b>🔄联合做T：</b>组合内协同操作，提高资金使用效率
             </li>
             <li>
               <b>🧮统一管理成本：</b>不同价格基数，也能精确对比
@@ -43,7 +43,7 @@ export const BlankPage = () => {
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2">
-          <DialogEdit trigger={<Button>新增分组</Button>} />
+          <DialogEdit trigger={<Button>新增组合</Button>} />
         </div>
       </EmptyContent>
     </Empty>

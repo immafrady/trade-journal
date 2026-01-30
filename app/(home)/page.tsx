@@ -41,8 +41,8 @@ function InnerPage() {
               title={"账户总览"}
               action={
                 <Button variant={"link"} size={"sm"} asChild>
-                  <Link href={"/group"}>
-                    分组视图
+                  <Link href={"/groups"}>
+                    组合视图
                     <ArrowRight />
                   </Link>
                 </Button>

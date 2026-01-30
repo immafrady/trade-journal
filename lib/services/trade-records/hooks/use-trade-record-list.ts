@@ -15,11 +15,14 @@ export function useTradeRecordList(
     async (api) => {
       const response = await fetch(api);
       const csv = await response.text();
-      const result = papa.parse(csv, {
-        delimiter: ",", // 分隔符
-        header: true,
-      });
-      return result.data as any[];
+      if (csv.trim()) {
+        const result = papa.parse(csv, {
+          delimiter: ",", // 分隔符
+          header: true,
+        });
+        return result.data as any[];
+      }
+      return [];
     },
     {
       fallbackData: [],
@@ -55,13 +58,13 @@ export function useTradeRecordList(
           totalShares += record.adjusted.shares;
         }
         const costPrice = totalShares > 0 ? totalAmount / totalShares : 0;
-        const totalMarketValue = totalShares * record.derived.price;
+        const marketValue = totalShares * record.derived.price;
         record.cumulative = {
           totalAmount,
           totalShares,
           costPrice,
-          totalMarketValue,
-          valueIndex: totalMarketValue / totalAmount,
+          marketValue,
+          valueIndex: totalAmount === 0 ? 0 : marketValue / totalAmount,
         };
 
         // 标记手续费未填写完

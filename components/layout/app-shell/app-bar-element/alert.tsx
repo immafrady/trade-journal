@@ -6,7 +6,7 @@ import { useTradeRecordStore } from "@/lib/services/trade-records";
 import { motion } from "motion/react";
 
 export const AppBarAlert = () => {
-  const draftList = useTradeRecordStore((s) => s.draftList) ?? [];
+  const draftList = useTradeRecordStore((s) => s.draftList);
 
   if (draftList.length) {
     return (

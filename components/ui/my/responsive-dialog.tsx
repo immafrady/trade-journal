@@ -15,7 +15,6 @@ import { LoadingButton } from "@/components/ui/my/button";
 export interface ResponsiveDialogRef {
   open: boolean;
   setOpen: (open: boolean) => void;
-  toggleOpen: () => void;
 }
 
 const ResponsiveDialogInner = (
@@ -44,7 +43,6 @@ const ResponsiveDialogInner = (
   React.useImperativeHandle(ref, () => ({
     open,
     setOpen,
-    toggleOpen: () => setOpen((o) => !o),
   }));
   return (
     <Dialog

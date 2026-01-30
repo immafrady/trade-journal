@@ -1,7 +1,4 @@
-import {
-  baseVisibility,
-  getColumns,
-} from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/columns";
+import { baseVisibility, getColumns } from "./columns";
 import {
   deleteSelectedTradeRecord,
   TradeRecordUpdaterContext,
@@ -18,16 +15,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { DialogSummary } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-summary";
-import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/bottom-bar";
+import { DialogSummary } from "./dialog-summary";
+import { BottomBar } from "./bottom-bar";
 import { toast } from "sonner";
-import { DialogFilter } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/dialog-filter";
-import {
-  TableColumnToggler,
-  VisibilityState,
-} from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data/table-column-toggler";
+import { DialogFilter } from "./dialog-filter";
+import { TableColumnToggler, VisibilityState } from "./table-column-toggler";
 
-export const TabBaseData = () => {
+export const TabTable = () => {
   const { id, data } = React.useContext(HoldingInfoContext);
   const { records } = useTradeRecordDataById(id);
   const updater = React.useContext(TradeRecordUpdaterContext);

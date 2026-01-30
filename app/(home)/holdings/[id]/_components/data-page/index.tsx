@@ -1,8 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TabSummary } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary";
+import { TabSummary } from "./tab-summary";
 import React from "react";
-import { TabBaseData } from "@/app/(home)/holdings/[id]/_components/data-page/tab-base-data";
-import { TabChart } from "@/app/(home)/holdings/[id]/_components/data-page/tab-chart";
+import { TabTable } from "./tab-table";
+import { TabChart } from "./tab-chart";
 
 export const DataPage = ({
   onTabChange,
@@ -19,7 +19,7 @@ export const DataPage = ({
         <div className={"flex justify-center"}>
           <TabsList>
             <TabsTrigger value={TabKey.Summary}>基本信息</TabsTrigger>
-            <TabsTrigger value={TabKey.BaseData}>基础数据</TabsTrigger>
+            <TabsTrigger value={TabKey.Table}>基础数据</TabsTrigger>
             <TabsTrigger value={TabKey.Chart}>收益图表</TabsTrigger>
           </TabsList>
         </div>
@@ -27,8 +27,8 @@ export const DataPage = ({
         <TabsContent value={TabKey.Summary}>
           <TabSummary />
         </TabsContent>
-        <TabsContent value={TabKey.BaseData}>
-          <TabBaseData />
+        <TabsContent value={TabKey.Table}>
+          <TabTable />
         </TabsContent>
         <TabsContent value={TabKey.Chart}>
           <TabChart />
@@ -40,6 +40,6 @@ export const DataPage = ({
 
 enum TabKey {
   Summary = "summary",
-  BaseData = "base-data",
+  Table = "table",
   Chart = "chart",
 }

@@ -9,7 +9,7 @@ import { AlertMessageItem } from "@/app/(home)/alert-messages/_components/alert-
 import { cn } from "@/lib/utils";
 
 export default function Page() {
-  const draftList = useTradeRecordStore((s) => s.draftList) ?? [];
+  const draftList = useTradeRecordStore((s) => s.draftList);
   return (
     <AppContainer
       appBar={

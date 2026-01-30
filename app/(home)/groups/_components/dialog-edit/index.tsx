@@ -14,6 +14,11 @@ import { Input } from "@/components/ui/input";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  addOrEditGroup,
+  editGroupHoldings,
+} from "@/lib/services/group/group-apis";
+import { useGroupList } from "@/lib/services/group/hooks/use-group-list";
 
 export const DialogEdit = ({
   trigger,
@@ -23,20 +28,37 @@ export const DialogEdit = ({
   model?: GroupModel;
 }) => {
   const dialogRef = React.useRef<ResponsiveDialogRef>(null);
+  const { mutate } = useGroupList();
   const { data: holdingList = [] } = useHoldingList();
   const editType = model ? "编辑" : "新增";
 
+  const defaultModel = React.useMemo(() => {
+    return model;
+  }, [model]);
   const form = useForm({
     defaultValues: {
-      label: model?.label ?? "",
-      budget: model?.budget ?? "",
-      holdingIds: model?.holdingIds ?? [],
+      label: defaultModel?.label ?? "",
+      budget: defaultModel?.budget ?? "",
+      holdingIds: defaultModel?.holdingIds ?? [],
     },
     onSubmitInvalid: () => {
       toast.error(`校验失败，无法提交`);
     },
     onSubmit: async ({ value }) => {
-      console.log(value);
+      const resp1 = await addOrEditGroup({
+        id: defaultModel?.id,
+        label: value.label,
+        budget: +value.budget,
+      });
+      if (resp1.status === 200) {
+        const { id } = await resp1.json();
+        const resp2 = await editGroupHoldings(id, value.holdingIds);
+        if (resp2.status === 200) {
+          toast.success(`${defaultModel?.id ? "编辑" : "添加"}成功`);
+        }
+        await mutate();
+        dialogRef.current?.setOpen(false);
+      }
     },
   });
 
@@ -80,6 +102,17 @@ export const DialogEdit = ({
           ></form.Field>
           <form.Field
             name={"budget"}
+            validators={{
+              onChange: ({ value }) => {
+                if (value !== "") {
+                  const v = +value;
+                  if (Number.isNaN(v)) return "请输入数字";
+                  if (v <= 0) {
+                    return "请输入正数";
+                  }
+                }
+              },
+            }}
             children={(field) => (
               <FieldLayout
                 label={GroupConstants.Budget}
@@ -89,6 +122,7 @@ export const DialogEdit = ({
                 <Input
                   value={field.state.value}
                   placeholder={"请输入"}
+                  type={"number"}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
               </FieldLayout>
@@ -103,7 +137,7 @@ export const DialogEdit = ({
               <FieldLayout
                 label={GroupConstants.Holdings}
                 field={field}
-                description={"该分组包含的资产列表"}
+                description={"该组合包含的资产列表"}
                 orientation={"vertical"}
               >
                 <FieldGroup className={"gap-1"}>

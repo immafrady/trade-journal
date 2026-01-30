@@ -8,8 +8,9 @@ export const useGroupList = () => {
     const { data: list = [] } = await response.json();
     return list.map((item: any) => ({
       ...item,
+      id: String(item.id),
       holdingIds: (item.group_holdings ?? []).map(
-        (sub: { holding_id: number }) => sub.holding_id,
+        (sub: { holding_id: number }) => String(sub.holding_id),
       ),
     })) as GroupModel[];
   });

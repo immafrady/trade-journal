@@ -178,7 +178,7 @@ export const DialogFilter = ({
                         TradeRecordConstants.CumulativeCostPrice,
                         TradeRecordConstants.CumulativeValueIndex,
                         TradeRecordConstants.CumulativeTotalAmount,
-                        TradeRecordConstants.CumulativeTotalMarketValue,
+                        TradeRecordConstants.CumulativeMarketValue,
                         TradeRecordConstants.CumulativeTotalShares,
                       ].map((value, idx) =>
                         value ? (

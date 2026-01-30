@@ -43,9 +43,6 @@ export const POST = async (
         group_id: groupId,
         holding_id: holdingId,
       })),
-      {
-        onConflict: "group_id,holding_id",
-      },
     );
 
     if (error) {
