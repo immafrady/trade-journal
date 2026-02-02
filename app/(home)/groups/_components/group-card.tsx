@@ -12,12 +12,10 @@ import {
   formatPercent,
   getTickerChangeColorClass,
 } from "@/lib/market-utils";
-import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { useGroupSummary } from "@/lib/services/group/hooks/use-group-summary";
 
 export const GroupCard = ({ model }: { model: GroupModel }) => {
   const router = useRouter();
-  const { data: holdingList } = useHoldingList() ?? [];
   const summary = useGroupSummary(model);
 
   return (
@@ -58,11 +56,18 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
           ]}
         ></InlineDisplay>
         <Separator className={"my-2"}></Separator>
+        <h5 className={"font-medium text-sm"}>市值占比</h5>
         <div className={"flex flex-col gap-1"}>
           {summary.summaries.map((s) => (
-            <div key={s.id} className={"flex items-center gap-1"}>
-              <SinaStockTypeBadge type={s.ticker.type} />
-              {s.ticker.label}
+            <div
+              key={s.id}
+              className={"flex items-center justify-between text-sm"}
+            >
+              <div className={"flex items-center gap-1"}>
+                <SinaStockTypeBadge type={s.ticker.type} />
+                {s.ticker.label}
+              </div>
+              <div className={"font-mono"}>{formatPercent(s.ratio)}</div>
             </div>
           ))}
         </div>
