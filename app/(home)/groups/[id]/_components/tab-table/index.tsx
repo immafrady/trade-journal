@@ -11,6 +11,7 @@ import {
 } from "@tanstack/react-table";
 import { columns } from "./columns";
 import { DataTable } from "@/components/ui/my/data-table";
+import { BottomBar } from "./bottom-bar";
 
 export const TabTable = () => {
   const group = React.useContext(GroupInfoContext)!;
@@ -47,6 +48,7 @@ export const TabTable = () => {
           row.original.record.derived.shares < 0 ? "bg-red-50 text-red-700" : ""
         }
       />
+      <BottomBar records={records}></BottomBar>
     </>
   );
 };
