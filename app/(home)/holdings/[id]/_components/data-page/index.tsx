@@ -19,7 +19,7 @@ export const DataPage = ({
         <div className={"flex justify-center"}>
           <TabsList>
             <TabsTrigger value={TabKey.Summary}>基本信息</TabsTrigger>
-            <TabsTrigger value={TabKey.Table}>基础数据</TabsTrigger>
+            <TabsTrigger value={TabKey.Table}>数据表格</TabsTrigger>
             <TabsTrigger value={TabKey.Chart}>收益图表</TabsTrigger>
           </TabsList>
         </div>

@@ -28,7 +28,7 @@ export default function Page() {
             <div className={"flex justify-center"}>
               <TabsList>
                 <TabsTrigger value={TabKey.Summary}>基本信息</TabsTrigger>
-                <TabsTrigger value={TabKey.BaseData}>基础数据</TabsTrigger>
+                <TabsTrigger value={TabKey.BaseData}>数据表格</TabsTrigger>
               </TabsList>
             </div>
 
