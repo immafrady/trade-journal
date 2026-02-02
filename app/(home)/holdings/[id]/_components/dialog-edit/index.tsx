@@ -94,6 +94,7 @@ export const DialogEdit = ({
 
   const t = useStore(form.store, (state: any) => state.values.type);
   const type = TradeRecordType.parseFromLabel(t);
+  const isDraft = TradeRecordType.Draft === type;
 
   return (
     <ResponsiveDialog
@@ -171,6 +172,8 @@ export const DialogEdit = ({
                     fieldApi.form.getFieldValue("type"),
                   );
                   if (!requireShares(type)) return; // 不用校验
+                  if (isDraft)
+                    return Number.isNaN(+value) ? "请输入数字" : undefined;
 
                   const amount = fieldApi.form.getFieldValue("amount");
                   const price = fieldApi.form.getFieldValue("price");
@@ -231,6 +234,8 @@ export const DialogEdit = ({
                     fieldApi.form.getFieldValue("type"),
                   );
                   if (!requirePrice(type)) return; // 不用校验
+                  if (isDraft)
+                    return Number.isNaN(+value) ? "请输入数字" : undefined;
                   if (
                     value === "" &&
                     fieldApi.form.getFieldValue("amount") === "" &&
@@ -284,6 +289,8 @@ export const DialogEdit = ({
                     fieldApi.form.getFieldValue("type"),
                   );
                   if (!requireAmount(type)) return; // 不用校验
+                  if (isDraft)
+                    return Number.isNaN(+value) ? "请输入数字" : undefined;
                   const shares = fieldApi.form.getFieldValue("shares");
                   const price = fieldApi.form.getFieldValue("price");
                   if (value === "") {

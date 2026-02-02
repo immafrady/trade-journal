@@ -8,6 +8,7 @@ export const requireAmount = (type?: TradeRecordType) =>
     TradeRecordType.Subscribe,
     TradeRecordType.Redeem,
     TradeRecordType.Dividend,
+    TradeRecordType.Draft,
   ].includes(type);
 
 export const requireFee = (type?: TradeRecordType) =>
@@ -17,6 +18,7 @@ export const requireFee = (type?: TradeRecordType) =>
     TradeRecordType.Sell,
     TradeRecordType.Subscribe,
     TradeRecordType.Redeem,
+    TradeRecordType.Draft,
   ].includes(type);
 
 export const requirePrice = (type?: TradeRecordType) =>
@@ -26,6 +28,7 @@ export const requirePrice = (type?: TradeRecordType) =>
     TradeRecordType.Sell,
     TradeRecordType.Subscribe,
     TradeRecordType.Redeem,
+    TradeRecordType.Draft,
   ].includes(type);
 
 export const requireShares = (type?: TradeRecordType) =>
@@ -37,6 +40,7 @@ export const requireShares = (type?: TradeRecordType) =>
     TradeRecordType.Redeem,
     TradeRecordType.Split,
     TradeRecordType.Merge,
+    TradeRecordType.Draft,
   ].includes(type);
 
 export const inputPositive = (type?: TradeRecordType) =>
