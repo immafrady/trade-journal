@@ -2,7 +2,7 @@ import { GroupModel } from "@/lib/services/group";
 import { useGroupHoldings } from "@/lib/services/group/hooks/use-group-holdings";
 import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import { SinaTicker } from "@/lib/services/sina";
-import { TradeRecord } from "@/lib/services/trade-records";
+import { TradeRecord, TradeRecordType } from "@/lib/services/trade-records";
 
 // 统计
 export const useGroupSummary = (model: GroupModel) => {
@@ -17,9 +17,10 @@ export const useGroupSummary = (model: GroupModel) => {
   for (const id of model.holdingIds!) {
     const ticker = tickerMap.get(id)!;
     const holdingRecords = holdingRecordMap[id];
-    let latest: TradeRecord | undefined = undefined;
-    if (holdingRecords?.length > 0) {
-      latest = holdingRecords[0];
+    const latest = holdingRecords?.find(
+      (record) => TradeRecordType.Draft !== record.props.type,
+    );
+    if (latest) {
       totalAmount += latest.cumulative.totalAmount;
       const quote = holdingsWithQuotes.find((hwq) => hwq.id === id)?.quote;
       const realtime = !!(quote && quote.current);

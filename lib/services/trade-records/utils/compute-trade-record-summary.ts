@@ -2,6 +2,7 @@
 import { TradeRecord, TradeRecordType } from "@/lib/services/trade-records";
 
 export const computeTradeRecordSummary = (list: TradeRecord[]) => {
+  list = list.filter((record) => TradeRecordType.Draft !== record.props.type); // 过滤掉草稿
   // 汇总操作次数、金额合计
   let totalFee = 0;
   let totalAmount = 0;

@@ -4,6 +4,7 @@ import {
   TradeRecord,
   TradeRecordContext,
   TradeRecordSummary,
+  TradeRecordType,
 } from "@/lib/services/trade-records";
 import { StoreApi } from "zustand/vanilla";
 import React from "react";
@@ -48,7 +49,9 @@ export const createTradeRecordStore = (): TradeRecordStore =>
         };
         const draftList: TradeRecordStoreState["draftList"] = [];
         Object.entries(store).forEach(([holdingId, data]) => {
-          const drafts = data.records.filter((r) => r.meta.isDraft);
+          const drafts = data.records.filter(
+            (r) => r.meta.isDraft || TradeRecordType.Draft === r.props.type,
+          );
           if (drafts.length) {
             draftList.push({
               holdingId,

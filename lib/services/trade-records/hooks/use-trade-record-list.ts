@@ -37,48 +37,50 @@ export function useTradeRecordList(
 
       for (let i = list.length - 1; i >= 0; i--) {
         const record = TradeRecord.fromCSV(list[i]);
-        totalAmount += record.adjusted.amount;
-        if (
-          [TradeRecordType.Split, TradeRecordType.Merge].includes(
-            record.props.type,
-          )
-        ) {
-          const afterShares = totalShares + record.adjusted.shares;
-          const ratio = afterShares / totalShares; // 计算出变化幅度
-          for (const r of result) {
-            // 重新将之前的再计算一遍
-            r.cumulative.totalShares *= ratio;
-            r.cumulative.costPrice =
-              r.cumulative.totalShares > 0
-                ? r.cumulative.totalAmount / r.cumulative.totalShares
-                : 0;
+        if (TradeRecordType.Draft !== record.props.type) {
+          // 除了“草稿”模式以外其他都要做数据处理
+          totalAmount += record.adjusted.amount;
+          if (
+            [TradeRecordType.Split, TradeRecordType.Merge].includes(
+              record.props.type,
+            )
+          ) {
+            const afterShares = totalShares + record.adjusted.shares;
+            const ratio = afterShares / totalShares; // 计算出变化幅度
+            for (const r of result) {
+              // 重新将之前的再计算一遍
+              r.cumulative.totalShares *= ratio;
+              r.cumulative.costPrice =
+                r.cumulative.totalShares > 0
+                  ? r.cumulative.totalAmount / r.cumulative.totalShares
+                  : 0;
+            }
+            totalShares = afterShares;
+          } else {
+            totalShares += record.adjusted.shares;
           }
-          totalShares = afterShares;
-        } else {
-          totalShares += record.adjusted.shares;
-        }
-        const costPrice = totalShares > 0 ? totalAmount / totalShares : 0;
-        const marketValue = totalShares * record.derived.price;
-        record.cumulative = {
-          totalAmount,
-          totalShares,
-          costPrice,
-          marketValue,
-          valueIndex: totalAmount === 0 ? 0 : marketValue / totalAmount,
-        };
+          const costPrice = totalShares > 0 ? totalAmount / totalShares : 0;
+          const marketValue = totalShares * record.derived.price;
+          record.cumulative = {
+            totalAmount,
+            totalShares,
+            costPrice,
+            marketValue,
+            valueIndex: totalAmount === 0 ? 0 : marketValue / totalAmount,
+          };
 
-        // 标记手续费未填写完
-        if (
-          [
-            TradeRecordType.Buy,
-            TradeRecordType.Sell,
-            TradeRecordType.Redeem,
-            TradeRecordType.Subscribe,
-          ].includes(record.props.type)
-        ) {
-          record.meta.isDraft = !record.derived.fee;
+          // 标记手续费未填写完
+          if (
+            [
+              TradeRecordType.Buy,
+              TradeRecordType.Sell,
+              TradeRecordType.Redeem,
+              TradeRecordType.Subscribe,
+            ].includes(record.props.type)
+          ) {
+            record.meta.isDraft = !record.derived.fee;
+          }
         }
-
         result.unshift(record);
       }
       return result;

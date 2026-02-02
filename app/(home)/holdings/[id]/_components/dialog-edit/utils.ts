@@ -30,9 +30,14 @@ export const requirePrice = (type?: TradeRecordType) =>
 
 export const requireShares = (type?: TradeRecordType) =>
   type &&
-  TradeRecordType.values
-    .filter((t) => t !== TradeRecordType.Dividend)
-    .includes(type);
+  [
+    TradeRecordType.Buy,
+    TradeRecordType.Sell,
+    TradeRecordType.Subscribe,
+    TradeRecordType.Redeem,
+    TradeRecordType.Split,
+    TradeRecordType.Merge,
+  ].includes(type);
 
 export const inputPositive = (type?: TradeRecordType) =>
   type &&

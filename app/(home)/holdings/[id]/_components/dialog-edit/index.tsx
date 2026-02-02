@@ -64,7 +64,8 @@ export const DialogEdit = ({
       fee: record?.props.fee ?? "",
       comment: record?.props.comment ?? "",
     },
-    onSubmitInvalid: () => {
+    onSubmitInvalid: (props) => {
+      console.log(props);
       toast.error(`校验失败，无法提交`);
     },
     onSubmit: async ({ value }) => {
@@ -115,6 +116,9 @@ export const DialogEdit = ({
         <div className={"flex flex-col gap-4"}>
           <form.Field
             name={"tradedAt"}
+            validators={{
+              onChange: ({ value }) => (!value ? "必填项！" : undefined),
+            }}
             children={(field) => (
               <FieldLayout
                 label={TradeRecordConstants.TradedAt}
