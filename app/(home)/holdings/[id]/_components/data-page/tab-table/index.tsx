@@ -1,6 +1,7 @@
 import { baseVisibility, getColumns } from "./columns";
 import {
   deleteSelectedTradeRecord,
+  TradeRecordType,
   TradeRecordUpdaterContext,
   useTradeRecordDataById,
 } from "@/lib/services/trade-records";
@@ -72,9 +73,12 @@ export const TabTable = () => {
       <DataTable
         table={table}
         className={"bg-card"}
-        getRowClassName={(row) =>
-          row.original.derived.shares < 0 ? "bg-red-50 text-red-700" : ""
-        }
+        getRowClassName={(row) => {
+          if (TradeRecordType.Draft === row.original.props.type)
+            return "text-gray-400";
+          if (row.original.derived.shares < 0) return "bg-red-50 text-red-700";
+          return "";
+        }}
       />
       <BottomBar
         selectedRowCount={selectedRows.length}
