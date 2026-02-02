@@ -10,10 +10,8 @@ export {
 } from "./domain/trade-record-type";
 
 export { parseFromCsv } from "./utils/parse-from-csv";
-export {
-  computeTradeRecordSummary,
-  type TradeRecordSummary,
-} from "./utils/compute-trade-record-summary";
+export { computeTradeRecordSummary } from "./utils/compute-trade-record-summary-2";
+export { computeProfit } from "./utils/compute-profit";
 
 export {
   addTradeRecords,

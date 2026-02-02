@@ -50,7 +50,9 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
         }
         detail={
           <div className={"grid grid-cols-2"}>
-            <div className={"col-span-full"}>时间：{quote.time}</div>
+            <div className={"col-span-full"}>
+              时间：{quote.date} {quote.time}
+            </div>
             <div>涨跌：{ticker.formatter(quote.diff!)}</div>
             <div>涨幅：{formatPercent(quote.pct)}</div>
             <div>最高：{ticker.formatter(quote.high!)}</div>

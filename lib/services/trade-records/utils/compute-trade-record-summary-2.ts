@@ -84,38 +84,12 @@ export const computeTradeRecordSummary = (records: TradeRecord[]) => {
     /** 成本与回本状态 */
     netInvestment, // 净投入资金 = 买入 - 卖出 + 手续费 - 分红
     costPrice: shares > 0 && remainingCost > 0 ? remainingCost / shares : 0, // 当前持仓成本价（仅当 shares > 0 且 netInvestment > 0 有意义）
+    avgPrice: shares > 0 ? netInvestment / shares : 0, // 总和成本
     isRecovered: netInvestment <= 0, // 是否已回本（净投入 <= 0）
     remainingCost, // 当前持仓真实成本
     /** 收益结果（核心） */
     realizedProfit, // 已实现盈亏（卖出部分）
     /** 杂项*/
     historicalMaxCapitalOccupied, // 最高资金占用
-  };
-};
-
-// 计算市值
-export const computeMarketValue = (
-  price: number,
-  summary: ReturnType<typeof computeTradeRecordSummary>,
-) => {
-  const marketValue = price * summary.shares;
-  const unrealizedProfit =
-    summary.shares > 0 ? marketValue - summary.remainingCost : 0;
-  const totalProfit = summary.realizedProfit + unrealizedProfit;
-
-  return {
-    marketValue, // 市值
-    /** 收益结果（核心） */
-    unrealizedProfit, // 当前浮动盈亏（市值 - 当前持仓成本）
-    totalProfit, // 总盈亏 = realized + unrealized + 分红 - 手续费
-    /** 收益率（只在合理时显示） */
-    totalReturnPct:
-      summary.historicalMaxCapitalOccupied > 0
-        ? totalProfit / summary.historicalMaxCapitalOccupied
-        : 0, // 总收益率（基于历史最大净投入）
-    holdingReturnPct:
-      !summary.isRecovered && summary.remainingCost > 0
-        ? unrealizedProfit / summary.remainingCost
-        : 0, // 持仓收益率（仅当未回本时显示）
   };
 };

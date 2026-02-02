@@ -1,11 +1,10 @@
 import {
-  TradeRecordConstants,
+  computeProfit,
   useTradeRecordDataById,
 } from "@/lib/services/trade-records";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import {
-  calculatePercent,
   formatMoney,
   formatPercent,
   formatShares,
@@ -13,114 +12,115 @@ import {
 } from "@/lib/market-utils";
 import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
 import { Separator } from "@/components/ui/separator";
-import { AnimatePresence, motion } from "motion/react";
-import { SinaStockType } from "@/lib/services/sina";
 import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary/bottom-bar";
+import { SinaStockType, SinaTicker } from "@/lib/services/sina";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export const TabSummary = () => {
   const { id, data } = React.useContext(HoldingInfoContext)!;
-  const { summary } = useTradeRecordDataById(id);
-  const [count, setCount] = React.useState(0);
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setCount((c) => c + 1);
-    }, 5000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  const { summary, latestProfit } = useTradeRecordDataById(id);
+  const [index, setIndex] = React.useState(0);
+  const profitList = React.useMemo(() => {
+    const list = [
+      {
+        label: "当前估值",
+        profit: latestProfit,
+      },
+    ];
+    if (data?.quote) {
+      list.push({
+        label: "场内估值",
+        profit: computeProfit(data.quote.time!, data.quote.current!, summary),
+      });
+      if (SinaStockType.AShare !== data.ticker.type) {
+        list.push({
+          label: "场外估值",
+          profit: computeProfit(
+            data.quote.fundDate!,
+            data.quote.fundNav!,
+            summary,
+          ),
+        });
+      }
+    }
+    return list;
+  }, [latestProfit, data?.quote, data?.ticker.type, summary]);
+
   return (
     <>
       <div className={"relative common-layout flex flex-col items-center"}>
         <div className={"w-full max-w-md"}>
           <section
             className={
-              "grid justify-center place-items-center gap-2 grid-cols-2 md:grid-cols-4"
+              "grid justify-center place-items-center gap-2 grid-cols-2"
             }
           >
-            <SimpleDisplayVertical title={"总支出金额"}>
-              {formatMoney(summary.totalAmount)}
+            <SimpleDisplayVertical title={"持仓成本"}>
+              {formatMoney(summary.remainingCost)}
             </SimpleDisplayVertical>
-            <SimpleDisplayVertical title={"总份额"}>
-              {formatShares(summary.totalShares)}
+            <SimpleDisplayVertical title={"持仓份额"}>
+              {formatShares(summary.shares)}
             </SimpleDisplayVertical>
-            <SimpleDisplayVertical title={"总交易费用"}>
+            <SimpleDisplayVertical title={"持仓成本价"}>
+              {data!.ticker.formatter(summary.costPrice)}
+            </SimpleDisplayVertical>
+            <SimpleDisplayVertical title={"累计成本价"}>
+              {data!.ticker.formatter(summary.avgPrice)}
+            </SimpleDisplayVertical>
+            <SimpleDisplayVertical title={"净投入资金"}>
+              {formatMoney(summary.netInvestment)}
+            </SimpleDisplayVertical>
+            <SimpleDisplayVertical title={"最高资金占用"}>
+              {formatMoney(summary.historicalMaxCapitalOccupied)}
+            </SimpleDisplayVertical>
+
+            <SimpleDisplayVertical title={"已实现盈亏"}>
+              <span
+                className={getTickerChangeColorClass(summary.realizedProfit)}
+              >
+                {formatMoney(summary.realizedProfit)}
+              </span>
+            </SimpleDisplayVertical>
+            <SimpleDisplayVertical title={"累计手续费"}>
               {formatMoney(summary.totalFee)}
             </SimpleDisplayVertical>
-            <SimpleDisplayVertical title={"交易次数"}>
-              {summary.count}
-            </SimpleDisplayVertical>
-            {!!summary.dividendCount && (
+            {!!summary.totalDividendCount && (
               <>
-                <SimpleDisplayVertical title={"总分红金额"}>
+                <SimpleDisplayVertical title={"累计分红金额"}>
                   {formatMoney(summary.totalDividend)}
                 </SimpleDisplayVertical>
-                <SimpleDisplayVertical title={"分红次数"}>
-                  {summary.dividendCount}
+                <SimpleDisplayVertical title={"累计分红次数"}>
+                  {summary.totalDividendCount}
                 </SimpleDisplayVertical>
               </>
             )}
           </section>
           <Separator className={"my-2 md:my-4"} />
-          {data && (
-            <div>
-              {data.ticker.type === SinaStockType.AShare ? (
-                <PriceCalculationBlock
-                  key={0}
-                  title={"收益计算"}
-                  costPrice={summary.costPrice}
-                  currentPrice={data.quote?.current}
-                  formatter={data.ticker.formatter}
-                  shares={summary.totalShares}
-                />
-              ) : (
-                <AnimatePresence mode={"wait"}>
-                  {count % 2 === 0 ? (
-                    <PriceCalculationBlock
-                      key={1}
-                      title={"收益计算（场内计价）"}
-                      costPrice={summary.costPrice}
-                      currentPrice={data.quote?.current}
-                      formatter={data.ticker.formatter}
-                      shares={summary.totalShares}
-                    />
-                  ) : (
-                    <PriceCalculationBlock
-                      key={2}
-                      title={"收益计算（场外计价）"}
-                      costPrice={summary.costPrice}
-                      currentPrice={data.quote?.fundNav}
-                      formatter={data.ticker.formatter}
-                      shares={summary.totalShares}
-                    />
-                  )}
-                </AnimatePresence>
-              )}
-            </div>
-          )}
-          <Separator className={"my-2 md:my-4"} />
-          {}
-          <AnimatePresence mode={"wait"}>
-            {count % 2 === 0 ? (
-              <DataPeakDisplayBlock
-                key={4}
-                title={TradeRecordConstants.CumulativeTotalAmount}
-                value={formatMoney(summary.totalAmount)}
-                maxValue={formatMoney(summary.maxTotalAmount)}
-                valuePct={summary.totalAmountPct}
-                valueTradeAt={summary.maxTotalAmountTradedAt ?? ""}
-              />
-            ) : (
-              <DataPeakDisplayBlock
-                key={5}
-                title={TradeRecordConstants.CumulativeTotalShares}
-                value={formatShares(summary.totalShares)}
-                maxValue={formatShares(summary.maxTotalShares)}
-                valuePct={summary.totalSharesPct}
-                valueTradeAt={summary.maxTotalSharesTradedAt ?? ""}
-              />
-            )}
-          </AnimatePresence>
+          <div className={"flex justify-center items-center"}>
+            <Button
+              variant={"ghost"}
+              onClick={() =>
+                setIndex((i) => {
+                  i--;
+                  if (i < 0) i = profitList.length - 1;
+                  return i;
+                })
+              }
+            >
+              <ArrowLeft></ArrowLeft>
+            </Button>
+            <span className={"font-medium"}>
+              {profitList[index % profitList.length].label}
+            </span>
+            <Button variant={"ghost"} onClick={() => setIndex((i) => i + 1)}>
+              <ArrowRight></ArrowRight>
+            </Button>
+          </div>
+          <ProfitBlock
+            ticker={data!.ticker}
+            profit={profitList[index % profitList.length].profit!}
+          ></ProfitBlock>
         </div>
       </div>
       <BottomBar />
@@ -128,111 +128,35 @@ export const TabSummary = () => {
   );
 };
 
-const MotionBlock = ({
-  title,
-  config,
+const ProfitBlock = ({
+  ticker,
+  profit,
 }: {
-  title: string;
-  config: { title: string; content: React.ReactNode }[];
-}) => (
-  <motion.section
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.5 }}
-  >
-    <h5 className={"text-center my-2"}>{title}</h5>
-    <div className="grid justify-center place-items-center gap-2 grid-cols-2 md:grid-cols-4">
-      {config.map((item, i) => (
-        <SimpleDisplayVertical key={i} title={item.title}>
-          {item.content}
-        </SimpleDisplayVertical>
-      ))}
-    </div>
-  </motion.section>
-);
-
-const PriceCalculationBlock = ({
-  title,
-  currentPrice,
-  costPrice,
-  shares,
-  formatter,
-}: {
-  title: string;
-  currentPrice?: number;
-  costPrice: number;
-  shares: number;
-  formatter: (num: number) => string;
+  ticker: SinaTicker;
+  profit: ReturnType<typeof computeProfit>;
 }) => {
-  const hasPrice = !!currentPrice;
-  const diff = hasPrice ? currentPrice - costPrice : null;
-  const pct = hasPrice
-    ? formatPercent(calculatePercent(currentPrice, costPrice))
-    : "--%";
-  const changeColorClassName = hasPrice ? getTickerChangeColorClass(diff!) : "";
   return (
-    <MotionBlock
-      title={title}
-      config={[
-        {
-          title: "当前成本",
-          content: formatter(costPrice),
-        },
-        {
-          title: "市场价格",
-          content: hasPrice ? formatter(currentPrice) : "--",
-        },
-        {
-          title: "收益金额",
-          content: (
-            <span className={changeColorClassName}>
-              {hasPrice ? formatMoney(diff! * shares) : "--"}
-            </span>
-          ),
-        },
-        {
-          title: "收益率",
-          content: <span className={changeColorClassName}>{pct}</span>,
-        },
-      ]}
-    />
+    <section
+      className={"grid justify-center place-items-center gap-2 grid-cols-2"}
+    >
+      <SimpleDisplayVertical title={"持仓市值"}>
+        {formatMoney(profit.marketValue)}
+      </SimpleDisplayVertical>
+      <SimpleDisplayVertical title={"估值日期"}>
+        {profit.date}
+      </SimpleDisplayVertical>
+      <SimpleDisplayVertical title={"当前浮动盈亏"}>
+        {formatMoney(profit.unrealizedProfit)}
+      </SimpleDisplayVertical>
+      <SimpleDisplayVertical title={"总盈亏"}>
+        {formatMoney(profit.totalProfit)}
+      </SimpleDisplayVertical>
+      <SimpleDisplayVertical title={"当前浮动收益率"}>
+        {formatPercent(profit.holdingReturnPct)}
+      </SimpleDisplayVertical>
+      <SimpleDisplayVertical title={"总收益率"}>
+        {formatPercent(profit.totalReturnPct)}
+      </SimpleDisplayVertical>
+    </section>
   );
 };
-
-const DataPeakDisplayBlock = ({
-  title,
-  value,
-  maxValue,
-  valuePct,
-  valueTradeAt,
-}: {
-  title: string;
-  value: string;
-  maxValue: string;
-  valuePct: number;
-  valueTradeAt: string;
-}) => (
-  <MotionBlock
-    key={3}
-    title={title}
-    config={[
-      {
-        title: "当前",
-        content: value,
-      },
-      {
-        title: "历史最高",
-        content: maxValue,
-      },
-      {
-        title: "百分位",
-        content: formatPercent(valuePct * 100),
-      },
-      {
-        title: "历史最高日",
-        content: valueTradeAt,
-      },
-    ]}
-  />
-);
