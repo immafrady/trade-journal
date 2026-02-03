@@ -56,22 +56,22 @@ export const TabSummary = () => {
               "grid justify-center place-items-center gap-2 grid-cols-2"
             }
           >
-            <SimpleDisplayVertical title={"持仓成本"}>
+            <SimpleDisplayVertical title={"剩余持仓成本"}>
               {formatMoney(summary.remainingCost)}
             </SimpleDisplayVertical>
-            <SimpleDisplayVertical title={"持仓份额"}>
+            <SimpleDisplayVertical title={"当前持仓份额"}>
               {formatShares(summary.shares)}
             </SimpleDisplayVertical>
-            <SimpleDisplayVertical title={"持仓成本价"}>
+            <SimpleDisplayVertical title={"剩余持仓摊薄成本"}>
               {data!.ticker.formatter(summary.costPrice)}
             </SimpleDisplayVertical>
-            <SimpleDisplayVertical title={"累计成本价"}>
+            <SimpleDisplayVertical title={"历史资金成本价"}>
               {data!.ticker.formatter(summary.avgPrice)}
             </SimpleDisplayVertical>
-            <SimpleDisplayVertical title={"净投入资金"}>
+            <SimpleDisplayVertical title={"当前净投入资金"}>
               {formatMoney(summary.netInvestment)}
             </SimpleDisplayVertical>
-            <SimpleDisplayVertical title={"最高资金占用"}>
+            <SimpleDisplayVertical title={"历史最高资金占用"}>
               {formatMoney(summary.historicalMaxCapitalOccupied)}
             </SimpleDisplayVertical>
 
@@ -129,7 +129,6 @@ export const TabSummary = () => {
 };
 
 const ProfitBlock = ({
-  ticker,
   profit,
 }: {
   ticker: SinaTicker;
@@ -139,13 +138,13 @@ const ProfitBlock = ({
     <section
       className={"grid justify-center place-items-center gap-2 grid-cols-2"}
     >
-      <SimpleDisplayVertical title={"持仓市值"}>
+      <SimpleDisplayVertical title={"当前持仓市值"}>
         {formatMoney(profit.marketValue)}
       </SimpleDisplayVertical>
       <SimpleDisplayVertical title={"估值日期"}>
         {profit.date}
       </SimpleDisplayVertical>
-      <SimpleDisplayVertical title={"当前浮动盈亏"}>
+      <SimpleDisplayVertical title={"剩余持仓浮动盈亏"}>
         <span className={getTickerChangeColorClass(profit.unrealizedProfit)}>
           {formatMoney(profit.unrealizedProfit)}
         </span>
@@ -155,12 +154,12 @@ const ProfitBlock = ({
           {formatMoney(profit.totalProfit)}
         </span>
       </SimpleDisplayVertical>
-      <SimpleDisplayVertical title={"当前浮动收益率"}>
+      <SimpleDisplayVertical title={"剩余持仓浮动盈亏"}>
         <span className={getTickerChangeColorClass(profit.unrealizedProfit)}>
           {formatPercent(profit.holdingReturnPct)}
         </span>
       </SimpleDisplayVertical>
-      <SimpleDisplayVertical title={"总收益率"}>
+      <SimpleDisplayVertical title={"整体回报率"}>
         <span className={getTickerChangeColorClass(profit.totalProfit)}>
           {formatPercent(profit.totalReturnPct)}
         </span>
