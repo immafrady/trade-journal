@@ -1,7 +1,9 @@
 import { create, type UseBoundStore } from "zustand/react";
 import {
-  computeProfit,
-  computeTradeRecordSummary,
+  computeHoldingProfit,
+  computeHoldingSummary,
+  HoldingProfit,
+  HoldingSummary,
   TradeRecord,
   TradeRecordContext,
   TradeRecordType,
@@ -11,8 +13,8 @@ import React from "react";
 
 export interface TradeRecordData {
   records: TradeRecord[];
-  summary: ReturnType<typeof computeTradeRecordSummary>;
-  latestProfit?: ReturnType<typeof computeProfit>;
+  summary: HoldingSummary;
+  latestProfit?: HoldingProfit;
 }
 
 export interface TradeRecordDraft {
@@ -31,7 +33,7 @@ export type TradeRecordStore = UseBoundStore<StoreApi<TradeRecordStoreState>>;
 // ------ //
 
 const genTradeRecordData = (records: TradeRecord[]) => {
-  const summary = computeTradeRecordSummary(records);
+  const summary = computeHoldingSummary(records);
   const latest = records.find(
     (record) => TradeRecordType.Draft !== record.props.type,
   );
@@ -39,7 +41,11 @@ const genTradeRecordData = (records: TradeRecord[]) => {
     records: records,
     summary,
     latestProfit: latest
-      ? computeProfit(latest.display.tradedAt, latest.derived.price, summary)
+      ? computeHoldingProfit(
+          latest.display.tradedAt,
+          latest.derived.price,
+          summary,
+        )
       : undefined,
   };
 };

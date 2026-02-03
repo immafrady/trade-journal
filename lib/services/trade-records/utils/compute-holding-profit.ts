@@ -1,10 +1,10 @@
 // 计算市值
-import { computeTradeRecordSummary } from "@/lib/services/trade-records";
+import { HoldingSummary } from "@/lib/services/trade-records";
 
-export const computeProfit = (
+export const computeHoldingProfit = (
   date: string,
   price: number,
-  summary: ReturnType<typeof computeTradeRecordSummary>,
+  summary: HoldingSummary,
 ) => {
   const marketValue = price * summary.shares;
   const unrealizedProfit =
@@ -28,3 +28,5 @@ export const computeProfit = (
         : 0, // 持仓收益率（仅当未回本时显示）
   };
 };
+
+export type HoldingProfit = ReturnType<typeof computeHoldingProfit>

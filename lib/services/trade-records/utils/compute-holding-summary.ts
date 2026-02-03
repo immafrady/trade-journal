@@ -1,7 +1,7 @@
 // 实际计算方法
 import { TradeRecord, TradeRecordType } from "@/lib/services/trade-records";
 
-export const computeTradeRecordSummary = (records: TradeRecord[]) => {
+export const computeHoldingSummary = (records: TradeRecord[]) => {
   records = records
     .filter((record) => TradeRecordType.Draft !== record.props.type) // 过滤掉草稿
     .reverse(); // 翻转
@@ -93,3 +93,5 @@ export const computeTradeRecordSummary = (records: TradeRecord[]) => {
     historicalMaxCapitalOccupied, // 最高资金占用
   };
 };
+
+export type HoldingSummary = ReturnType<typeof computeHoldingSummary>;

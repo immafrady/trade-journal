@@ -1,5 +1,6 @@
 import {
-  computeProfit,
+  computeHoldingProfit,
+  HoldingProfit,
   useTradeRecordDataById,
 } from "@/lib/services/trade-records";
 import React from "react";
@@ -32,7 +33,7 @@ export const TabSummary = () => {
       if (SinaStockType.AShare !== data.ticker.type) {
         list.push({
           label: "场外估值",
-          profit: computeProfit(
+          profit: computeHoldingProfit(
             data.quote.fundDate!,
             data.quote.fundNav!,
             summary,
@@ -41,7 +42,11 @@ export const TabSummary = () => {
       }
       list.unshift({
         label: "场内估值",
-        profit: computeProfit(data.quote.time!, data.quote.current!, summary),
+        profit: computeHoldingProfit(
+          data.quote.time!,
+          data.quote.current!,
+          summary,
+        ),
       });
     }
     return list;
@@ -132,7 +137,7 @@ const ProfitBlock = ({
   profit,
 }: {
   ticker: SinaTicker;
-  profit: ReturnType<typeof computeProfit>;
+  profit: HoldingProfit;
 }) => {
   return (
     <section
