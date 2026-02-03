@@ -2,7 +2,6 @@
 import { HoldingSummary } from "@/lib/services/trade-records";
 
 export const computeHoldingProfit = (
-  date: string,
   price: number,
   summary: HoldingSummary,
 ) => {
@@ -12,7 +11,6 @@ export const computeHoldingProfit = (
   const totalProfit = summary.realizedProfit + unrealizedProfit;
 
   return {
-    date, // 发生日期
     marketValue, // 市值
     /** 收益结果（核心） */
     unrealizedProfit, // 当前浮动盈亏（市值 - 当前持仓成本）
@@ -29,4 +27,4 @@ export const computeHoldingProfit = (
   };
 };
 
-export type HoldingProfit = ReturnType<typeof computeHoldingProfit>
+export type HoldingProfit = ReturnType<typeof computeHoldingProfit>;

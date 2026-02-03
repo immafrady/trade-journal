@@ -14,6 +14,7 @@ import React from "react";
 export interface TradeRecordData {
   records: TradeRecord[];
   summary: HoldingSummary;
+  latest?: TradeRecord;
   latestProfit?: HoldingProfit;
 }
 
@@ -40,12 +41,9 @@ const genTradeRecordData = (records: TradeRecord[]) => {
   return {
     records: records,
     summary,
+    latest,
     latestProfit: latest
-      ? computeHoldingProfit(
-          latest.display.tradedAt,
-          latest.derived.price,
-          summary,
-        )
+      ? computeHoldingProfit(latest.derived.price, summary)
       : undefined,
   };
 };

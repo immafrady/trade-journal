@@ -49,12 +49,22 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
           />
         }
         detail={
-          <div className={"grid grid-cols-2"}>
+          <div className={"grid grid-cols-2 font-mono"}>
             <div className={"col-span-full"}>
               时间：{quote.date} {quote.time}
             </div>
-            <div>涨跌：{ticker.formatter(quote.diff!)}</div>
-            <div>涨幅：{formatPercent(quote.pct)}</div>
+            <div>
+              涨跌：
+              <span className={getTickerChangeColorClass(quote.diff!)}>
+                {ticker.formatter(quote.diff!)}
+              </span>
+            </div>
+            <div>
+              涨幅：
+              <span className={getTickerChangeColorClass(quote.diff!)}>
+                {formatPercent(quote.pct)}
+              </span>
+            </div>
             <div>最高：{ticker.formatter(quote.high!)}</div>
             <div>最低：{ticker.formatter(quote.low!)}</div>
             <div>今开：{ticker.formatter(quote.open!)}</div>
@@ -76,14 +86,14 @@ export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
             />
           }
           detail={
-            <>
+            <div className={"font-mono"}>
               <div>净值日期： {quote.fundDate}</div>
               <div>前一日净值： {formatFund(quote.preFundNav)}</div>
               <div>
                 净值变化：
                 {formatPercent(quote.fundNavPct)}
               </div>
-            </>
+            </div>
           }
         />,
       );
