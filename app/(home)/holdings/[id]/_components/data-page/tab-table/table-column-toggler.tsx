@@ -1,15 +1,10 @@
 import React from "react";
-import {
-  adjustVisibility,
-  baseVisibility,
-  cumulativeVisibility,
-} from "./columns";
-import { Archive, Database, Gauge } from "lucide-react";
+import { baseVisibility, cumulativeVisibility } from "./columns";
+import { Archive, Database } from "lucide-react";
 import { ToggleButton } from "@/components/ui/my/button";
 
 export type VisibilityState =
   | typeof baseVisibility
-  | typeof adjustVisibility
   | typeof cumulativeVisibility;
 
 export const TableColumnToggler = ({
@@ -30,15 +25,6 @@ export const TableColumnToggler = ({
             </div>
           ),
           value: baseVisibility,
-        },
-        {
-          children: (
-            <div className={"flex items-center gap-0.5"}>
-              <Gauge />
-              进阶数据
-            </div>
-          ),
-          value: adjustVisibility,
         },
         {
           children: (
