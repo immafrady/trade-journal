@@ -17,6 +17,7 @@ export function genSelectableColumn<T>(): ColumnDef<T> {
     ),
     cell: ({ row }) => (
       <Checkbox
+        disabled={!row.getCanSelect()}
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
