@@ -36,17 +36,17 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
           list={[
             {
               title: "投入/预算",
-              content: `${formatMoney(summary.totalAmount)}/${formatMoney(model.budget)}`,
+              content: `${formatMoney(summary.totalNetInvestment)}/${formatMoney(model.budget)}`,
             },
             {
               title: "市值(收益率)",
               content: (
                 <div>
-                  {formatMoney(summary.marketValue)}(
+                  {formatMoney(summary.totalMarketValue)}(
                   <span
-                    className={getTickerChangeColorClass(summary.valueDiff!)}
+                    className={getTickerChangeColorClass(summary.totalProfit!)}
                   >
-                    {formatPercent(summary.valuePct)}
+                    {formatPercent(summary.totalProfitPct)}
                   </span>
                   )
                 </div>
@@ -57,7 +57,7 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
         <Separator className={"my-2"}></Separator>
         <h5 className={"font-medium text-sm"}>市值占比</h5>
         <div className={"flex flex-col gap-1"}>
-          {summary.summaries.map((s) => (
+          {summary.holdings.map((s) => (
             <div
               key={s.id}
               className={"flex items-center justify-between text-sm"}
@@ -66,7 +66,7 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
                 <SinaStockTypeBadge type={s.ticker.type} />
                 {s.ticker.label}
               </div>
-              <div className={"font-mono"}>{formatPercent(s.ratio)}</div>
+              <div className={"font-mono"}>{formatPercent(s.weightPct)}</div>
             </div>
           ))}
         </div>

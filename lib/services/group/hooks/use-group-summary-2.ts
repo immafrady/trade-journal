@@ -8,8 +8,8 @@ import {
 import { GroupModel } from "@/lib/services/group";
 import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 
-export const useGroupSummary = (model: GroupModel) => {
-  const holdingIds = model.holdingIds ?? [];
+export const useGroupSummary = (group: GroupModel) => {
+  const holdingIds = group.holdingIds ?? [];
   const store = useTradeRecordStore((s) => s.store);
   const holdingsWithQuotes = useHoldingsWithQuote();
 
@@ -24,26 +24,30 @@ export const useGroupSummary = (model: GroupModel) => {
   const holdings: GroupHoldingSummary[] = [];
   for (const id of holdingIds) {
     const hwq = holdingsWithQuotes.find((hwq) => hwq.id === id)!;
-    const summary = store[id].summary;
-    const profit = hwq.quote
-      ? computeHoldingProfit(hwq.quote.current!, store[id].summary)
-      : store[id].latestProfit;
+    const data = store[id];
+    if (data) {
+      const summary = data.summary;
+      const profit = hwq.quote
+        ? computeHoldingProfit(hwq.quote.current!, summary)
+        : store[id].latestProfit;
 
-    totalMarketValue += profit?.marketValue ?? 0;
-    totalRemainingCost += summary.remainingCost;
-    totalNetInvestment += summary.netInvestment;
-    totalRealizedProfit += summary.realizedProfit;
-    totalUnrealizedProfit += profit?.unrealizedProfit ?? 0;
-    totalProfit += profit?.totalProfit ?? 0;
-    historicalMaxCapitalOccupied += summary.historicalMaxCapitalOccupied;
+      totalMarketValue += profit?.marketValue ?? 0;
+      totalRemainingCost += summary.remainingCost;
+      totalNetInvestment += summary.netInvestment;
+      totalRealizedProfit += summary.realizedProfit;
+      totalUnrealizedProfit += profit?.unrealizedProfit ?? 0;
+      totalProfit += profit?.totalProfit ?? 0;
+      historicalMaxCapitalOccupied += summary.historicalMaxCapitalOccupied;
 
-    holdings.push({
-      id,
-      ticker: hwq.ticker,
-      summary,
-      profit,
-      weightPct: 0,
-    });
+      holdings.push({
+        id,
+        ticker: hwq.ticker,
+        summary,
+        profit,
+        weightPct: 0,
+        offline: !hwq.quote,
+      });
+    }
   }
 
   return {
@@ -55,6 +59,9 @@ export const useGroupSummary = (model: GroupModel) => {
 
     /** 净投入资金（组合维度） */
     totalNetInvestment,
+    /** 预算差*/
+    budgetDiff: group.budget - totalNetInvestment,
+    budgetPct: (totalNetInvestment / group.budget) * 100,
 
     /** 已实现盈亏 */
     totalRealizedProfit,
@@ -72,10 +79,12 @@ export const useGroupSummary = (model: GroupModel) => {
     /** 历史最高资金占用 */
     historicalMaxCapitalOccupied,
 
-    holdings: holdings.map((item) => ({
-      ...item,
-      weightPct: ((item.profit?.marketValue ?? 0) / totalMarketValue) * 100,
-    })),
+    holdings: holdings
+      .map((item) => ({
+        ...item,
+        weightPct: ((item.profit?.marketValue ?? 0) / totalMarketValue) * 100,
+      }))
+      .sort((a, b) => b.weightPct - a.weightPct),
   };
 };
 
@@ -85,4 +94,5 @@ export interface GroupHoldingSummary {
   summary: HoldingSummary;
   profit?: HoldingProfit;
   weightPct: number;
+  offline: boolean;
 }

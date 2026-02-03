@@ -52,10 +52,10 @@ export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
         list: list
           .map((item) => ({
             ...item,
-            proportion:
+            weightPct:
               ((item.profit?.marketValue ?? 0) / totalMarketValue) * 100,
           }))
-          .sort((a, b) => b.proportion - a.proportion),
+          .sort((a, b) => b.weightPct - a.weightPct),
         totalMarketValue,
         totalProfit,
       }}
