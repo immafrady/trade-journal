@@ -1,12 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SinaQuote, SinaStockType, SinaTicker } from "@/lib/services/sina";
 import React from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
 import {
   formatMoney,
   formatPercent,
@@ -14,103 +7,62 @@ import {
 } from "@/lib/market-utils";
 import { ArrowRight } from "lucide-react";
 import { LoadingButton } from "@/components/ui/my/button";
-import { SimpleDisplay } from "@/components/ui/my/quote-display";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { useRouter } from "next/navigation";
-import { useTradeRecordDataById } from "@/lib/services/trade-records";
+import { HoldingWithQuoteExtend } from "@/app/(home)/_provider";
 
-export const TickerCard = ({
-  id,
-  ticker,
-  quote,
-  proportion = 0,
-}: {
-  id: string;
-  ticker: SinaTicker;
-  quote?: SinaQuote;
-  proportion?: number;
-}) => {
+export const TickerCard = ({ data }: { data: HoldingWithQuoteExtend }) => {
   // 计算汇总的逻辑
-  const data = useTradeRecordDataById(id);
-  const summary = data?.summary;
 
   const router = useRouter();
-  const isAShare = ticker.type === SinaStockType.AShare;
-  const carouselList = [];
-  if (quote) {
-    carouselList.push(
-      <SimpleDisplay
-        title={isAShare ? "市场价格" : "场内价格"}
-        value={ticker.formatter(quote.current!)}
-        change={formatPercent(quote.pct!)}
-        colorClass={getTickerChangeColorClass(quote.pct!)}
-      />,
-    );
-    if (!isAShare) {
-      carouselList.push(
-        <SimpleDisplay
-          title={"场外价格"}
-          value={ticker.formatter(quote.fundNav!)}
-          change={formatPercent(quote.fundNavPct!)}
-          colorClass={getTickerChangeColorClass(quote.fundNavPct!)}
-        />,
-      );
-    }
-  }
+
   return (
-    <Card key={ticker.key}>
+    <Card>
       <CardHeader>
         <CardTitle className={"flex items-center justify-between"}>
           <div className={"flex items-center gap-1"}>
-            <SinaStockTypeBadge type={ticker.type} />
-            {ticker.label}
+            <SinaStockTypeBadge type={data.ticker.type} />
+            {data.ticker.label}
           </div>
           <LoadingButton
             variant={"ghost"}
             icon={<ArrowRight />}
             onClick={() => {
-              router.push(`/holdings/${id}`);
+              router.push(`/holdings/${data.id}`);
             }}
           />
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {quote && (
-          <>
-            {summary && (
-              <InlineDisplay
-                className={"gap-0.5"}
-                list={[
-                  {
-                    title: "成本价格",
-                    content: ticker.formatter(summary.costPrice),
-                  },
-                  {
-                    title: "仓位",
-                    content: formatMoney(summary.totalAmount),
-                  },
-                  {
-                    title: "仓位占比",
-                    content: formatPercent(proportion),
-                  },
-                ]}
-              />
-            )}
-            <Carousel
-              plugins={[Autoplay({ delay: 2500 })]}
-              opts={{
-                loop: true,
-                align: "center",
-              }}
-            >
-              <CarouselContent>
-                {carouselList.map((item, idx) => (
-                  <CarouselItem key={idx}>{item}</CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
-          </>
+        {data.profit && (
+          <InlineDisplay
+            className={"gap-0.5"}
+            list={[
+              {
+                title: "市值(仓位)",
+                content: (
+                  <div>
+                    {formatMoney(data.profit?.marketValue)}(
+                    {formatPercent(data.proportion)})
+                  </div>
+                ),
+              },
+              {
+                title: "累计收益/率",
+                content: (
+                  <div
+                    className={getTickerChangeColorClass(
+                      data.profit.totalProfit,
+                    )}
+                  >
+                    {formatMoney(data.profit?.totalProfit)}/
+                    {formatPercent(data.profit.totalReturnPct)}
+                  </div>
+                ),
+              },
+            ]}
+          />
         )}
       </CardContent>
     </Card>

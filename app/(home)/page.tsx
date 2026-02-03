@@ -58,16 +58,8 @@ function InnerPage() {
       {list.length ? (
         <>
           <div className={"common-layout flex flex-col gap-2 pt-10 pb-20"}>
-            {list?.map(({ id, ticker, quote, proportion }) => {
-              return (
-                <TickerCard
-                  key={ticker.key}
-                  id={id}
-                  ticker={ticker}
-                  quote={quote}
-                  proportion={proportion}
-                />
-              );
+            {list?.map((hwq) => {
+              return <TickerCard key={hwq.id} data={hwq} />;
             })}
           </div>
           <NavigateToHoldingsAdd />
