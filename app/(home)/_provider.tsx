@@ -41,7 +41,7 @@ export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
         ...hwq,
         summary: data.summary,
         profit,
-        proportion: 0,
+        weightPct: 0,
       });
     }
   }
@@ -68,5 +68,5 @@ export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
 export interface HoldingWithQuoteExtend extends HoldingWithQuote {
   summary: HoldingSummary;
   profit?: HoldingProfit;
-  proportion: number;
+  weightPct: number;
 }

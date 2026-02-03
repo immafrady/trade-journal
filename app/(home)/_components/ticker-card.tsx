@@ -44,7 +44,7 @@ export const TickerCard = ({ data }: { data: HoldingWithQuoteExtend }) => {
                 content: (
                   <div>
                     {formatMoney(data.profit?.marketValue)}(
-                    {formatPercent(data.proportion)})
+                    {formatPercent(data.weightPct)})
                   </div>
                 ),
               },
