@@ -47,8 +47,6 @@ export const TabTable = () => {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnFiltersChange: setColumnFilters,
-    enableRowSelection: (row) =>
-      TradeRecordType.Draft !== row.original.props.type,
   });
 
   const selectedRows = table
