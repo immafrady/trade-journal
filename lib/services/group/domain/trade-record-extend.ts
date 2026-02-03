@@ -1,6 +1,6 @@
 import { TradeRecord } from "@/lib/services/trade-records";
 import { SinaTicker } from "@/lib/services/sina";
-import { TradeRecordExtendConstants } from "@/lib/services/group/domain/constants";
+import { TradeRecordExtendConstants } from "@/lib/services/group";
 import { formatFund, formatMoney, formatShares } from "@/lib/market-utils";
 
 export class TradeRecordExtend {

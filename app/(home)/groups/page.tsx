@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import React from "react";
 import Link from "next/link";
-import { useGroupList } from "@/lib/services/group/hooks/use-group-list";
+import { useGroupList } from "@/lib/services/group";
 import { BlankPage } from "./_components/blank-page";
 import { ListPage } from "./_components/list-page";
 

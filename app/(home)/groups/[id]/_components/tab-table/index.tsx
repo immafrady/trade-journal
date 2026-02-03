@@ -1,6 +1,6 @@
 import { GroupInfoContext } from "../../_providers/group-info";
 import React from "react";
-import { useGroupTradeRecords } from "@/lib/services/group/hooks/use-group-trade-records";
+import { useGroupTradeRecords } from "@/lib/services/group";
 import {
   ColumnFiltersState,
   getCoreRowModel,

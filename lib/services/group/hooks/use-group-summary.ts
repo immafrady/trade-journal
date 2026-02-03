@@ -1,5 +1,4 @@
-import { GroupModel } from "@/lib/services/group";
-import { useGroupHoldings } from "@/lib/services/group/hooks/use-group-holdings";
+import { GroupModel, useGroupHoldings } from "@/lib/services/group";
 import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import { SinaTicker } from "@/lib/services/sina";
 import { TradeRecord, TradeRecordType } from "@/lib/services/trade-records";

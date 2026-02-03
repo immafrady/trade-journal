@@ -1,4 +1,4 @@
-import { GroupModel } from "@/lib/services/group";
+import { GroupModel, useGroupSummary } from "@/lib/services/group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingButton } from "@/components/ui/my/button";
 import { ArrowRight } from "lucide-react";
@@ -12,7 +12,6 @@ import {
   formatPercent,
   getTickerChangeColorClass,
 } from "@/lib/market-utils";
-import { useGroupSummary } from "@/lib/services/group/hooks/use-group-summary";
 
 export const GroupCard = ({ model }: { model: GroupModel }) => {
   const router = useRouter();

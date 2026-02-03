@@ -1,12 +1,14 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { TradeRecordExtend } from "@/lib/services/group/domain/trade-record-extend";
+import {
+  TradeRecordExtend,
+  TradeRecordExtendConstants,
+} from "@/lib/services/group";
 import {
   genColumnDef,
   genNoColumnDef,
   genSelectableColumn,
 } from "@/components/ui/my/data-table/selectable-column";
 import { Dayjs } from "dayjs";
-import { TradeRecordExtendConstants } from "@/lib/services/group/domain/constants";
 import { formatFund, formatMoney, formatShares } from "@/lib/market-utils";
 
 function getColumns(): ColumnDef<TradeRecordExtend>[] {

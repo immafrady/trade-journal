@@ -1,7 +1,13 @@
 /* eslint-disable react/no-children-prop */
 
 import React from "react";
-import { GroupModel } from "@/lib/services/group";
+import {
+  addOrEditGroup,
+  editGroupHoldings,
+  GroupConstants,
+  GroupModel,
+  useGroupList,
+} from "@/lib/services/group";
 import {
   ResponsiveDialog,
   ResponsiveDialogRef,
@@ -9,16 +15,10 @@ import {
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 import { FieldLayout } from "@/components/ui/my/field-layout";
-import { GroupConstants } from "@/lib/services/group/domain/constants";
 import { Input } from "@/components/ui/input";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  addOrEditGroup,
-  editGroupHoldings,
-} from "@/lib/services/group/group-apis";
-import { useGroupList } from "@/lib/services/group/hooks/use-group-list";
 
 export const DialogEdit = ({
   trigger,

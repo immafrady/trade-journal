@@ -1,6 +1,5 @@
 import React from "react";
-import { TradeRecordExtend } from "@/lib/services/group/domain/trade-record-extend";
-import { useGroupHoldings } from "@/lib/services/group/hooks/use-group-holdings";
+import { TradeRecordExtend, useGroupHoldings } from "@/lib/services/group";
 
 export const useGroupTradeRecords = (holdingIds: string[]) => {
   const { tickerMap, holdingRecordMap } = useGroupHoldings(holdingIds);

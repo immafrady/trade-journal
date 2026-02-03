@@ -1,10 +1,10 @@
+import React from "react";
 import { BottomBarContainer } from "@/components/ui/my/bottom-bar-container";
 import { FileDown } from "lucide-react";
-import React from "react";
 import { GroupInfoContext } from "@/app/(home)/groups/[id]/_providers/group-info";
 import { LoadingButton } from "@/components/ui/my/button";
 import { exportAsCSV } from "@/lib/utils";
-import { TradeRecordExtend } from "@/lib/services/group/domain/trade-record-extend";
+import { TradeRecordExtend } from "@/lib/services/group";
 
 export const BottomBar = ({ records }: { records: TradeRecordExtend[] }) => {
   const group = React.useContext(GroupInfoContext)!;

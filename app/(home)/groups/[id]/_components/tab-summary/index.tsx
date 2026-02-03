@@ -1,5 +1,5 @@
 import { BottomBar } from "./bottom-bar";
-import { useGroupSummary } from "@/lib/services/group/hooks/use-group-summary";
+import { useGroupSummary } from "@/lib/services/group";
 import React from "react";
 import { GroupInfoContext } from "@/app/(home)/groups/[id]/_providers/group-info";
 import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
