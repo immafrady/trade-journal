@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "@/lib/utils";
 
 export const SimpleDisplay = ({
   title,
@@ -13,8 +14,8 @@ export const SimpleDisplay = ({
 }) => {
   return (
     <div className={"flex items-center justify-between"}>
-      <div className={"text-muted-foreground"}>{title}</div>
-      <div className={colorClass}>
+      <div>{title}</div>
+      <div className={cn("font-mono", colorClass)}>
         {value}
         {change && `(${change})`}
       </div>

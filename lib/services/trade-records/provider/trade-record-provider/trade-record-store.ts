@@ -1,16 +1,21 @@
 import { create, type UseBoundStore } from "zustand/react";
 import {
-  computeTradeRecordSummary,
+  computeHoldingProfit,
+  computeHoldingSummary,
+  HoldingProfit,
+  HoldingSummary,
   TradeRecord,
   TradeRecordContext,
-  TradeRecordSummary,
+  TradeRecordType,
 } from "@/lib/services/trade-records";
 import { StoreApi } from "zustand/vanilla";
 import React from "react";
 
 export interface TradeRecordData {
   records: TradeRecord[];
-  summary: TradeRecordSummary;
+  summary: HoldingSummary;
+  latest?: TradeRecord;
+  latestProfit?: HoldingProfit;
 }
 
 export interface TradeRecordDraft {
@@ -29,9 +34,17 @@ export type TradeRecordStore = UseBoundStore<StoreApi<TradeRecordStoreState>>;
 // ------ //
 
 const genTradeRecordData = (records: TradeRecord[]) => {
+  const summary = computeHoldingSummary(records);
+  const latest = records.find(
+    (record) => TradeRecordType.Draft !== record.props.type,
+  );
   return {
     records: records,
-    summary: computeTradeRecordSummary(records),
+    summary,
+    latest,
+    latestProfit: latest
+      ? computeHoldingProfit(latest.derived.price, summary)
+      : undefined,
   };
 };
 
@@ -48,7 +61,9 @@ export const createTradeRecordStore = (): TradeRecordStore =>
         };
         const draftList: TradeRecordStoreState["draftList"] = [];
         Object.entries(store).forEach(([holdingId, data]) => {
-          const drafts = data.records.filter((r) => r.meta.isDraft);
+          const drafts = data.records.filter(
+            (r) => r.meta.isDraft || TradeRecordType.Draft === r.props.type,
+          );
           if (drafts.length) {
             draftList.push({
               holdingId,

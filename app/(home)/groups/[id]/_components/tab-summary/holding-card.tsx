@@ -1,4 +1,4 @@
-import { GroupHoldingSummary } from "@/lib/services/group/hooks/use-group-summary";
+import { GroupHoldingSummary } from "@/lib/services/group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingButton } from "@/components/ui/my/button";
 import { ArrowRight } from "lucide-react";

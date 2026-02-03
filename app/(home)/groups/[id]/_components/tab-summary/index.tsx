@@ -1,17 +1,16 @@
 import { BottomBar } from "./bottom-bar";
-import { useGroupSummary } from "@/lib/services/group/hooks/use-group-summary";
+import { useGroupSummary } from "@/lib/services/group";
 import React from "react";
 import { GroupInfoContext } from "@/app/(home)/groups/[id]/_providers/group-info";
 import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
 import {
-  formatFund,
   formatMoney,
   formatPercent,
   getTickerChangeColorClass,
 } from "@/lib/market-utils";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { HoldingCard } from "@/app/(home)/groups/[id]/_components/tab-summary/holding-card";
+import { TickerCard } from "@/components/ui/my/ticker-card";
 
 export const TabSummary = () => {
   const group = React.useContext(GroupInfoContext)!;
@@ -23,8 +22,68 @@ export const TabSummary = () => {
           <SectionLayout
             list={[
               {
-                title: "投入成本",
-                content: formatMoney(summary.totalAmount),
+                title: "当前市值",
+                content: formatMoney(summary.totalMarketValue),
+              },
+              {
+                title: "收益率",
+                content: (
+                  <span
+                    className={getTickerChangeColorClass(
+                      summary.totalProfitPct,
+                    )}
+                  >
+                    {formatPercent(summary.totalProfitPct)}
+                  </span>
+                ),
+              },
+
+              {
+                title: "历史最高资金占用",
+                content: formatMoney(summary.historicalMaxCapitalOccupied),
+              },
+              {
+                title: "浮动盈亏",
+                content: (
+                  <span
+                    className={getTickerChangeColorClass(summary.totalProfit)}
+                  >
+                    {formatMoney(summary.totalProfit)}
+                  </span>
+                ),
+              },
+              {
+                title: "已实现盈亏",
+                content: (
+                  <span
+                    className={getTickerChangeColorClass(
+                      summary.totalRealizedProfit,
+                    )}
+                  >
+                    {formatMoney(summary.totalRealizedProfit)}
+                  </span>
+                ),
+              },
+              {
+                title: "未实现盈亏",
+                content: (
+                  <span
+                    className={getTickerChangeColorClass(
+                      summary.totalUnrealizedProfit,
+                    )}
+                  >
+                    {formatMoney(summary.totalUnrealizedProfit)}
+                  </span>
+                ),
+              },
+            ]}
+          ></SectionLayout>
+          <Separator className={"my-2 md:my-4"} />
+          <SectionLayout
+            list={[
+              {
+                title: "净投入资金",
+                content: formatMoney(summary.totalNetInvestment),
               },
               {
                 title: "组合预算",
@@ -53,43 +112,16 @@ export const TabSummary = () => {
             ]}
           ></SectionLayout>
           <Separator className={"my-2 md:my-4"} />
-          <SectionLayout
-            list={[
-              {
-                title: "当前市值",
-                content: formatMoney(summary.marketValue),
-              },
-              {
-                title: "浮动盈亏",
-                content: (
-                  <span
-                    className={getTickerChangeColorClass(summary.valueDiff)}
-                  >
-                    {formatMoney(summary.valueDiff)}
-                  </span>
-                ),
-              },
-              {
-                title: "盈亏指数",
-                content: formatFund(summary.valueIndex),
-              },
-              {
-                title: "收益率",
-                content: (
-                  <span
-                    className={getTickerChangeColorClass(summary.valueDiff)}
-                  >
-                    {formatPercent(summary.valuePct)}
-                  </span>
-                ),
-              },
-            ]}
-          ></SectionLayout>
-          <Separator className={"my-2 md:my-4"} />
           <h5 className={"text-center my-2"}>持仓明细</h5>
           <div className={"flex flex-col gap-2"}>
-            {summary.summaries.map((s) => (
-              <HoldingCard key={s.id} summary={s}></HoldingCard>
+            {summary.holdings.map((s) => (
+              <TickerCard
+                key={s.id}
+                id={s.id}
+                ticker={s.ticker}
+                weightPct={s.weightPct}
+                profit={s.profit}
+              ></TickerCard>
             ))}
           </div>
         </div>

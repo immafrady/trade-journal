@@ -5,6 +5,7 @@ export class SinaQuote {
   constructor(public readonly ticker: SinaTicker) {}
 
   // 股票相关
+  public date?: string;
   public time?: string;
   public open?: number;
   public current?: number;
@@ -25,7 +26,8 @@ export class SinaQuote {
     const raw = match ? match[1] : "";
     if (raw) {
       const list = raw.split(",");
-      this.time = `${list[30]} ${list[31]}`;
+      this.date = list[30];
+      this.time = list[31];
       this.open = +list[1];
       this.prevClose = +list[2];
       this.current = +list[3];

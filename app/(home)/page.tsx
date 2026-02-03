@@ -2,7 +2,7 @@
 import React from "react";
 import StartGuidance from "@/app/(home)/_components/start-guidance";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
-import { TickerCard } from "@/app/(home)/_components/ticker-card";
+import { TickerCard } from "@/components/ui/my/ticker-card";
 import { NavigateToHoldingsAdd } from "@/app/(home)/_components/navigate-to-holdings-add";
 import Loading from "@/components/ui/my/loading";
 import {
@@ -58,14 +58,14 @@ function InnerPage() {
       {list.length ? (
         <>
           <div className={"common-layout flex flex-col gap-2 pt-10 pb-20"}>
-            {list?.map(({ id, ticker, quote, proportion }) => {
+            {list?.map((hwq) => {
               return (
                 <TickerCard
-                  key={ticker.key}
-                  id={id}
-                  ticker={ticker}
-                  quote={quote}
-                  proportion={proportion}
+                  key={hwq.id}
+                  id={hwq.id}
+                  ticker={hwq.ticker}
+                  weightPct={hwq.weightPct}
+                  profit={hwq.profit}
                 />
               );
             })}

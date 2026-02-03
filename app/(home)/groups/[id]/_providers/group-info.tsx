@@ -1,7 +1,6 @@
 import React from "react";
-import { GroupModel } from "@/lib/services/group";
+import { GroupModel, useGroupList } from "@/lib/services/group";
 import { useParams, useRouter } from "next/navigation";
-import { useGroupList } from "@/lib/services/group/hooks/use-group-list";
 import { toast } from "sonner";
 
 export const GroupInfoContext = React.createContext<GroupModel | undefined>(

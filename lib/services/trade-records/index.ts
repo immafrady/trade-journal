@@ -11,9 +11,13 @@ export {
 
 export { parseFromCsv } from "./utils/parse-from-csv";
 export {
-  computeTradeRecordSummary,
-  type TradeRecordSummary,
-} from "./utils/compute-trade-record-summary";
+  computeHoldingSummary,
+  type HoldingSummary,
+} from "./utils/compute-holding-summary";
+export {
+  computeHoldingProfit,
+  type HoldingProfit,
+} from "./utils/compute-holding-profit";
 
 export {
   addTradeRecords,

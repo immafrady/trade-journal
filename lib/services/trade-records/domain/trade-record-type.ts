@@ -6,6 +6,7 @@ export enum TradeRecordTypeValue {
   Dividend,
   Split,
   Merge,
+  Draft,
 }
 
 export class TradeRecordType {
@@ -31,6 +32,10 @@ export class TradeRecordType {
     TradeRecordTypeValue.Merge,
     "合股",
   );
+  static readonly Draft = new TradeRecordType(
+    TradeRecordTypeValue.Draft,
+    "草稿",
+  );
   static readonly values = [
     TradeRecordType.Buy,
     TradeRecordType.Sell,
@@ -39,6 +44,7 @@ export class TradeRecordType {
     TradeRecordType.Dividend,
     TradeRecordType.Split,
     TradeRecordType.Merge,
+    TradeRecordType.Draft,
   ] as const;
 
   private constructor(

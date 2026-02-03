@@ -4,60 +4,60 @@ import {
   useHoldingsWithQuote,
 } from "@/lib/services/composed/use-holdings-with-quote";
 import { useTradeRecordStore } from "@/lib/services/trade-records/provider/trade-record-provider/trade-record-store";
+import {
+  computeHoldingProfit,
+  HoldingProfit,
+  HoldingSummary,
+} from "@/lib/services/trade-records";
 
 interface HomeProviderProps {
   list: HoldingWithQuoteExtend[];
-  totalAmount: number;
-  maxTotalAmount: number;
+  totalMarketValue: number;
+  totalProfit: number;
 }
 
 export const HomeContext = React.createContext<HomeProviderProps>({
   list: [],
-  totalAmount: 0,
-  maxTotalAmount: 0,
+  totalMarketValue: 0,
+  totalProfit: 0,
 });
 
 export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
   const store = useTradeRecordStore((s) => s.store);
-  const raws = useHoldingsWithQuote();
+  const holdingWithQuotes = useHoldingsWithQuote();
 
-  const data = Object.values(store)
-    .map((item) => item.summary)
-    .reduce(
-      (prev, curr) => {
-        return {
-          totalAmount: prev.totalAmount + curr.totalAmount,
-          maxTotalAmount: prev.maxTotalAmount + curr.maxTotalAmount,
-        };
-      },
-      {
-        totalAmount: 0,
-        maxTotalAmount: 0,
-      },
-    );
-
-  const list: HoldingWithQuoteExtend[] = raws
-    .filter((item) => {
-      return !!store[item.id];
-    })
-    .map((item) => {
-      const summary = store[item.id].summary;
-      return {
-        ...item,
-        proportion:
-          data.totalAmount && summary
-            ? (summary.totalAmount / data.totalAmount) * 100
-            : 0,
-      };
-    })
-    .sort((a, b) => b.proportion - a.proportion);
+  let totalMarketValue = 0;
+  let totalProfit = 0;
+  const list: HoldingWithQuoteExtend[] = [];
+  for (const hwq of holdingWithQuotes) {
+    const data = store[hwq.id];
+    if (data) {
+      const profit = hwq.quote
+        ? computeHoldingProfit(hwq.quote.current!, data.summary)
+        : data.latestProfit;
+      totalMarketValue += profit?.marketValue ?? 0;
+      totalProfit += profit?.totalProfit ?? 0;
+      list.push({
+        ...hwq,
+        summary: data.summary,
+        profit,
+        weightPct: 0,
+      });
+    }
+  }
 
   return (
     <HomeContext.Provider
       value={{
-        list,
-        totalAmount: data.totalAmount,
-        maxTotalAmount: data.maxTotalAmount,
+        list: list
+          .map((item) => ({
+            ...item,
+            weightPct:
+              ((item.profit?.marketValue ?? 0) / totalMarketValue) * 100,
+          }))
+          .sort((a, b) => b.weightPct - a.weightPct),
+        totalMarketValue,
+        totalProfit,
       }}
     >
       {children}
@@ -66,5 +66,7 @@ export const HomeProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export interface HoldingWithQuoteExtend extends HoldingWithQuote {
-  proportion: number;
+  summary: HoldingSummary;
+  profit?: HoldingProfit;
+  weightPct: number;
 }

@@ -1,4 +1,4 @@
-import { GroupModel } from "@/lib/services/group/domain/group";
+import { GroupModel } from "@/lib/services/group";
 
 // 新增组合
 export async function addOrEditGroup(group: GroupModel) {
