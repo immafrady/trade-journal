@@ -80,13 +80,6 @@ export function getColumns(
       cell: (row) => formatShares(row.getValue() as number),
     }),
     genColumnDef({
-      id: TradeRecordConstants.AdjustedShares,
-      isNumeric: true,
-      accessorFn: (row) => row.adjusted.shares,
-      filterFn: "inNumberRange",
-      cell: (row) => formatShares(row.getValue() as number),
-    }),
-    genColumnDef({
       id: TradeRecordConstants.CumulativeTotalShares,
       isNumeric: true,
       accessorFn: (row) => row.cumulative.totalShares,
@@ -97,13 +90,6 @@ export function getColumns(
       id: TradeRecordConstants.Amount,
       isNumeric: true,
       accessorFn: (row) => row.derived.amount,
-      filterFn: "inNumberRange",
-      cell: (row) => formatMoney(row.getValue() as number),
-    }),
-    genColumnDef({
-      id: TradeRecordConstants.AdjustedAmount,
-      isNumeric: true,
-      accessorFn: (row) => row.adjusted.amount,
       filterFn: "inNumberRange",
       cell: (row) => formatMoney(row.getValue() as number),
     }),
@@ -125,19 +111,6 @@ export function getColumns(
       id: TradeRecordConstants.Fee,
       isNumeric: true,
       accessorFn: (row) => row.derived.fee,
-      cell: (row) => {
-        const v = row.getValue() as number;
-        return (
-          <span className={!v ? "text-destructive" : undefined}>
-            {formatMoney(v)}
-          </span>
-        );
-      },
-    }),
-    genColumnDef({
-      id: TradeRecordConstants.AdjustedFee,
-      isNumeric: true,
-      accessorFn: (row) => row.adjusted.fee,
       cell: (row) => {
         const v = row.getValue() as number;
         return (
@@ -206,21 +179,7 @@ export function getColumns(
 }
 
 export const baseVisibility = {
-  [TradeRecordConstants.AdjustedAmount]: false,
-  [TradeRecordConstants.AdjustedFee]: false,
   [TradeRecordConstants.FeeRate]: false,
-  [TradeRecordConstants.AdjustedShares]: false,
-  [TradeRecordConstants.CumulativeTotalAmount]: false,
-  [TradeRecordConstants.CumulativeTotalShares]: false,
-  [TradeRecordConstants.CumulativeCostPrice]: false,
-  [TradeRecordConstants.CumulativeMarketValue]: false,
-  [TradeRecordConstants.CumulativeValueIndex]: false,
-} as const;
-
-export const adjustVisibility = {
-  [TradeRecordConstants.Amount]: false,
-  [TradeRecordConstants.Fee]: false,
-  [TradeRecordConstants.Shares]: false,
   [TradeRecordConstants.CumulativeTotalAmount]: false,
   [TradeRecordConstants.CumulativeTotalShares]: false,
   [TradeRecordConstants.CumulativeCostPrice]: false,
@@ -233,7 +192,4 @@ export const cumulativeVisibility = {
   [TradeRecordConstants.Fee]: false,
   [TradeRecordConstants.FeeRate]: false,
   [TradeRecordConstants.Shares]: false,
-  [TradeRecordConstants.AdjustedAmount]: false,
-  [TradeRecordConstants.AdjustedFee]: false,
-  [TradeRecordConstants.AdjustedShares]: false,
 } as const;
