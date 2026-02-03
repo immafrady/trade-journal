@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-summary/bottom-bar";
 import { SinaStockType, SinaTicker } from "@/lib/services/sina";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export const TabSummary = () => {
   const { id, data } = React.useContext(HoldingInfoContext)!;
@@ -29,10 +29,6 @@ export const TabSummary = () => {
       },
     ];
     if (data?.quote) {
-      list.push({
-        label: "场内估值",
-        profit: computeProfit(data.quote.time!, data.quote.current!, summary),
-      });
       if (SinaStockType.AShare !== data.ticker.type) {
         list.push({
           label: "场外估值",
@@ -43,6 +39,10 @@ export const TabSummary = () => {
           ),
         });
       }
+      list.unshift({
+        label: "场内估值",
+        profit: computeProfit(data.quote.time!, data.quote.current!, summary),
+      });
     }
     return list;
   }, [latestProfit, data?.quote, data?.ticker.type, summary]);
@@ -108,13 +108,13 @@ export const TabSummary = () => {
                 })
               }
             >
-              <ArrowLeft></ArrowLeft>
+              <ChevronLeft></ChevronLeft>
             </Button>
             <span className={"font-medium"}>
               {profitList[index % profitList.length].label}
             </span>
             <Button variant={"ghost"} onClick={() => setIndex((i) => i + 1)}>
-              <ArrowRight></ArrowRight>
+              <ChevronRight></ChevronRight>
             </Button>
           </div>
           <ProfitBlock
@@ -146,16 +146,24 @@ const ProfitBlock = ({
         {profit.date}
       </SimpleDisplayVertical>
       <SimpleDisplayVertical title={"当前浮动盈亏"}>
-        {formatMoney(profit.unrealizedProfit)}
+        <span className={getTickerChangeColorClass(profit.unrealizedProfit)}>
+          {formatMoney(profit.unrealizedProfit)}
+        </span>
       </SimpleDisplayVertical>
       <SimpleDisplayVertical title={"总盈亏"}>
-        {formatMoney(profit.totalProfit)}
+        <span className={getTickerChangeColorClass(profit.totalProfit)}>
+          {formatMoney(profit.totalProfit)}
+        </span>
       </SimpleDisplayVertical>
       <SimpleDisplayVertical title={"当前浮动收益率"}>
-        {formatPercent(profit.holdingReturnPct)}
+        <span className={getTickerChangeColorClass(profit.unrealizedProfit)}>
+          {formatPercent(profit.holdingReturnPct)}
+        </span>
       </SimpleDisplayVertical>
       <SimpleDisplayVertical title={"总收益率"}>
-        {formatPercent(profit.totalReturnPct)}
+        <span className={getTickerChangeColorClass(profit.totalProfit)}>
+          {formatPercent(profit.totalReturnPct)}
+        </span>
       </SimpleDisplayVertical>
     </section>
   );

@@ -1,75 +1,95 @@
 // 实际计算方法
 import { TradeRecord, TradeRecordType } from "@/lib/services/trade-records";
 
-export const computeTradeRecordSummary = (list: TradeRecord[]) => {
-  list = list.filter((record) => TradeRecordType.Draft !== record.props.type); // 过滤掉草稿
+export const computeTradeRecordSummary = (records: TradeRecord[]) => {
+  records = records
+    .filter((record) => TradeRecordType.Draft !== record.props.type) // 过滤掉草稿
+    .reverse(); // 翻转
   // 汇总操作次数、金额合计
-  let totalFee = 0;
-  let totalAmount = 0;
-  let costPrice = 0;
-  let maxTotalAmount = 0;
-  let totalShares = 0;
-  let maxTotalShares = 0;
-  let maxTotalAmountTradedAt: string | null = null;
-  let maxTotalSharesTradedAt: string | null = null;
-  let dividendCount = 0;
+  let shares = 0;
+  let remainingCost = 0; // 当前持仓真实成本
+  let netInvestment = 0; // 净投入资金
+
+  let totalBuyAmount = 0;
+  let totalSellAmount = 0;
   let totalDividend = 0;
-  if (list.length) {
-    // 最新的值就是当前的成本
-    totalAmount = list[0].cumulative.totalAmount;
-    totalShares = list[0].cumulative.totalShares;
-    costPrice = list[0].cumulative.costPrice;
-    for (let i = list.length - 1; i >= 0; i--) {
-      const record = list[i];
+  let totalFee = 0;
+
+  let totalBuyCount = 0;
+  let totalSellCount = 0;
+  let totalDividendCount = 0;
+
+  let realizedProfit = 0;
+  let historicalMaxCapitalOccupied = 0;
+
+  for (const record of records) {
+    if (
+      [TradeRecordType.Merge, TradeRecordType.Split].includes(record.props.type)
+    ) {
+      // 🧩 拆股 / 合股（只影响份额和成本单价，不影响总成本）
+      shares += record.adjusted.shares;
+    } else if (TradeRecordType.Dividend === record.props.type) {
+      // 💰 现金分红
+      totalDividend -= record.adjusted.amount; // amount 是负数（现金流入）
+      totalDividendCount++;
+      realizedProfit -= record.adjusted.amount;
+      netInvestment += record.adjusted.amount; // amount负数 → 净投入减少
+    } else if (TradeRecordType.Draft !== record.props.type) {
+      // 📈 普通交易（申购/赎回/买卖）
       totalFee += record.adjusted.fee;
-      maxTotalAmount = Math.max(maxTotalAmount, record.cumulative.totalAmount);
-      if (maxTotalAmount === record.cumulative.totalAmount) {
-        maxTotalAmountTradedAt = record.display.tradedAt;
+
+      const tradeShares = record.adjusted.shares;
+      const tradeAmount = record.adjusted.amount;
+
+      if (tradeShares > 0) {
+        // ===== 买入 / 申购 =====
+        shares += tradeShares;
+        remainingCost += tradeAmount; // 买入增加成本
+        netInvestment += tradeAmount;
+        totalBuyAmount += tradeAmount;
+        totalBuyCount++;
+      } else if (tradeShares < 0) {
+        // ===== 卖出 / 赎回 =====
+        const avgCost = shares > 0 ? remainingCost / shares : 0;
+        const costPortion = avgCost * -tradeShares;
+
+        shares += tradeShares;
+        remainingCost -= costPortion;
+
+        realizedProfit += -tradeAmount - costPortion;
+        netInvestment += tradeAmount;
+
+        totalSellAmount -= tradeAmount;
+        totalSellCount++;
       }
-      maxTotalShares = Math.max(maxTotalShares, record.cumulative.totalShares);
-      if (maxTotalShares === record.cumulative.totalShares) {
-        maxTotalSharesTradedAt = record.display.tradedAt;
-      }
-      if (
-        record.props.type === TradeRecordType.Dividend &&
-        record.props.amount
-      ) {
-        // 统计分红
-        dividendCount += 1;
-        totalDividend += record.props.amount;
-      }
+
+      historicalMaxCapitalOccupied = Math.max(
+        historicalMaxCapitalOccupied,
+        netInvestment,
+      );
     }
   }
 
   return {
-    totalFee,
-    totalAmount,
-    totalShares,
-    costPrice,
-    count: list.length,
-    maxTotalAmount,
-    maxTotalShares,
-    totalAmountPct: totalAmount / maxTotalAmount,
-    totalSharesPct: totalShares / maxTotalShares,
-    maxTotalAmountTradedAt,
-    maxTotalSharesTradedAt,
-    dividendCount,
-    totalDividend: -totalDividend,
-  } as TradeRecordSummary;
+    /** 当前状态 */
+    shares, // 当前持仓份额
+    /** 资金流向 */
+    totalBuyAmount, // 累计买入金额
+    totalSellAmount, // 累计卖出回收金额
+    totalFee, // 累计手续费（仅做统计处理）
+    totalDividend, // 累计分红
+    totalBuyCount, // 累计买入次数
+    totalSellCount, // 累计卖出次数
+    totalDividendCount, // 累计分红次数
+    /** 成本与回本状态 */
+    netInvestment, // 净投入资金 = 买入 - 卖出 + 手续费 - 分红
+    costPrice: shares > 0 && remainingCost > 0 ? remainingCost / shares : 0, // 当前持仓成本价（仅当 shares > 0 且 netInvestment > 0 有意义）
+    avgPrice: shares > 0 ? netInvestment / shares : 0, // 总和成本
+    isRecovered: netInvestment <= 0, // 是否已回本（净投入 <= 0）
+    remainingCost, // 当前持仓真实成本
+    /** 收益结果（核心） */
+    realizedProfit, // 已实现盈亏（卖出部分）
+    /** 杂项*/
+    historicalMaxCapitalOccupied, // 最高资金占用
+  };
 };
-
-export interface TradeRecordSummary {
-  totalFee: number; // 总交易费用
-  totalAmount: number; // 总支出金额
-  totalShares: number; // 总份额
-  costPrice: number; // 当前成本
-  count: number; // 操作次数
-  maxTotalAmount: number; // 最高时的总交易费用
-  maxTotalShares: number; // 最高时的总份额
-  totalAmountPct: number; // 总交易费用百分位
-  maxTotalAmountTradedAt?: string; // 最高时的总交易费用发生日期
-  totalSharesPct: number; // 总份额百分位
-  maxTotalSharesTradedAt?: string; // 最高时的总份额发生日期
-  dividendCount: number; // 分红次数
-  totalDividend: number; // 分红金额
-}
