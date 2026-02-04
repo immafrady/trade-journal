@@ -7,7 +7,7 @@ export { useGroupList } from "./hooks/use-group-list";
 export {
   useGroupSummary,
   type GroupHoldingSummary,
-} from "./hooks/use-group-summary-2";
+} from "./hooks/use-group-summary";
 export { useGroupTradeRecords } from "./hooks/use-group-trade-records";
 
 export { addOrEditGroup, editGroupHoldings, deleteGroup } from "./group-apis";
