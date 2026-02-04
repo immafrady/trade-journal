@@ -18,12 +18,11 @@ export const useGroupTradeRecords = (holdingIds: string[]) => {
     }
 
     // 👇 2️⃣ 按时间从旧到新排序，其次按照id从旧到新排序
-    timeline.sort((a, b) => {
-      const timeDiff =
-        a.record.props.tradedAt.valueOf() - b.record.props.tradedAt.valueOf();
-      if (!timeDiff) return timeDiff;
-      return a.record.props.id! - b.record.props.id!;
-    });
+    timeline.sort(
+      (a, b) =>
+        a.record.props.tradedAt.valueOf() - b.record.props.tradedAt.valueOf() ||
+        a.record.props.id! - b.record.props.id!,
+    );
 
     let totalAmount = 0;
     // 👇 3️⃣ 沿时间轴推进（核心算法 O(n)）
