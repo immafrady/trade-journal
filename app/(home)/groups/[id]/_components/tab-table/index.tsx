@@ -20,10 +20,16 @@ export const TabTable = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0, //initial page index
+    pageSize: 15, //default page size
+  });
+
   const table = useReactTable({
     data: records,
     state: {
       columnFilters,
+      pagination,
     },
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -31,6 +37,7 @@ export const TabTable = () => {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: setPagination,
   });
 
   const selectedRows = table
