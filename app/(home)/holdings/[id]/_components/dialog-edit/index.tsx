@@ -40,6 +40,7 @@ import {
 import { formatMoney, formatShares } from "@/lib/market-utils";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { toFormString } from "@/lib/utils";
 
 export const DialogEdit = ({
   trigger,
@@ -57,12 +58,12 @@ export const DialogEdit = ({
     defaultValues: {
       tradedAt: record?.props.tradedAt.toDate() ?? new Date(),
       type: record?.props.type.label,
-      factor: record?.props.factor ?? "1",
-      shares: record?.props.shares ?? "",
-      price: record?.props.price ?? "",
-      amount: record?.props.amount ?? "",
-      fee: record?.props.fee ?? "",
-      comment: record?.props.comment ?? "",
+      factor: toFormString(record?.props.factor, "1"),
+      shares: toFormString(record?.props.shares),
+      price: toFormString(record?.props.price),
+      amount: toFormString(record?.props.amount),
+      fee: toFormString(record?.props.fee),
+      comment: toFormString(record?.props.comment),
     },
     onSubmitInvalid: (props) => {
       console.log(props);

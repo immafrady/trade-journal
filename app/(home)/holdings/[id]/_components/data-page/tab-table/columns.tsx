@@ -110,11 +110,11 @@ export function getColumns(
     genColumnDef({
       id: TradeRecordConstants.Fee,
       isNumeric: true,
-      accessorFn: (row) => row.derived.fee,
+      accessorFn: (row) => row.derived.fee || row.props.fee,
       cell: (row) => {
         const v = row.getValue() as number;
         return (
-          <span className={!v ? "text-destructive" : undefined}>
+          <span className={v === undefined ? "text-destructive" : undefined}>
             {formatMoney(v)}
           </span>
         );

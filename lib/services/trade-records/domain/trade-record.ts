@@ -123,31 +123,6 @@ export class TradeRecord {
     isDraft: false,
   };
 
-  /**
-   * 数据库解析
-   * @param model
-   */
-  static fromDatabase(model: TradeRecordModel) {
-    const type = TradeRecordType.parseFromValue(model.type);
-    if (!type) {
-      throw new Error(
-        `无法解析交易类型: ${model.type}, 原始数据: ${JSON.stringify(model)}`,
-      );
-    }
-    return new TradeRecord({
-      holdingId: model.holding_id,
-      type,
-      factor: model.factor,
-      shares: model.shares,
-      price: model.price,
-      amount: model.amount,
-      fee: model.fee,
-      comment: model.comment,
-      tradedAt: dayjs(model.traded_at),
-      id: model.id,
-    });
-  }
-
   static fromCSV(model: TradeRecordCSVModel) {
     const type = TradeRecordType.parseFromValue(+model.type);
     if (!type) {
@@ -159,26 +134,31 @@ export class TradeRecord {
       holdingId: +model.holding_id,
       type,
       factor: +model.factor,
-      shares: +model.shares || undefined,
-      price: +model.price || undefined,
-      amount: +model.amount || undefined,
-      fee: +model.fee || undefined,
+      shares: this.csvNumber(model.shares),
+      price: this.csvNumber(model.price),
+      amount: this.csvNumber(model.amount),
+      fee: this.csvNumber(model.fee),
       comment: model.comment,
       tradedAt: dayjs(model.traded_at),
       id: +model.id,
     });
   }
 
+  // 解析csv格式的数字
+  private static csvNumber(v: string): number | undefined {
+    return v === "" ? undefined : +v;
+  }
+
   // 转化为json，默认使用数据库格式
   toJSON(): TradeRecordModel {
     return {
-      amount: this.props.amount!,
+      amount: this.props.amount ?? null,
       comment: this.props.comment!,
       factor: this.props.factor!,
-      fee: this.props.fee,
+      fee: this.props.fee ?? null,
       holding_id: this.props.holdingId,
-      price: this.props.price,
-      shares: this.props.shares,
+      price: this.props.price ?? null,
+      shares: this.props.shares ?? null,
       traded_at: this.display.tradedAt,
       type: this.props.type.value,
       id: this.props.id,
@@ -218,10 +198,10 @@ export interface TradeRecordModel {
   holding_id: number;
   type: TradeRecordTypeValue;
   factor: number;
-  shares?: number;
-  price?: number;
-  amount?: number;
-  fee?: number;
+  shares?: number | null;
+  price?: number | null;
+  amount?: number | null;
+  fee?: number | null;
   comment: string;
   traded_at: string;
 }

@@ -78,7 +78,9 @@ export function useTradeRecordList(
               TradeRecordType.Subscribe,
             ].includes(record.props.type)
           ) {
-            record.meta.isDraft = !record.derived.fee;
+            if (!record.derived.fee) {
+              record.meta.isDraft = record.props.fee === undefined;
+            }
           }
         }
         result.unshift(record);

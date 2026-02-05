@@ -5,7 +5,6 @@ import { StepParseError } from "@/app/(home)/holdings/[id]/import/_components/st
 import {
   addTradeRecords,
   TradeRecord,
-  TradeRecordModel,
   TradeRecordUpdaterContext,
 } from "@/lib/services/trade-records";
 import { StepPreviewData } from "@/app/(home)/holdings/[id]/import/_components/step-preview-data";
@@ -41,15 +40,12 @@ export default function Page() {
             records={records}
             onSubmit={async () => {
               const response = await addTradeRecords(records);
-              const { data, error } = await response.json();
-              if (error && error.message) {
-                toast.error(error.message);
+              const { error } = await response.json();
+              if (error) {
+                toast.error(error);
               } else {
-                const newRecords = data.map((d: TradeRecordModel) =>
-                  TradeRecord.fromDatabase(d),
-                );
                 await updater(id);
-                toast.success(`成功插入${newRecords.length}条数据`);
+                toast.success(`成功插入${records.length}条数据`);
                 router.replace(`/holdings/${id}`);
               }
             }}

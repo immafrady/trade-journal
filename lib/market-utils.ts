@@ -3,7 +3,7 @@ import { SinaStockType } from "@/lib/services/sina";
 export type StockValueFormatter = (num?: number) => string;
 
 export const formatMoney = (num?: number) => {
-  if (!num) return "--";
+  if (num === undefined) return "--";
   const formatted = Math.abs(num).toLocaleString("zh-CN", {
     style: "currency",
     currency: "CNY",

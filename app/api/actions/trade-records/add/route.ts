@@ -7,7 +7,10 @@ import { MyResponse } from "@/app/api/_my-response";
 export const POST = async (request: NextRequest) => {
   const body: TradeRecordModel[] = await request.json();
   const supabase = await createClient();
-  return MyResponse.anyOk(
-    await supabase.from("trade_records").insert(body).select(),
-  );
+  const { error } = await supabase.from("trade_records").insert(body).select();
+  if (error) {
+    return MyResponse.serverFail(error.message);
+  } else {
+    return MyResponse.msgOk("成功插入！");
+  }
 };
