@@ -1,20 +1,20 @@
 import React from "react";
 import { useTradeRecordList } from "@/lib/services/trade-records/hooks/use-trade-record-list";
-import { useTradeRecordStore } from "@/lib/services/trade-records";
+import { useHoldingDetailStore } from "@/lib/services/composed/holding-detail-provider/subscribe";
 
-export type TradeRecordUpdaterHandle = {
+export type HoldingDetailUpdaterHandle = {
   update: () => Promise<any>;
 };
 
-export const TradeRecordUpdater = React.memo(
+export const HoldingDetailUpdater = React.memo(
   React.forwardRef<
-    TradeRecordUpdaterHandle,
+    HoldingDetailUpdaterHandle,
     {
       holdingId: string;
     }
   >(({ holdingId }, ref) => {
     const { mutate, data = [] } = useTradeRecordList(holdingId);
-    const updateStore = useTradeRecordStore((s) => s.updateStore);
+    const updateStore = useHoldingDetailStore((s) => s.updateStore);
     React.useImperativeHandle(
       ref,
       () => ({
@@ -23,9 +23,9 @@ export const TradeRecordUpdater = React.memo(
       [mutate],
     );
     React.useEffect(() => {
-      updateStore?.(holdingId, data);
+      updateStore(holdingId, data);
     }, [data, holdingId, updateStore]);
     return null;
   }),
 );
-TradeRecordUpdater.displayName = "TradeRecordUpdater";
+HoldingDetailUpdater.displayName = "HoldingDetailUpdater";

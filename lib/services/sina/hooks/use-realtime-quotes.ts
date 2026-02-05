@@ -16,7 +16,7 @@ export function useRealtimeQuotes(tickers: SinaTicker[]) {
       return await response.text();
     },
     {
-      refreshInterval: 5000,
+      fallbackData: "",
     },
   );
   const data = React.useMemo(() => {
