@@ -30,3 +30,12 @@ export type HoldingDetailState = {
 
 // 仓库
 export type HoldingDetailStore = UseBoundStore<StoreApi<HoldingDetailState>>;
+
+// HoldingDetail
+export interface HoldingDetail {
+  record: TradeRecord[];
+  summary: HoldingSummary;
+  latest?: TradeRecord;
+  profit?: HoldingProfit;
+  quote?: SinaQuote;
+}
