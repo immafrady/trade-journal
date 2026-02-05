@@ -1,5 +1,4 @@
 "use client";
-import { useTradeRecordStore } from "@/lib/services/trade-records";
 import {
   AppBar,
   AppBarExtra,
@@ -7,9 +6,10 @@ import {
 } from "@/components/layout/app-shell";
 import { AlertMessageItem } from "@/app/(home)/alert-messages/_components/alert-message-item";
 import { cn } from "@/lib/utils";
+import { useHoldingDetailStore } from "@/lib/services/composed/holding-detail-provider";
 
 export default function Page() {
-  const draftList = useTradeRecordStore((s) => s.draftList);
+  const draftList = useHoldingDetailStore((s) => s.draftList);
   return (
     <AppContainer
       appBar={

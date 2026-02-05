@@ -2,11 +2,11 @@ import Link from "next/link";
 import React from "react";
 import { TriangleAlert } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useTradeRecordStore } from "@/lib/services/trade-records";
 import { motion } from "motion/react";
+import { useHoldingDetailStore } from "@/lib/services/composed/holding-detail-provider";
 
 export const AppBarAlert = () => {
-  const draftList = useTradeRecordStore((s) => s.draftList);
+  const draftList = useHoldingDetailStore((s) => s.draftList);
 
   if (draftList.length) {
     return (

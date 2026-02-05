@@ -1,7 +1,6 @@
 import {
   computeHoldingProfit,
   HoldingProfit,
-  useTradeRecordDataById,
 } from "@/lib/services/trade-records";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
@@ -17,10 +16,11 @@ import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-
 import { SinaStockType } from "@/lib/services/sina";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useHoldingDetailById } from "@/lib/services/composed/holding-detail-provider";
 
 export const TabSummary = () => {
   const { id, data } = React.useContext(HoldingInfoContext)!;
-  const { summary, latestProfit, latest } = useTradeRecordDataById(id);
+  const { summary, quote, profit, latest } = useHoldingDetailById(id);
   const [index, setIndex] = React.useState(0);
   const profitList = React.useMemo(() => {
     const list: { label: string; date: string; profit: HoldingProfit }[] = [];
@@ -28,27 +28,27 @@ export const TabSummary = () => {
       list.push({
         label: "当前估值",
         date: latest.display.tradedAt,
-        profit: latestProfit!,
+        profit: computeHoldingProfit(latest.derived.price, summary),
       });
     }
-    if (data?.quote) {
-      if (SinaStockType.AShare !== data.ticker.type) {
+    if (quote) {
+      if (SinaStockType.AShare !== data?.ticker.type) {
         list.push({
           label: "场外估值",
-          date: data.quote.fundDate!,
-          profit: computeHoldingProfit(data.quote.fundNav!, summary),
+          date: quote.fundDate!,
+          profit: computeHoldingProfit(quote.fundNav!, summary),
         });
       }
       list.unshift({
         label: "场内估值",
-        date: data.quote.date!,
-        profit: computeHoldingProfit(data.quote.current!, summary),
+        date: quote.date!,
+        profit: profit!,
       });
     }
     return list;
-  }, [latest, data?.quote, data?.ticker.type, latestProfit, summary]);
+  }, [latest, quote, summary, data?.ticker.type, profit]);
 
-  const profit = profitList.length
+  const currentProfit = profitList.length
     ? profitList[index % profitList.length]
     : undefined;
   return (
@@ -100,7 +100,7 @@ export const TabSummary = () => {
               </>
             )}
           </section>
-          {profit ? (
+          {currentProfit ? (
             <>
               <Separator className={"my-2 md:my-4"} />
               <div className={"flex justify-center items-center"}>
@@ -116,7 +116,7 @@ export const TabSummary = () => {
                 >
                   <ChevronLeft></ChevronLeft>
                 </Button>
-                <span className={"font-medium"}>{profit.label}</span>
+                <span className={"font-medium"}>{currentProfit.label}</span>
                 <Button
                   variant={"ghost"}
                   onClick={() => setIndex((i) => i + 1)}
@@ -125,8 +125,8 @@ export const TabSummary = () => {
                 </Button>
               </div>
               <ProfitBlock
-                date={profit.date!}
-                profit={profit.profit!}
+                date={currentProfit.date!}
+                profit={currentProfit.profit!}
               ></ProfitBlock>
             </>
           ) : null}

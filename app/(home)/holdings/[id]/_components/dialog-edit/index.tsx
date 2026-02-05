@@ -12,7 +12,6 @@ import {
   TradeRecord,
   TradeRecordConstants,
   TradeRecordType,
-  TradeRecordUpdaterContext,
   updateTradeRecord,
 } from "@/lib/services/trade-records";
 import { DatePicker } from "@/components/ui/my/date-picker";
@@ -41,6 +40,7 @@ import { formatMoney, formatShares } from "@/lib/market-utils";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { toFormString } from "@/lib/utils";
+import { HoldingDetailUpdaterContext } from "@/lib/services/composed/holding-detail-provider";
 
 export const DialogEdit = ({
   trigger,
@@ -51,7 +51,7 @@ export const DialogEdit = ({
 }) => {
   const dialogRef = React.useRef<ResponsiveDialogRef>(null);
   const { id: holdingId, data } = React.useContext(HoldingInfoContext);
-  const updater = React.useContext(TradeRecordUpdaterContext);
+  const updater = React.useContext(HoldingDetailUpdaterContext);
   const editType = record ? "编辑" : "新增";
 
   const form = useForm({

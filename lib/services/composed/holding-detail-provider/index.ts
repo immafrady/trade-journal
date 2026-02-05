@@ -12,8 +12,11 @@ export {
   HoldingDetailProvider,
 } from "./providers/holding-detail-provider";
 
+export { HoldingDetailUpdaterContext } from "./providers/holding-detail-updater-provider";
+
 export {
   useHoldingDetailStore,
-  useHoldingDetail,
+  useHoldingDetailById,
   useHoldingDetailList,
+  useTradeRecordsById,
 } from "./subscribe";

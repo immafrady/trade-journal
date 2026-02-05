@@ -19,6 +19,7 @@ export const useHoldingDetailList = (holdingIds: string[]): HoldingDetail[] => {
   return useHoldingDetailStore(
     useShallow((s) =>
       holdingIds.map((id) => ({
+        id,
         record: s.recordStore[id],
         summary: s.summaryStore[id],
         latest: s.latestRecordStore[id],
@@ -30,9 +31,10 @@ export const useHoldingDetailList = (holdingIds: string[]): HoldingDetail[] => {
 };
 
 // 数据拼凑(单个)
-export const useHoldingDetail = (id: string): HoldingDetail => {
+export const useHoldingDetailById = (id: string): HoldingDetail => {
   return useHoldingDetailStore(
     useShallow((s) => ({
+      id,
       record: s.recordStore[id],
       summary: s.summaryStore[id],
       latest: s.latestRecordStore[id],
@@ -40,4 +42,9 @@ export const useHoldingDetail = (id: string): HoldingDetail => {
       quote: s.quoteStore[id],
     })),
   );
+};
+
+// 纯取TradeRecords
+export const useTradeRecordsById = (holdingId: string) => {
+  return useHoldingDetailStore((s) => s.recordStore[holdingId]);
 };

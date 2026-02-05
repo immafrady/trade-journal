@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { BaseInfo } from "@/app/(home)/holdings/[id]/_components/base-info";
-import { useTradeRecordDataById } from "@/lib/services/trade-records";
 import { BlankPage } from "@/app/(home)/holdings/[id]/_components/blank-page";
 import { DataPage } from "@/app/(home)/holdings/[id]/_components/data-page";
 import { cn } from "@/lib/utils";
@@ -11,10 +10,11 @@ import {
   AppContainer,
 } from "@/components/layout/app-shell";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { useTradeRecordsById } from "@/lib/services/composed/holding-detail-provider";
 
 export default function Page() {
   const { id, data } = React.useContext(HoldingInfoContext);
-  const { records } = useTradeRecordDataById(id);
+  const records = useTradeRecordsById(id);
   const [moreInfo, setMoreInfo] = React.useState(true);
 
   return (

@@ -33,6 +33,7 @@ export type HoldingDetailStore = UseBoundStore<StoreApi<HoldingDetailState>>;
 
 // HoldingDetail
 export interface HoldingDetail {
+  id: string;
   record: TradeRecord[];
   summary: HoldingSummary;
   latest?: TradeRecord;

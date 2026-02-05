@@ -1,5 +1,5 @@
-import { useTradeRecordDataById } from "@/lib/services/trade-records";
 import React from "react";
+import { useTradeRecordsById } from "@/lib/services/composed/holding-detail-provider";
 
 export interface TradeRecordChart {
   tradedAt: string;
@@ -8,7 +8,7 @@ export interface TradeRecordChart {
 }
 
 export const useTradeRecordChart = (holdingId: string) => {
-  const { records } = useTradeRecordDataById(holdingId);
+  const records = useTradeRecordsById(holdingId);
   return React.useMemo(() => {
     return [...records]
       .map(

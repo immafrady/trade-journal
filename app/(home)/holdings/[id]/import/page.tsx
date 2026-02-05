@@ -2,11 +2,7 @@
 import { StepChooseFile } from "@/app/(home)/holdings/[id]/import/_components/step-choose-file";
 import React from "react";
 import { StepParseError } from "@/app/(home)/holdings/[id]/import/_components/step-parse-error";
-import {
-  addTradeRecords,
-  TradeRecord,
-  TradeRecordUpdaterContext,
-} from "@/lib/services/trade-records";
+import { addTradeRecords, TradeRecord } from "@/lib/services/trade-records";
 import { StepPreviewData } from "@/app/(home)/holdings/[id]/import/_components/step-preview-data";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -16,10 +12,11 @@ import {
   AppContainer,
 } from "@/components/layout/app-shell";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingDetailUpdaterContext } from "@/lib/services/composed/holding-detail-provider";
 
 export default function Page() {
   const { id, data } = React.useContext(HoldingInfoContext);
-  const updater = React.useContext(TradeRecordUpdaterContext);
+  const updater = React.useContext(HoldingDetailUpdaterContext);
   const [errors, setErrors] = React.useState<Error[]>([]);
   const [records, setRecords] = React.useState<TradeRecord[]>([]);
 

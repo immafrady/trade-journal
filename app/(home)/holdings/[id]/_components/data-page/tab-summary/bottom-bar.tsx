@@ -3,20 +3,18 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LoadingButton } from "@/components/ui/my/button";
 import { MyAlertDialog } from "@/components/ui/my/alert-dialog";
-import {
-  clearAllTradeRecords,
-  TradeRecordUpdaterContext,
-} from "@/lib/services/trade-records";
+import { clearAllTradeRecords } from "@/lib/services/trade-records";
 import { toast } from "sonner";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { usePathname } from "next/navigation";
 import { BottomBarContainer } from "@/components/ui/my/bottom-bar-container";
 import { ClipboardPlus, FileUp, Trash } from "lucide-react";
+import { HoldingDetailUpdaterContext } from "@/lib/services/composed/holding-detail-provider";
 
 export const BottomBar = () => {
   const { id } = React.useContext(HoldingInfoContext)!;
-  const updater = React.useContext(TradeRecordUpdaterContext);
+  const updater = React.useContext(HoldingDetailUpdaterContext);
   const [loading, setLoading] = React.useState(false);
   const pathname = usePathname(); // 例如 /holdings/10
   return (
