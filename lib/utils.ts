@@ -22,3 +22,16 @@ export function exportAsCSV(filename: string, data: any[]) {
   link.download = filename.endsWith(".csv") ? filename : `${filename}.csv`;
   link.click();
 }
+
+// 表单字段初始化
+export function toFormString(
+  value: unknown,
+  defaultValue: string = "",
+): string {
+  if (value === null || value === undefined) return defaultValue;
+
+  const str = String(value);
+
+  // 如果转换后是空字符串，也用默认值
+  return str === "" ? defaultValue : str;
+}

@@ -1,8 +1,14 @@
 import React from "react";
-import { TradeRecordExtend, useGroupHoldings } from "@/lib/services/group";
+import { TradeRecordExtend } from "@/lib/services/group";
+import { useHoldingDetailStore } from "@/lib/services/composed/holding-detail-provider";
+import { useShallow } from "zustand/react/shallow";
+import { useTickerMap } from "@/lib/services/holdings/use-ticker-map";
 
 export const useGroupTradeRecords = (holdingIds: string[]) => {
-  const { tickerMap, holdingRecordMap } = useGroupHoldings(holdingIds);
+  const tickerMap = useTickerMap();
+  const recordList = useHoldingDetailStore(
+    useShallow((s) => holdingIds.map((id) => s.recordStore[id])),
+  );
 
   return React.useMemo(() => {
     const result: TradeRecordExtend[] = [];
@@ -10,8 +16,10 @@ export const useGroupTradeRecords = (holdingIds: string[]) => {
 
     // 👇 1️⃣ 先把所有记录摊平成时间线
     const timeline: TradeRecordExtend[] = [];
-    for (const [id, records] of Object.entries(holdingRecordMap)) {
-      const ticker = tickerMap.get(id)!;
+    for (let i = 0; i < holdingIds.length; i += 1) {
+      const id = holdingIds[i];
+      const records = recordList[i];
+      const ticker = tickerMap[id];
       for (const record of records) {
         timeline.push(new TradeRecordExtend(id, ticker, record));
       }
@@ -43,5 +51,5 @@ export const useGroupTradeRecords = (holdingIds: string[]) => {
       result.unshift(tre);
     }
     return result;
-  }, [tickerMap, holdingRecordMap]);
+  }, [holdingIds, recordList, tickerMap]);
 };

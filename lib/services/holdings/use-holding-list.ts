@@ -17,7 +17,7 @@ export function useHoldingList() {
     return data;
   });
 
-  const data: { id: string; ticker: SinaTicker }[] = React.useMemo(() => {
+  const data: HoldingInfo[] = React.useMemo(() => {
     try {
       return list.map(
         (holding: any) =>

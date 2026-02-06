@@ -2,8 +2,6 @@ import { baseVisibility, getColumns } from "./columns";
 import {
   deleteSelectedTradeRecord,
   TradeRecordType,
-  TradeRecordUpdaterContext,
-  useTradeRecordDataById,
 } from "@/lib/services/trade-records";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
@@ -21,11 +19,15 @@ import { BottomBar } from "./bottom-bar";
 import { toast } from "sonner";
 import { DialogFilter } from "./dialog-filter";
 import { TableColumnToggler, VisibilityState } from "./table-column-toggler";
+import {
+  HoldingDetailUpdaterContext,
+  useTradeRecordsById,
+} from "@/lib/services/composed/holding-detail-provider";
 
 export const TabTable = () => {
   const { id, data } = React.useContext(HoldingInfoContext);
-  const { records } = useTradeRecordDataById(id);
-  const updater = React.useContext(TradeRecordUpdaterContext);
+  const records = useTradeRecordsById(id);
+  const updater = React.useContext(HoldingDetailUpdaterContext);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>(baseVisibility);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
