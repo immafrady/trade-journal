@@ -1,13 +1,13 @@
 import {
   HoldingDetailState,
   HoldingDetailStore,
+  TradeRecordDraft,
 } from "@/lib/services/composed/holding-detail-provider/type";
 import { create } from "zustand/react";
 import {
   computeHoldingProfit,
   computeHoldingSummary,
   TradeRecord,
-  TradeRecordStoreState,
   TradeRecordType,
 } from "@/lib/services/trade-records";
 
@@ -49,7 +49,7 @@ export const createHoldingDetailStore = (): HoldingDetailStore =>
     // 更新草稿列表
     updateDraftList: () =>
       set((state) => {
-        const draftList: TradeRecordStoreState["draftList"] = [];
+        const draftList: TradeRecordDraft[] = [];
         Object.entries(state.recordStore).forEach(([holdingId, records]) => {
           const drafts = records.filter(
             (r) => r.meta.isDraft || TradeRecordType.Draft === r.props.type,
@@ -83,8 +83,10 @@ export const createHoldingDetailStore = (): HoldingDetailStore =>
           const price = quote?.current || latest?.derived.price;
           if (price) {
             return {
-              ...state.profitStore,
-              [id]: computeHoldingProfit(price, summary),
+              profitStore: {
+                ...state.profitStore,
+                [id]: computeHoldingProfit(price, summary),
+              },
             };
           }
         }

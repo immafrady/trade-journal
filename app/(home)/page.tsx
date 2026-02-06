@@ -10,25 +10,17 @@ import {
   AppBarExtra,
   AppContainer,
 } from "@/components/layout/app-shell";
-import { HomeContext, HomeProvider } from "@/app/(home)/_provider";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { HoldingSummary } from "@/app/(home)/_components/holding-summary";
+import { useHoldingSummary } from "@/lib/services/composed/use-holdings-summary";
 
 export default function Page() {
-  return (
-    <HomeProvider>
-      <InnerPage />
-    </HomeProvider>
-  );
-}
-
-function InnerPage() {
-  const { list } = React.useContext(HomeContext);
-
-  const { isLoading } = useHoldingList();
-
+  const { isLoading, data: list } = useHoldingList();
+  const holdingIds = list.map((holding) => holding.id);
+  const summary = useHoldingSummary(holdingIds);
+  console.log("refresh", summary);
   return isLoading ? (
     <Loading isLoading={true} />
   ) : (
@@ -48,17 +40,17 @@ function InnerPage() {
                 </Button>
               }
             >
-              <HoldingSummary />
+              <HoldingSummary summary={summary} />
             </AppBarExtra>
           )}
         </AppBar>
       }
       hideBackButton={true}
     >
-      {list.length ? (
+      {summary.holdings.length ? (
         <>
           <div className={"common-layout flex flex-col gap-2 pt-10 pb-20"}>
-            {list?.map((hwq) => {
+            {summary.holdings.map((hwq) => {
               return (
                 <TickerCard
                   key={hwq.id}

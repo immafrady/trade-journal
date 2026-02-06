@@ -61,35 +61,37 @@ export const TabSummary = () => {
             }
           >
             <SimpleDisplayVertical title={"剩余持仓成本"}>
-              {formatMoney(summary.remainingCost)}
+              {formatMoney(summary?.remainingCost)}
             </SimpleDisplayVertical>
             <SimpleDisplayVertical title={"当前持仓份额"}>
-              {formatShares(summary.shares)}
+              {formatShares(summary?.shares)}
             </SimpleDisplayVertical>
             <SimpleDisplayVertical title={"剩余持仓摊薄成本"}>
-              {data!.ticker.formatter(summary.costPrice)}
+              {data!.ticker.formatter(summary?.costPrice)}
             </SimpleDisplayVertical>
             <SimpleDisplayVertical title={"历史资金成本价"}>
-              {data!.ticker.formatter(summary.avgPrice)}
+              {data!.ticker.formatter(summary?.avgPrice)}
             </SimpleDisplayVertical>
             <SimpleDisplayVertical title={"当前净投入资金"}>
-              {formatMoney(summary.netInvestment)}
+              {formatMoney(summary?.netInvestment)}
             </SimpleDisplayVertical>
             <SimpleDisplayVertical title={"历史最高资金占用"}>
-              {formatMoney(summary.historicalMaxCapitalOccupied)}
+              {formatMoney(summary?.historicalMaxCapitalOccupied)}
             </SimpleDisplayVertical>
 
             <SimpleDisplayVertical title={"已实现盈亏"}>
               <span
-                className={getTickerChangeColorClass(summary.realizedProfit)}
+                className={getTickerChangeColorClass(
+                  summary?.realizedProfit ?? 0,
+                )}
               >
-                {formatMoney(summary.realizedProfit)}
+                {formatMoney(summary?.realizedProfit)}
               </span>
             </SimpleDisplayVertical>
             <SimpleDisplayVertical title={"累计手续费"}>
-              {formatMoney(summary.totalFee)}
+              {formatMoney(summary?.totalFee)}
             </SimpleDisplayVertical>
-            {!!summary.totalDividendCount && (
+            {!!summary?.totalDividendCount && (
               <>
                 <SimpleDisplayVertical title={"累计分红金额"}>
                   {formatMoney(summary.totalDividend)}

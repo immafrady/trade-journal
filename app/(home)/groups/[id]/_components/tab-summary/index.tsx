@@ -1,5 +1,4 @@
 import { BottomBar } from "./bottom-bar";
-import { useGroupSummary } from "@/lib/services/group";
 import React from "react";
 import { GroupInfoContext } from "@/app/(home)/groups/[id]/_providers/group-info";
 import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
@@ -11,10 +10,17 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { TickerCard } from "@/components/ui/my/ticker-card";
+import { useHoldingSummary } from "@/lib/services/composed/use-holdings-summary";
 
 export const TabSummary = () => {
   const group = React.useContext(GroupInfoContext)!;
-  const summary = useGroupSummary(group);
+  const summary = useHoldingSummary(group.holdingIds!);
+  const budgetDiff = group.budget
+    ? group.budget - summary.totalNetInvestment
+    : 0;
+  const budgetPct = group.budget
+    ? (summary.totalNetInvestment / group.budget) * 100
+    : 0;
   return (
     <>
       <div className={"relative common-layout flex flex-col items-center"}>
@@ -92,20 +98,16 @@ export const TabSummary = () => {
               {
                 title: "剩余预算",
                 content: (
-                  <span
-                    className={cn(summary.budgetDiff < 0 && "text-destructive")}
-                  >
-                    {formatMoney(summary.budgetDiff)}
+                  <span className={cn(budgetDiff < 0 && "text-destructive")}>
+                    {formatMoney(budgetDiff)}
                   </span>
                 ),
               },
               {
                 title: "预算使用率",
                 content: (
-                  <span
-                    className={cn(summary.budgetDiff < 0 && "text-destructive")}
-                  >
-                    {formatPercent(summary.budgetPct)}
+                  <span className={cn(budgetDiff < 0 && "text-destructive")}>
+                    {formatPercent(budgetPct)}
                   </span>
                 ),
               },

@@ -21,12 +21,12 @@ export const useHoldingSummary = (holdingIds: string[]) => {
     const profit = detail.profit;
 
     totalMarketValue += profit?.marketValue ?? 0;
-    totalRemainingCost += summary.remainingCost;
-    totalNetInvestment += summary.netInvestment;
-    totalRealizedProfit += summary.realizedProfit;
+    totalRemainingCost += summary?.remainingCost ?? 0;
+    totalNetInvestment += summary?.netInvestment ?? 0;
+    totalRealizedProfit += summary?.realizedProfit ?? 0;
     totalUnrealizedProfit += profit?.unrealizedProfit ?? 0;
     totalProfit += profit?.totalProfit ?? 0;
-    historicalMaxCapitalOccupied += summary.historicalMaxCapitalOccupied;
+    historicalMaxCapitalOccupied += summary?.historicalMaxCapitalOccupied ?? 0;
 
     holdings.push({
       id: detail.id,
@@ -67,7 +67,10 @@ export const useHoldingSummary = (holdingIds: string[]) => {
     holdings: holdings
       .map((item) => ({
         ...item,
-        weightPct: ((item.profit?.marketValue ?? 0) / totalMarketValue) * 100,
+        weightPct:
+          totalMarketValue && item.profit?.marketValue
+            ? (item.profit.marketValue / totalMarketValue) * 100
+            : 0,
       }))
       .sort((a, b) => b.weightPct - a.weightPct),
   };
@@ -76,8 +79,10 @@ export const useHoldingSummary = (holdingIds: string[]) => {
 export interface GroupHoldingSummary {
   id: string;
   ticker: SinaTicker;
-  summary: HoldingSummary;
+  summary?: HoldingSummary;
   profit?: HoldingProfit;
   weightPct: number;
   offline: boolean;
 }
+
+export type HoldingsSummaryDetail = ReturnType<typeof useHoldingSummary>;
