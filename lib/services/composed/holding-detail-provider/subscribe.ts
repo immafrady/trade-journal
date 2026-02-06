@@ -10,7 +10,11 @@ import { useShallow } from "zustand/react/shallow";
 export const useHoldingDetailStore = <T>(
   selector: (state: HoldingDetailState) => T,
 ) => {
-  const store = React.useContext(HoldingDetailContext)!;
+  const store = React.useContext(HoldingDetailContext);
+  if (!store)
+    throw new Error(
+      "HoldingDetailStore must be used with HoldingDetailProvider",
+    );
   return store(selector);
 };
 
