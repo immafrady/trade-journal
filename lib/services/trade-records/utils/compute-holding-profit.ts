@@ -3,12 +3,18 @@ import { HoldingSummary } from "@/lib/services/trade-records";
 
 export const computeHoldingProfit = (
   price: number,
-  summary: HoldingSummary,
+  summary?: HoldingSummary,
 ) => {
-  const marketValue = price * summary.shares;
-  const unrealizedProfit =
-    summary.shares > 0 ? marketValue - summary.remainingCost : 0;
-  const totalProfit = summary.realizedProfit + unrealizedProfit;
+  const shares = summary?.shares ?? 0;
+  const remainingCost = summary?.remainingCost ?? 0;
+  const realizedProfit = summary?.realizedProfit ?? 0;
+  const historicalMaxCapitalOccupied =
+    summary?.historicalMaxCapitalOccupied ?? 0;
+  const isRecovered = summary?.isRecovered ?? false;
+
+  const marketValue = price * shares;
+  const unrealizedProfit = shares > 0 ? marketValue - remainingCost : 0;
+  const totalProfit = realizedProfit + unrealizedProfit;
 
   return {
     marketValue, // 市值
@@ -17,12 +23,12 @@ export const computeHoldingProfit = (
     totalProfit, // 总盈亏 = realized + unrealized + 分红 - 手续费
     /** 收益率（只在合理时显示） */
     totalReturnPct:
-      summary.historicalMaxCapitalOccupied > 0
-        ? (totalProfit / summary.historicalMaxCapitalOccupied) * 100
+      historicalMaxCapitalOccupied > 0
+        ? (totalProfit / historicalMaxCapitalOccupied) * 100
         : 0, // 总收益率（基于历史最大净投入）
     holdingReturnPct:
-      !summary.isRecovered && summary.remainingCost > 0
-        ? (unrealizedProfit / summary.remainingCost) * 100
+      !isRecovered && remainingCost > 0
+        ? (unrealizedProfit / remainingCost) * 100
         : 0, // 持仓收益率（仅当未回本时显示）
   };
 };

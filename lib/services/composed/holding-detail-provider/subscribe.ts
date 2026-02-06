@@ -16,18 +16,30 @@ export const useHoldingDetailStore = <T>(
 
 // 数据拼凑(列表）
 export const useHoldingDetailList = (holdingIds: string[]): HoldingDetail[] => {
-  return useHoldingDetailStore(
-    useShallow((s) =>
-      holdingIds.map((id) => ({
-        id,
-        record: s.recordStore[id],
-        summary: s.summaryStore[id],
-        latest: s.latestRecordStore[id],
-        profit: s.profitStore[id],
-        quote: s.quoteStore[id],
-      })),
-    ),
+  // 1. Selector 只负责从 Store 中获取相关的原始引用
+  // 即使 store 里的数据变了，只要这几个 store 本身的引用没变，就不会触发重绘
+  const stores = useHoldingDetailStore(
+    useShallow((s) => ({
+      recordStore: s.recordStore,
+      summaryStore: s.summaryStore,
+      latestRecordStore: s.latestRecordStore,
+      profitStore: s.profitStore,
+      quoteStore: s.quoteStore,
+    })),
   );
+
+  // 2. 在外部使用 useMemo 组装数据
+  // 只有当 holdingIds 或 具体的 store 变化时，才会重新构造对象
+  return React.useMemo(() => {
+    return holdingIds.map((id) => ({
+      id,
+      record: stores.recordStore[id],
+      summary: stores.summaryStore[id],
+      latest: stores.latestRecordStore[id],
+      profit: stores.profitStore[id],
+      quote: stores.quoteStore[id],
+    }));
+  }, [holdingIds, stores]);
 };
 
 // 数据拼凑(单个)

@@ -1,7 +1,9 @@
 import React from "react";
-import { TradeRecordUpdaterHandle } from "@/lib/services/trade-records";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
-import { HoldingDetailUpdater } from "../updaters/holding-detail-updater";
+import {
+  HoldingDetailUpdater,
+  HoldingDetailUpdaterHandle,
+} from "../updaters/holding-detail-updater";
 
 // 更新器上下文
 export const HoldingDetailUpdaterContext = React.createContext<
@@ -16,7 +18,7 @@ export const HoldingDetailUpdaterProvider = ({
   const { data: holdings } = useHoldingList();
 
   const updaterRefs = React.useRef<
-    Record<string, TradeRecordUpdaterHandle | null>
+    Record<string, HoldingDetailUpdaterHandle | null>
   >({});
 
   // 更新器
