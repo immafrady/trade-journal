@@ -36,20 +36,21 @@ export const GroupCard = ({ model }: { model: GroupModel }) => {
         <InlineDisplay
           list={[
             {
+              title: "总市值",
+              content: formatMoney(summary.totalMarketValue),
+            },
+            {
               title: "投入/预算",
               content: `${formatMoney(summary.totalNetInvestment)}/${formatMoney(model.budget)}`,
             },
             {
-              title: "市值(收益率)",
+              title: "浮盈/收益率",
               content: (
-                <div>
-                  {formatMoney(summary.totalMarketValue)}(
-                  <span
-                    className={getTickerChangeColorClass(summary.totalProfit!)}
-                  >
-                    {formatPercent(summary.totalProfitPct)}
-                  </span>
-                  )
+                <div
+                  className={getTickerChangeColorClass(summary.totalProfit!)}
+                >
+                  {formatMoney(summary.totalProfit)}/
+                  {formatPercent(summary.totalProfitPct)}
                 </div>
               ),
             },
