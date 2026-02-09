@@ -77,7 +77,7 @@ export function StepChooseFile({
   onErrors: (errors: Error[]) => void;
 }) {
   const fileRef = React.useRef<HTMLInputElement | null>(null);
-  const { id } = React.useContext(HoldingInfoContext);
+  const { id } = React.useContext(HoldingInfoContext)!;
   const [loading, setLoading] = React.useState<boolean>(false);
 
   return (

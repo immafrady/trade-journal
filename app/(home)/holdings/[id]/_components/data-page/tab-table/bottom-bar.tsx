@@ -16,7 +16,7 @@ export const BottomBar = ({
   selectedRowCount: number;
   onDeleteConfirm: () => Promise<void>;
 }) => {
-  const { id, data } = React.useContext(HoldingInfoContext)!;
+  const { id, ticker } = React.useContext(HoldingInfoContext)!;
   const records = useTradeRecordsById(id);
   const [exportLoading, setExportLoading] = React.useState(false);
   const [clearLoading, setClearLoading] = React.useState(false);
@@ -33,16 +33,16 @@ export const BottomBar = ({
 
       <LoadingButton
         loading={exportLoading}
-        disabled={!records || !data || clearLoading}
+        disabled={!records || clearLoading}
         variant={"outline"}
         size={"sm"}
         onClick={() => {
           setExportLoading(true);
           exportAsCSV(
-            `${data!.ticker.label}-操作记录`,
+            `${ticker.label}-操作记录`,
             records!
               .reverse()
-              .map((item) => item.toCSVObject(data!.ticker.formatter)),
+              .map((item) => item.toCSVObject(ticker.formatter)),
           );
           setExportLoading(false);
         }}

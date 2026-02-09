@@ -25,7 +25,7 @@ import {
 } from "@/lib/services/composed/holding-detail-provider";
 
 export const TabTable = () => {
-  const { id, data } = React.useContext(HoldingInfoContext);
+  const { id, ticker } = React.useContext(HoldingInfoContext)!;
   const records = useTradeRecordsById(id);
   const updater = React.useContext(HoldingDetailUpdaterContext);
   const [columnVisibility, setColumnVisibility] =
@@ -35,8 +35,8 @@ export const TabTable = () => {
   );
 
   const columns = React.useMemo(() => {
-    return getColumns(data?.ticker.formatter);
-  }, [data?.ticker.formatter]);
+    return getColumns(ticker.formatter);
+  }, [ticker.formatter]);
   const table = useReactTable({
     data: records,
     state: {

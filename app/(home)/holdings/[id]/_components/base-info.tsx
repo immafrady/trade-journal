@@ -1,5 +1,4 @@
 "use client";
-import { HoldingWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SinaStockType } from "@/lib/services/sina";
 import { Button } from "@/components/ui/button";
@@ -26,13 +25,17 @@ import {
 import { motion } from "motion/react";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import { TargetAndTransition } from "motion";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { useHoldingQuoteById } from "@/lib/services/composed/holding-detail-provider";
 
-export const BaseInfo = ({ data }: { data: HoldingWithQuote }) => {
+export const BaseInfo = () => {
+  const { id, ticker } = React.useContext(HoldingInfoContext)!;
+  const quote = useHoldingQuoteById(id);
+
   const route = useRouter();
   const [expanded, setExpanded] = React.useState(true);
   const toggleExpanded = () => setExpanded(!expanded);
   const { mutate } = useHoldingList();
-  const { id, ticker, quote } = data;
 
   const isAShare = ticker.type === SinaStockType.AShare;
   const carouselList = [];

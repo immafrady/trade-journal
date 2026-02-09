@@ -1,18 +1,18 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useHoldingsWithQuote } from "@/lib/services/composed/use-holdings-with-quote";
 import React from "react";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import { LoadingButton } from "@/components/ui/my/button";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { TradeRecordDraft } from "@/lib/services/composed/holding-detail-provider";
+import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 
 export const AlertMessageItem = ({ draft }: { draft: TradeRecordDraft }) => {
   const { holdingId, records } = draft;
   const router = useRouter();
-  const list = useHoldingsWithQuote();
+  const { data: list } = useHoldingList();
   const data = React.useMemo(
     () => list?.find((item) => item.id === holdingId),
     [list, holdingId],

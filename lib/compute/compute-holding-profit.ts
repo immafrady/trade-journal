@@ -1,5 +1,6 @@
 // 计算市值
-import { HoldingSummary } from "@/lib/services/trade-records";
+
+import { HoldingSummary } from "@/lib/compute/compute-holding-summary";
 
 export const computeHoldingProfit = (
   price: number,

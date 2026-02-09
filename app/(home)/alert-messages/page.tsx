@@ -7,9 +7,19 @@ import {
 import { AlertMessageItem } from "@/app/(home)/alert-messages/_components/alert-message-item";
 import { cn } from "@/lib/utils";
 import { useHoldingDetailStore } from "@/lib/services/composed/holding-detail-provider";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 export default function Page() {
   const draftList = useHoldingDetailStore((s) => s.draftList);
+
+  const router = useRouter();
+  React.useEffect(() => {
+    if (!draftList.length) {
+      router.replace("/");
+    }
+    return () => {};
+  }, [draftList.length, router]);
   return (
     <AppContainer
       appBar={

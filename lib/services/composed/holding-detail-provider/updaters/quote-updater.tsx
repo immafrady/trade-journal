@@ -1,5 +1,5 @@
 import React from "react";
-import { useHoldingDetailStore } from "@/lib/services/composed/holding-detail-provider/subscribe";
+import { useHoldingDetailStore } from "@/lib/services/composed/holding-detail-provider";
 import { useHoldingList } from "@/lib/services/holdings/use-holding-list";
 import { SinaQuote, useRealtimeQuotes } from "@/lib/services/sina";
 

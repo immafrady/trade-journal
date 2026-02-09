@@ -19,4 +19,8 @@ export {
   useHoldingDetailById,
   useHoldingDetailList,
   useTradeRecordsById,
+  useHoldingSummaryById,
+  useHoldingProfitById,
+  useHoldingQuoteById,
+  useLatestTradeRecordById,
 } from "./subscribe";

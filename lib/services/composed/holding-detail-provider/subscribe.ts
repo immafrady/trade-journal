@@ -6,6 +6,7 @@ import {
 } from "@/lib/services/composed/holding-detail-provider";
 import { useShallow } from "zustand/react/shallow";
 
+const EMPTY_ARRAY: never[] = [];
 // 基础的
 export const useHoldingDetailStore = <T>(
   selector: (state: HoldingDetailState) => T,
@@ -37,7 +38,7 @@ export const useHoldingDetailList = (holdingIds: string[]): HoldingDetail[] => {
   return React.useMemo(() => {
     return holdingIds.map((id) => ({
       id,
-      record: stores.recordStore[id],
+      record: stores.recordStore[id] ?? EMPTY_ARRAY,
       summary: stores.summaryStore[id],
       latest: stores.latestRecordStore[id],
       profit: stores.profitStore[id],
@@ -51,7 +52,7 @@ export const useHoldingDetailById = (id: string): HoldingDetail => {
   return useHoldingDetailStore(
     useShallow((s) => ({
       id,
-      record: s.recordStore[id],
+      record: s.recordStore[id] ?? EMPTY_ARRAY,
       summary: s.summaryStore[id],
       latest: s.latestRecordStore[id],
       profit: s.profitStore[id],
@@ -62,5 +63,21 @@ export const useHoldingDetailById = (id: string): HoldingDetail => {
 
 // 纯取TradeRecords
 export const useTradeRecordsById = (holdingId: string) => {
-  return useHoldingDetailStore((s) => s.recordStore[holdingId]);
+  return useHoldingDetailStore((s) => s.recordStore[holdingId] ?? EMPTY_ARRAY);
+};
+
+export const useHoldingSummaryById = (holdingId: string) => {
+  return useHoldingDetailStore((s) => s.summaryStore[holdingId]);
+};
+
+export const useLatestTradeRecordById = (holdingId: string) => {
+  return useHoldingDetailStore((s) => s.latestRecordStore[holdingId]);
+};
+
+export const useHoldingProfitById = (holdingId: string) => {
+  return useHoldingDetailStore((s) => s.profitStore[holdingId]);
+};
+
+export const useHoldingQuoteById = (holdingId: string) => {
+  return useHoldingDetailStore((s) => s.quoteStore[holdingId]);
 };

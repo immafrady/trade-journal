@@ -4,12 +4,8 @@ import {
   TradeRecordDraft,
 } from "@/lib/services/composed/holding-detail-provider/type";
 import { create } from "zustand/react";
-import {
-  computeHoldingProfit,
-  computeHoldingSummary,
-  TradeRecord,
-  TradeRecordType,
-} from "@/lib/services/trade-records";
+import { TradeRecord, TradeRecordType } from "@/lib/services/trade-records";
+import { computeHoldingProfit, computeHoldingSummary } from "@/lib/compute";
 
 export const createHoldingDetailStore = (): HoldingDetailStore =>
   create((set, get) => ({

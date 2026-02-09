@@ -1,7 +1,7 @@
 import { SinaTicker } from "@/lib/services/sina";
-import { HoldingProfit, HoldingSummary } from "@/lib/services/trade-records";
 import { useHoldingDetailList } from "@/lib/services/composed/holding-detail-provider";
 import { useTickerMap } from "@/lib/services/holdings/use-ticker-map";
+import { HoldingProfit, HoldingSummary } from "@/lib/compute";
 
 export const useHoldingSummary = (holdingIds: string[]) => {
   const map = useTickerMap();

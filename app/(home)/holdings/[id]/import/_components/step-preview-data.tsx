@@ -39,8 +39,7 @@ export function StepPreviewData({
   onRedo: () => void;
   onSubmit: () => Promise<void>;
 }) {
-  const { data } = React.useContext(HoldingInfoContext);
-  const ticker = data!.ticker;
+  const { ticker } = React.useContext(HoldingInfoContext)!;
 
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);

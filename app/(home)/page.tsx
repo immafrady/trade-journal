@@ -20,7 +20,6 @@ export default function Page() {
   const { isLoading, data: list } = useHoldingList();
   const holdingIds = list.map((holding) => holding.id);
   const summary = useHoldingSummary(holdingIds);
-  console.log("refresh", summary);
   return isLoading ? (
     <Loading isLoading={true} />
   ) : (

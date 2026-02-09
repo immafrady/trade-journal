@@ -1,6 +1,6 @@
 import React from "react";
 import { useTradeRecordList } from "@/lib/services/trade-records/hooks/use-trade-record-list";
-import { useHoldingDetailStore } from "@/lib/services/composed/holding-detail-provider/subscribe";
+import { useHoldingDetailStore } from "@/lib/services/composed/holding-detail-provider";
 
 export type HoldingDetailUpdaterHandle = {
   update: () => Promise<any>;

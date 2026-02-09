@@ -12,3 +12,8 @@ export const useTickerMap = () => {
     return m;
   }, [list]);
 };
+
+export const useTickerById = (id: string) => {
+  const map = useTickerMap();
+  return map[id];
+};
