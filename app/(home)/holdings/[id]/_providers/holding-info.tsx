@@ -1,17 +1,15 @@
-import {
-  HoldingWithQuote,
-  useHoldingsWithQuote,
-} from "@/lib/services/composed/use-holdings-with-quote";
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { SinaTicker } from "@/lib/services/sina";
+import { useTickerById } from "@/lib/services/holdings/use-ticker-map";
 
 interface HoldingInfo {
   id: string;
-  data?: HoldingWithQuote;
+  ticker: SinaTicker;
 }
 
-export const HoldingInfoContext = React.createContext<HoldingInfo>({ id: "" });
+export const HoldingInfoContext = React.createContext<HoldingInfo | null>(null);
 
 export const HoldingInfoProvider = ({
   children,
@@ -19,23 +17,19 @@ export const HoldingInfoProvider = ({
   children: React.ReactNode;
 }) => {
   const { id } = useParams<{ id: string }>();
-  const list = useHoldingsWithQuote();
-  const data = React.useMemo(
-    () => list?.find((item) => item.id === id),
-    [list, id],
-  );
-  const router = useRouter();
+  const ticker = useTickerById(id);
 
+  const router = useRouter();
   React.useEffect(() => {
-    if (list.length && !data) {
+    if (!ticker) {
       router.replace("/");
       toast.error("查无此数据");
     }
     return () => {};
-  }, [list, data, router]);
+  }, [router, ticker]);
 
   return (
-    <HoldingInfoContext.Provider value={{ id, data }}>
+    <HoldingInfoContext.Provider value={{ id, ticker }}>
       {children}
     </HoldingInfoContext.Provider>
   );

@@ -55,7 +55,7 @@ export const DialogSummary = ({
   disabled: boolean;
   records: TradeRecord[];
 }) => {
-  const { data } = React.useContext(HoldingInfoContext);
+  const { ticker } = React.useContext(HoldingInfoContext)!;
   const [summary, setSummary] = React.useState<SummaryData | null>(null);
 
   // 构建展示
@@ -79,7 +79,7 @@ export const DialogSummary = ({
             },
             {
               title: "买入均价",
-              content: data?.ticker.formatter(summary.buy.price),
+              content: ticker.formatter(summary.buy.price),
             },
           ]}
         />,
@@ -103,7 +103,7 @@ export const DialogSummary = ({
             },
             {
               title: "卖出均价",
-              content: data?.ticker.formatter(summary.sell.price),
+              content: ticker.formatter(summary.sell.price),
             },
           ]}
         />,
@@ -125,7 +125,7 @@ export const DialogSummary = ({
               title: "做T差价",
               content: (
                 <div className={summary.t.className}>
-                  {data?.ticker.formatter(summary.t.gap)}
+                  {ticker.formatter(summary.t.gap)}
                 </div>
               ),
             },

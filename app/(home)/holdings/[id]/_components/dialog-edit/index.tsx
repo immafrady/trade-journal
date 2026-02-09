@@ -50,7 +50,7 @@ export const DialogEdit = ({
   record?: TradeRecord;
 }) => {
   const dialogRef = React.useRef<ResponsiveDialogRef>(null);
-  const { id: holdingId, data } = React.useContext(HoldingInfoContext);
+  const { id: holdingId, ticker } = React.useContext(HoldingInfoContext)!;
   const updater = React.useContext(HoldingDetailUpdaterContext);
   const editType = record ? "编辑" : "新增";
 
@@ -66,7 +66,6 @@ export const DialogEdit = ({
       comment: toFormString(record?.props.comment),
     },
     onSubmitInvalid: (props) => {
-      console.log(props);
       toast.error(`校验失败，无法提交`);
     },
     onSubmit: async ({ value }) => {
@@ -267,10 +266,8 @@ export const DialogEdit = ({
                       value={field.state.value}
                       type={"number"}
                       placeholder={
-                        shares && amount && data
-                          ? data?.ticker.formatter(
-                              calcPrice(amount, shares, fee),
-                            )
+                        shares && amount
+                          ? ticker.formatter(calcPrice(amount, shares, fee))
                           : "请输入"
                       }
                       onChange={(e) => field.handleChange(e.target.value)}

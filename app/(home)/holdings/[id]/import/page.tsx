@@ -15,7 +15,7 @@ import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holdin
 import { HoldingDetailUpdaterContext } from "@/lib/services/composed/holding-detail-provider";
 
 export default function Page() {
-  const { id, data } = React.useContext(HoldingInfoContext);
+  const { id, ticker } = React.useContext(HoldingInfoContext)!;
   const updater = React.useContext(HoldingDetailUpdaterContext);
   const [errors, setErrors] = React.useState<Error[]>([]);
   const [records, setRecords] = React.useState<TradeRecord[]>([]);
@@ -25,8 +25,8 @@ export default function Page() {
     <AppContainer
       appBar={
         <AppBar>
-          {data?.ticker.label && (
-            <AppBarExtra title={`${data.ticker.label} · 导入`}></AppBarExtra>
+          {ticker.label && (
+            <AppBarExtra title={`${ticker.label} · 导入`}></AppBarExtra>
           )}
         </AppBar>
       }

@@ -10,10 +10,14 @@ import {
   AppContainer,
 } from "@/components/layout/app-shell";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
-import { useTradeRecordsById } from "@/lib/services/composed/holding-detail-provider";
+import {
+  useHoldingQuoteById,
+  useTradeRecordsById,
+} from "@/lib/services/composed/holding-detail-provider";
 
 export default function Page() {
-  const { id, data } = React.useContext(HoldingInfoContext);
+  const { id, ticker } = React.useContext(HoldingInfoContext)!;
+  const quote = useHoldingQuoteById(id);
   const records = useTradeRecordsById(id);
   const [moreInfo, setMoreInfo] = React.useState(true);
 
@@ -21,15 +25,15 @@ export default function Page() {
     <AppContainer
       appBar={
         <AppBar bgGradient={moreInfo}>
-          {!!data &&
+          {!!quote &&
             (moreInfo ? (
               <AppBarExtra
                 className={"px-2 -mb-6 relative z-50 pointer-events-auto"}
               >
-                <BaseInfo data={data} />
+                <BaseInfo />
               </AppBarExtra>
             ) : (
-              <AppBarExtra title={`${data.ticker.label} · 详情`}></AppBarExtra>
+              <AppBarExtra title={`${ticker.label} · 详情`}></AppBarExtra>
             ))}
         </AppBar>
       }

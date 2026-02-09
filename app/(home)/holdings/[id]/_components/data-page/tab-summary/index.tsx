@@ -16,11 +16,20 @@ import { BottomBar } from "@/app/(home)/holdings/[id]/_components/data-page/tab-
 import { SinaStockType } from "@/lib/services/sina";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useHoldingDetailById } from "@/lib/services/composed/holding-detail-provider";
+import {
+  useHoldingProfitById,
+  useHoldingQuoteById,
+  useHoldingSummaryById,
+  useLatestTradeRecordById,
+} from "@/lib/services/composed/holding-detail-provider";
 
 export const TabSummary = () => {
-  const { id, data } = React.useContext(HoldingInfoContext)!;
-  const { summary, quote, profit, latest } = useHoldingDetailById(id);
+  const { id, ticker } = React.useContext(HoldingInfoContext)!;
+  const summary = useHoldingSummaryById(id);
+  const quote = useHoldingQuoteById(id);
+  const profit = useHoldingProfitById(id);
+  const latest = useLatestTradeRecordById(id);
+
   const [index, setIndex] = React.useState(0);
   const profitList = React.useMemo(() => {
     const list: { label: string; date: string; profit: HoldingProfit }[] = [];
@@ -32,7 +41,7 @@ export const TabSummary = () => {
       });
     }
     if (quote) {
-      if (SinaStockType.AShare !== data?.ticker.type) {
+      if (SinaStockType.AShare !== ticker.type) {
         list.push({
           label: "场外估值",
           date: quote.fundDate!,
@@ -46,7 +55,7 @@ export const TabSummary = () => {
       });
     }
     return list;
-  }, [latest, quote, summary, data?.ticker.type, profit]);
+  }, [latest, quote, summary, ticker.type, profit]);
 
   const currentProfit = profitList.length
     ? profitList[index % profitList.length]
@@ -67,10 +76,10 @@ export const TabSummary = () => {
               {formatShares(summary?.shares)}
             </SimpleDisplayVertical>
             <SimpleDisplayVertical title={"剩余持仓摊薄成本"}>
-              {data!.ticker.formatter(summary?.costPrice)}
+              {ticker.formatter(summary?.costPrice)}
             </SimpleDisplayVertical>
             <SimpleDisplayVertical title={"历史资金成本价"}>
-              {data!.ticker.formatter(summary?.avgPrice)}
+              {ticker.formatter(summary?.avgPrice)}
             </SimpleDisplayVertical>
             <SimpleDisplayVertical title={"当前净投入资金"}>
               {formatMoney(summary?.netInvestment)}
