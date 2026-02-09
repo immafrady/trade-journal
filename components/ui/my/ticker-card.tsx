@@ -11,7 +11,7 @@ import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { useRouter } from "next/navigation";
 import { SinaTicker } from "@/lib/services/sina";
-import { HoldingProfit } from "@/lib/services/trade-records";
+import { HoldingProfit } from "@/lib/compute";
 
 export const TickerCard = ({
   id,

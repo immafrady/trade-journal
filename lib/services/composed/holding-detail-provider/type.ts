@@ -1,11 +1,8 @@
-import {
-  HoldingProfit,
-  HoldingSummary,
-  TradeRecord,
-} from "@/lib/services/trade-records";
+import { TradeRecord } from "@/lib/services/trade-records";
 import type { UseBoundStore } from "zustand/react";
 import { StoreApi } from "zustand/vanilla";
 import { SinaQuote } from "@/lib/services/sina";
+import { HoldingProfit, HoldingSummary } from "@/lib/compute";
 
 // 草稿
 export interface TradeRecordDraft {

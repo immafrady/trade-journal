@@ -1,7 +1,3 @@
-import {
-  computeHoldingProfit,
-  HoldingProfit,
-} from "@/lib/services/trade-records";
 import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import {
@@ -22,6 +18,7 @@ import {
   useHoldingSummaryById,
   useLatestTradeRecordById,
 } from "@/lib/services/composed/holding-detail-provider";
+import { computeHoldingProfit, HoldingProfit } from "@/lib/compute";
 
 export const TabSummary = () => {
   const { id, ticker } = React.useContext(HoldingInfoContext)!;
