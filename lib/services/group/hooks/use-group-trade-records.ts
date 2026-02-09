@@ -48,8 +48,8 @@ export const useGroupTradeRecords = (holdingIds: string[]) => {
         marketValue,
         valueIndex,
       };
-      result.unshift(tre);
+      result.push(tre);
     }
-    return result;
+    return result.reverse();
   }, [holdingIds, recordList, tickerMap]);
 };
