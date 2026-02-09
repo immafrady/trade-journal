@@ -140,9 +140,7 @@ const SectionLayout = ({
 }) => {
   return (
     <section
-      className={
-        "grid justify-center place-items-center gap-2 grid-cols-2 md:grid-cols-4"
-      }
+      className={"grid justify-center place-items-center gap-2 grid-cols-2"}
     >
       {list.map((item) => (
         <SimpleDisplayVertical key={item.title} title={item.title}>
