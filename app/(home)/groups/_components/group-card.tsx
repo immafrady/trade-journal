@@ -13,49 +13,68 @@ import {
   getTickerChangeColorClass,
 } from "@/lib/market-utils";
 import { useHoldingSummary } from "@/lib/services/composed/use-holdings-summary";
+import { useDailyProfit } from "@/lib/services/composed/use-daily-profit";
 
-export const GroupCard = ({ model }: { model: GroupModel }) => {
+export const GroupCard = ({ group }: { group: GroupModel }) => {
   const router = useRouter();
-  const summary = useHoldingSummary(model.holdingIds!);
+  const summary = useHoldingSummary(group.holdingIds!);
+  const daily = useDailyProfit(group.holdingIds!);
+  const diplayList = React.useMemo(() => {
+    const list = [
+      {
+        title: "总市值",
+        content: formatMoney(summary.totalMarketValue),
+      },
+      {
+        title: "投入/预算",
+        content: `${formatMoney(summary.totalNetInvestment)}/${formatMoney(group.budget)}`,
+      },
+      {
+        title: "浮盈/收益率",
+        content: (
+          <div className={getTickerChangeColorClass(summary.totalProfit!)}>
+            {formatMoney(summary.totalProfit)}/
+            {formatPercent(summary.totalProfitPct)}
+          </div>
+        ),
+      },
+    ];
+    if (daily) {
+      list.push({
+        title: "本日收益/率",
+        content: (
+          <div className={getTickerChangeColorClass(daily.totalDiff)}>
+            {formatMoney(daily.totalDiff)}/{formatPercent(daily.totalPct)}
+          </div>
+        ),
+      });
+    }
+    return list;
+  }, [
+    summary.totalMarketValue,
+    summary.totalNetInvestment,
+    summary.totalProfit,
+    summary.totalProfitPct,
+    group.budget,
+    daily,
+  ]);
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className={"flex items-center justify-between"}>
-          <div className={"flex items-center gap-1"}>{model.label}</div>
+          <div className={"flex items-center gap-1"}>{group.label}</div>
           <LoadingButton
             variant={"ghost"}
             icon={<ArrowRight />}
             onClick={() => {
-              router.push(`/groups/${model.id!}`);
+              router.push(`/groups/${group.id!}`);
             }}
           />
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <InlineDisplay
-          list={[
-            {
-              title: "总市值",
-              content: formatMoney(summary.totalMarketValue),
-            },
-            {
-              title: "投入/预算",
-              content: `${formatMoney(summary.totalNetInvestment)}/${formatMoney(model.budget)}`,
-            },
-            {
-              title: "浮盈/收益率",
-              content: (
-                <div
-                  className={getTickerChangeColorClass(summary.totalProfit!)}
-                >
-                  {formatMoney(summary.totalProfit)}/
-                  {formatPercent(summary.totalProfitPct)}
-                </div>
-              ),
-            },
-          ]}
-        ></InlineDisplay>
+        <InlineDisplay list={diplayList}></InlineDisplay>
         <Separator className={"my-2"}></Separator>
         <h5 className={"font-medium text-sm"}>市值占比</h5>
         <div className={"flex flex-col gap-1"}>
