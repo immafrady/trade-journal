@@ -11,18 +11,20 @@ import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { useRouter } from "next/navigation";
 import { SinaTicker } from "@/lib/services/sina";
-import { HoldingProfit } from "@/lib/compute";
+import { HoldingDailyProfit, HoldingProfit } from "@/lib/compute";
 
 export const TickerCard = ({
   id,
   ticker,
   profit,
   weightPct,
+  daily,
 }: {
   ticker: SinaTicker;
   id: string;
   profit?: HoldingProfit;
   weightPct: number;
+  daily?: HoldingDailyProfit;
 }) => {
   // 计算汇总的逻辑
 
@@ -72,6 +74,21 @@ export const TickerCard = ({
               },
             ]}
           />
+        )}
+        {daily && (
+          <InlineDisplay
+            className={"gap-0.5"}
+            list={[
+              {
+                title: "本日收益/率",
+                content: (
+                  <div className={getTickerChangeColorClass(daily.diff)}>
+                    {formatMoney(daily.diff)}/{formatPercent(daily.pct)}
+                  </div>
+                ),
+              },
+            ]}
+          ></InlineDisplay>
         )}
       </CardContent>
     </Card>

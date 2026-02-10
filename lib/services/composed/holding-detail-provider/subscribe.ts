@@ -6,7 +6,7 @@ import {
 } from "@/lib/services/composed/holding-detail-provider";
 import { useShallow } from "zustand/react/shallow";
 
-const EMPTY_ARRAY: never[] = [];
+export const EMPTY_ARRAY: never[] = [];
 // 基础的
 export const useHoldingDetailStore = <T>(
   selector: (state: HoldingDetailState) => T,

@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { TickerCard } from "@/components/ui/my/ticker-card";
 import { useHoldingSummary } from "@/lib/services/composed/use-holdings-summary";
+import { useDailyProfit } from "@/lib/services/composed/use-daily-profit";
 
 export const TabSummary = () => {
   const group = React.useContext(GroupInfoContext)!;
@@ -21,10 +22,40 @@ export const TabSummary = () => {
   const budgetPct = group.budget
     ? (summary.totalNetInvestment / group.budget) * 100
     : 0;
+  const daily = useDailyProfit(group.holdingIds!);
   return (
     <>
       <div className={"relative common-layout flex flex-col items-center"}>
         <div className={"w-full max-w-md"}>
+          {daily && (
+            <>
+              <SectionLayout
+                list={[
+                  {
+                    title: "本日收益额",
+                    content: (
+                      <span
+                        className={getTickerChangeColorClass(daily.totalDiff)}
+                      >
+                        {formatMoney(daily.totalDiff)}
+                      </span>
+                    ),
+                  },
+                  {
+                    title: "本日收益率",
+                    content: (
+                      <span
+                        className={getTickerChangeColorClass(daily.totalDiff)}
+                      >
+                        {formatPercent(daily.totalPct)}
+                      </span>
+                    ),
+                  },
+                ]}
+              ></SectionLayout>
+              <Separator className={"my-2 md:my-4"} />
+            </>
+          )}
           <SectionLayout
             list={[
               {
@@ -123,6 +154,7 @@ export const TabSummary = () => {
                 ticker={s.ticker}
                 weightPct={s.weightPct}
                 profit={s.profit}
+                daily={daily?.holdingMap[s.id]}
               ></TickerCard>
             ))}
           </div>
@@ -140,9 +172,7 @@ const SectionLayout = ({
 }) => {
   return (
     <section
-      className={
-        "grid justify-center place-items-center gap-2 grid-cols-2 md:grid-cols-4"
-      }
+      className={"grid justify-center place-items-center gap-2 grid-cols-2"}
     >
       {list.map((item) => (
         <SimpleDisplayVertical key={item.title} title={item.title}>

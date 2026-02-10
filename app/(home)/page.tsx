@@ -15,11 +15,14 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { HoldingSummary } from "@/app/(home)/_components/holding-summary";
 import { useHoldingSummary } from "@/lib/services/composed/use-holdings-summary";
+import { useDailyProfit } from "@/lib/services/composed/use-daily-profit";
 
 export default function Page() {
   const { isLoading, data: list } = useHoldingList();
   const holdingIds = list.map((holding) => holding.id);
   const summary = useHoldingSummary(holdingIds);
+  const daily = useDailyProfit(holdingIds);
+
   return isLoading ? (
     <Loading isLoading={true} />
   ) : (
@@ -39,7 +42,7 @@ export default function Page() {
                 </Button>
               }
             >
-              <HoldingSummary summary={summary} />
+              <HoldingSummary summary={summary} daily={daily} />
             </AppBarExtra>
           )}
         </AppBar>
@@ -57,6 +60,7 @@ export default function Page() {
                   ticker={hwq.ticker}
                   weightPct={hwq.weightPct}
                   profit={hwq.profit}
+                  daily={daily?.holdingMap[hwq.id]}
                 />
               );
             })}

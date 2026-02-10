@@ -15,6 +15,7 @@ export {
 export { HoldingDetailUpdaterContext } from "./providers/holding-detail-updater-provider";
 
 export {
+  EMPTY_ARRAY,
   useHoldingDetailStore,
   useHoldingDetailById,
   useHoldingDetailList,

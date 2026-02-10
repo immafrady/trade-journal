@@ -8,7 +8,7 @@ import { Plus } from "lucide-react";
 export const ListPage = ({ list }: { list: GroupModel[] }) => (
   <div className={"common-layout flex flex-col gap-2 pb-20"}>
     {list.map((model) => (
-      <GroupCard key={model.id!} model={model}></GroupCard>
+      <GroupCard key={model.id!} group={model}></GroupCard>
     ))}
     <DialogEdit
       trigger={
