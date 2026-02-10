@@ -24,12 +24,13 @@ export const HoldingSummary = ({
           list={[
             { title: "总市值", content: formatMoney(summary.totalMarketValue) },
             {
-              title: "累计收益",
+              title: "累计收益/率",
               content: (
                 <span
                   className={getTickerChangeColorClass(summary.totalProfit)}
                 >
-                  {formatMoney(summary.totalProfit)}
+                  {formatMoney(summary.totalProfit)}/
+                  {formatPercent(summary.totalProfitPct)}
                 </span>
               ),
             },
@@ -40,7 +41,7 @@ export const HoldingSummary = ({
             className={"gap-0.5"}
             list={[
               {
-                title: "当日收益/率",
+                title: "本日收益/率",
                 content: (
                   <span className={getTickerChangeColorClass(daily.totalDiff)}>
                     {formatMoney(daily.totalDiff)}/
