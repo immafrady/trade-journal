@@ -34,7 +34,7 @@ export const SectionProfitSwitcher = React.memo(({ id }: { id: string }) => {
 
     if (latest) {
       list.push({
-        label: "当前估值",
+        label: "成交估值",
         date: latest.display.tradedAt,
         profit: computeHoldingProfit(latest.derived.price, summary),
       });
@@ -43,14 +43,14 @@ export const SectionProfitSwitcher = React.memo(({ id }: { id: string }) => {
     if (quote) {
       if (SinaStockType.AShare !== ticker.type) {
         list.push({
-          label: "场外估值",
+          label: "净值估值",
           date: quote.fundDate!,
           profit: computeHoldingProfit(quote.fundNav!, summary),
         });
       }
 
       list.unshift({
-        label: "场内估值",
+        label: "市价估值",
         date: quote.date!,
         profit: profit!,
       });
