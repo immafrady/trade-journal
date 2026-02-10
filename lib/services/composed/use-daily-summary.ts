@@ -9,18 +9,23 @@ export const useDailySummary = (holdingIds: string[]) => {
 
   return React.useMemo(() => {
     // 如果你的 list 是按时间倒序，这里可以先 reverse 一次
-    return buildDailySummary(ascList).reverse();
-  }, [ascList]);
+    return buildDailySummary(ascList, holdingIds).reverse();
+  }, [ascList, holdingIds]);
 };
 
-export function buildDailySummary(list: TradeRecordExtend[]): DailySummary[] {
+export function buildDailySummary(
+  list: TradeRecordExtend[],
+  holdingIds: string[],
+): DailySummary[] {
   if (list.length === 0) return [];
 
   const result: DailySummary[] = [];
 
   let currentDate: Dayjs | null = null;
   let prevShares: Record<string, number> = {};
-  let currentShares: Record<string, number> = {};
+  let currentShares: Record<string, number> = Object.fromEntries(
+    holdingIds.map((id) => [id, 0]),
+  );
   let records: TradeRecordExtend[] = [];
 
   for (const tre of list) {

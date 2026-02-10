@@ -1,13 +1,16 @@
 import React from "react";
 import { TradeRecordExtend } from "@/lib/services/group";
-import { useHoldingDetailStore } from "@/lib/services/composed/holding-detail-provider";
+import {
+  EMPTY_ARRAY,
+  useHoldingDetailStore,
+} from "@/lib/services/composed/holding-detail-provider";
 import { useShallow } from "zustand/react/shallow";
 import { useTickerMap } from "@/lib/services/holdings/use-ticker-map";
 
 export const useGroupTradeRecords = (holdingIds: string[]) => {
   const tickerMap = useTickerMap();
   const recordList = useHoldingDetailStore(
-    useShallow((s) => holdingIds.map((id) => s.recordStore[id])),
+    useShallow((s) => holdingIds.map((id) => s.recordStore[id] ?? EMPTY_ARRAY)),
   );
 
   return React.useMemo(() => {
