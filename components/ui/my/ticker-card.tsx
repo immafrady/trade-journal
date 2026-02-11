@@ -56,8 +56,10 @@ export const TickerCard = ({
                 title: "市值(仓位)",
                 content: (
                   <div>
-                    {formatMoney(profit.marketValue)}({formatPercent(weightPct)}
-                    )
+                    {formatMoney(profit.marketValue)}
+                    <span className={"text-xs"}>
+                      ({formatPercent(weightPct)})
+                    </span>
                   </div>
                 ),
               },
@@ -68,7 +70,9 @@ export const TickerCard = ({
                     className={getTickerChangeColorClass(profit.totalProfit)}
                   >
                     {formatMoney(profit?.totalProfit)}/
-                    {formatPercent(profit.totalReturnPct)}
+                    <span className={"text-xs"}>
+                      {formatPercent(profit.totalReturnPct)}
+                    </span>
                   </div>
                 ),
               },
@@ -83,7 +87,10 @@ export const TickerCard = ({
                 title: "本日收益/率",
                 content: (
                   <div className={getTickerChangeColorClass(daily.diff)}>
-                    {formatMoney(daily.diff)}/{formatPercent(daily.pct)}
+                    {formatMoney(daily.diff)}/
+                    <span className={"text-xs"}>
+                      {formatPercent(daily.pct)}
+                    </span>
                   </div>
                 ),
               },

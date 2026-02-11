@@ -30,7 +30,9 @@ export const HoldingSummary = ({
                   className={getTickerChangeColorClass(summary.totalProfit)}
                 >
                   {formatMoney(summary.totalProfit)}/
-                  {formatPercent(summary.totalProfitPct)}
+                  <span className={"text-xs"}>
+                    {formatPercent(summary.totalProfitPct)}
+                  </span>
                 </span>
               ),
             },
@@ -45,7 +47,9 @@ export const HoldingSummary = ({
                 content: (
                   <span className={getTickerChangeColorClass(daily.totalDiff)}>
                     {formatMoney(daily.totalDiff)}/
-                    {formatPercent(daily.totalPct)}
+                    <span className={"text-xs"}>
+                      {formatPercent(daily.totalPct)}
+                    </span>
                   </span>
                 ),
               },

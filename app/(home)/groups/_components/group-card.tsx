@@ -19,7 +19,7 @@ export const GroupCard = ({ group }: { group: GroupModel }) => {
   const router = useRouter();
   const summary = useHoldingSummary(group.holdingIds!);
   const daily = useDailyProfit(group.holdingIds!);
-  const diplayList = React.useMemo(() => {
+  const displayList = React.useMemo(() => {
     const list = [
       {
         title: "总市值",
@@ -34,7 +34,9 @@ export const GroupCard = ({ group }: { group: GroupModel }) => {
         content: (
           <div className={getTickerChangeColorClass(summary.totalProfit!)}>
             {formatMoney(summary.totalProfit)}/
-            {formatPercent(summary.totalProfitPct)}
+            <span className={"text-xs"}>
+              {formatPercent(summary.totalProfitPct)}
+            </span>
           </div>
         ),
       },
@@ -44,7 +46,8 @@ export const GroupCard = ({ group }: { group: GroupModel }) => {
         title: "本日收益/率",
         content: (
           <div className={getTickerChangeColorClass(daily.totalDiff)}>
-            {formatMoney(daily.totalDiff)}/{formatPercent(daily.totalPct)}
+            {formatMoney(daily.totalDiff)}/
+            <span className={"text-xs"}>{formatPercent(daily.totalPct)}</span>
           </div>
         ),
       });
@@ -74,7 +77,7 @@ export const GroupCard = ({ group }: { group: GroupModel }) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <InlineDisplay list={diplayList}></InlineDisplay>
+        <InlineDisplay list={displayList}></InlineDisplay>
         <Separator className={"my-2"}></Separator>
         <h5 className={"font-medium text-sm"}>市值占比</h5>
         <div className={"flex flex-col gap-1"}>
