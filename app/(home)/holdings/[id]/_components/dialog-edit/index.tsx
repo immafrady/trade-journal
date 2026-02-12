@@ -128,6 +128,7 @@ export const DialogEdit = ({
               >
                 <DatePicker
                   date={field.state.value}
+                  defaultMonth={field.state.value}
                   onChange={(d) => field.handleChange(d!)}
                 />
               </FieldLayout>
