@@ -83,11 +83,11 @@ function getColumns(): ColumnDef<TradeRecordExtend>[] {
     genColumnDef({
       id: TradeRecordExtendConstants.Fee,
       isNumeric: true,
-      accessorFn: (row) => row.record.derived.fee,
+      accessorFn: (row) => row.record.derived.fee || row.record.props.fee,
       cell: (row) => {
         const v = row.getValue() as number;
         return (
-          <span className={!v ? "text-destructive" : undefined}>
+          <span className={v === undefined ? "text-destructive" : undefined}>
             {formatMoney(v)}
           </span>
         );
