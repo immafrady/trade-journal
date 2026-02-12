@@ -48,6 +48,7 @@ export const computeDailyProfit = (
       prevMarketValue,
       diff,
       pct: prevMarketValue === 0 ? 0 : (diff / prevMarketValue) * 100,
+      current: quote.current!,
     };
   }
 
@@ -64,6 +65,7 @@ export interface HoldingDailyProfit {
   prevMarketValue: number;
   diff: number;
   pct: number;
+  current: number;
 }
 
 export interface PortfolioDailyProfit {
