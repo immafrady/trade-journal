@@ -94,6 +94,14 @@ export const TickerCard = ({
                   </div>
                 ),
               },
+              {
+                title: "当前价格",
+                content: (
+                  <div className={getTickerChangeColorClass(daily.diff)}>
+                    {ticker.formatter(daily.current)}
+                  </div>
+                ),
+              },
             ]}
           ></InlineDisplay>
         )}

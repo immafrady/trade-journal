@@ -11,12 +11,14 @@ import {
 } from "@/components/ui/popover";
 import { CalendarCheckIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DayPicker } from "react-day-picker";
 
 export function DatePicker({
   date,
   onChange,
   className,
-}: {
+  ...props
+}: React.ComponentProps<typeof DayPicker> & {
   date: Date | undefined;
   onChange: (d?: Date) => void;
   className?: string;
@@ -36,6 +38,7 @@ export function DatePicker({
       </PopoverTrigger>
       <PopoverContent className="w-auto overflow-hidden p-0" align="start">
         <Calendar
+          {...props}
           mode="single"
           selected={date}
           captionLayout="dropdown"

@@ -1,5 +1,6 @@
 import { DailySummary } from "@/lib/services/composed/use-daily-summary";
 import { SinaQuote } from "@/lib/services/sina";
+import { TradeRecordType } from "@/lib/services/trade-records";
 
 export const computeDailyProfit = (
   dailySummary: DailySummary,
@@ -16,30 +17,49 @@ export const computeDailyProfit = (
     const quote = quoteMap[holdingId];
     if (!quote) return null;
 
+    /**
+     * todo 持续观察计算合理性
+     * 计算方法：
+     * 当下=不变仓位*现价 + Σ(买入量*现价)   + Σ(买出量*卖出价)
+     * 之前=不变仓位*昨收 + Σ(买入量*买入价) + Σ(买出量*昨收)
+     * diff=当下-之前
+     * pct=diff/之前
+     */
     const currentShares = dailySummary.currentShares[holdingId] ?? 0;
     const isSameDate = summaryDateStr === quote.date;
     const prevShares = isSameDate
       ? (dailySummary.prevShares[holdingId] ?? 0)
-      : currentShares;
-    const currentMarketValue = currentShares * quote.current!;
-    const prevMarketValue = prevShares * quote.prevClose!;
+      : currentShares; // 非同一日的交易，不用特殊计算直接期初期末份额一致
+    let currentMarketValue = currentShares * quote.current!;
+    let prevMarketValue = prevShares * quote.prevClose!;
 
-    let diff = 0;
     if (isSameDate) {
-      // 当日，得精确计算
-      // 真实收益 = 当前总资产 - 昨日总资产 - 今日净投入
-      const todayNetInvestment = dailySummary.records.reduce((prev, curr) => {
-        if (curr.holdingId === holdingId) {
-          return prev + curr.record.adjusted.amount;
+      for (const tre of dailySummary.records) {
+        if (tre.holdingId === holdingId) {
+          switch (tre.record.props.type) {
+            case TradeRecordType.Sell:
+            case TradeRecordType.Redeem: {
+              // prevMarketValue已包含，不做重复计算
+              currentMarketValue += -tre.record.adjusted.amount;
+              break;
+            }
+            case TradeRecordType.Buy:
+            case TradeRecordType.Subscribe: {
+              // currentMarketValue已包含，不做重复计算
+              prevMarketValue += tre.record.adjusted.amount;
+              break;
+            }
+            case TradeRecordType.Dividend: {
+              // 分红在现价里面已经体现，所以必须要在昨收的部分减掉对应的金额
+              prevMarketValue += tre.record.adjusted.amount;
+              break;
+            }
+          }
         }
-        return prev;
-      }, 0);
-      diff = currentMarketValue - prevMarketValue - todayNetInvestment;
-    } else {
-      // 非当日，粗略计算
-      diff = currentMarketValue - prevMarketValue;
+      }
     }
 
+    const diff = currentMarketValue - prevMarketValue;
     totalDiff += diff;
     totalPrevMarketValue += prevMarketValue;
 
@@ -48,6 +68,7 @@ export const computeDailyProfit = (
       prevMarketValue,
       diff,
       pct: prevMarketValue === 0 ? 0 : (diff / prevMarketValue) * 100,
+      current: quote.current!,
     };
   }
 
@@ -64,6 +85,7 @@ export interface HoldingDailyProfit {
   prevMarketValue: number;
   diff: number;
   pct: number;
+  current: number;
 }
 
 export interface PortfolioDailyProfit {

@@ -115,6 +115,7 @@ export const DialogFilter = ({
                   <DatePicker
                     className={"flex-1"}
                     date={field.state.value}
+                    defaultMonth={field.state.value}
                     onChange={(v) => field.handleChange(v)}
                   />
                   <Button
@@ -138,6 +139,7 @@ export const DialogFilter = ({
                   <DatePicker
                     className={"flex-1"}
                     date={field.state.value}
+                    defaultMonth={field.state.value}
                     onChange={(v) => field.handleChange(v)}
                   />
                   <Button
