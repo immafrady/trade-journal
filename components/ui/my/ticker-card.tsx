@@ -27,8 +27,55 @@ export const TickerCard = ({
   daily?: HoldingDailyProfit;
 }) => {
   // 计算汇总的逻辑
-
   const router = useRouter();
+
+  const list: { title: string; content: React.ReactNode }[] = [];
+  if (profit) {
+    list.push(
+      {
+        title: "市值(仓位)",
+        content: (
+          <div>
+            {formatMoney(profit.marketValue)}
+            <span className={"text-xs"}>({formatPercent(weightPct)})</span>
+          </div>
+        ),
+      },
+      {
+        title: "累计收益/率",
+        content: (
+          <div className={getTickerChangeColorClass(profit.totalProfit)}>
+            {formatMoney(profit?.totalProfit)}/
+            <span className={"text-xs"}>
+              {formatPercent(profit.totalReturnPct)}
+            </span>
+          </div>
+        ),
+      },
+    );
+  }
+
+  if (daily) {
+    list.push(
+      {
+        title: "本日收益/率",
+        content: (
+          <div className={getTickerChangeColorClass(daily.diff)}>
+            {formatMoney(daily.diff)}/
+            <span className={"text-xs"}>{formatPercent(daily.pct)}</span>
+          </div>
+        ),
+      },
+      {
+        title: "当前价格",
+        content: (
+          <div className={getTickerChangeColorClass(daily.diff)}>
+            {ticker.formatter(daily.current)}
+          </div>
+        ),
+      },
+    );
+  }
 
   return (
     <Card>
@@ -48,63 +95,7 @@ export const TickerCard = ({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {profit && (
-          <InlineDisplay
-            className={"gap-0.5"}
-            list={[
-              {
-                title: "市值(仓位)",
-                content: (
-                  <div>
-                    {formatMoney(profit.marketValue)}
-                    <span className={"text-xs"}>
-                      ({formatPercent(weightPct)})
-                    </span>
-                  </div>
-                ),
-              },
-              {
-                title: "累计收益/率",
-                content: (
-                  <div
-                    className={getTickerChangeColorClass(profit.totalProfit)}
-                  >
-                    {formatMoney(profit?.totalProfit)}/
-                    <span className={"text-xs"}>
-                      {formatPercent(profit.totalReturnPct)}
-                    </span>
-                  </div>
-                ),
-              },
-            ]}
-          />
-        )}
-        {daily && (
-          <InlineDisplay
-            className={"gap-0.5"}
-            list={[
-              {
-                title: "本日收益/率",
-                content: (
-                  <div className={getTickerChangeColorClass(daily.diff)}>
-                    {formatMoney(daily.diff)}/
-                    <span className={"text-xs"}>
-                      {formatPercent(daily.pct)}
-                    </span>
-                  </div>
-                ),
-              },
-              {
-                title: "当前价格",
-                content: (
-                  <div className={getTickerChangeColorClass(daily.diff)}>
-                    {ticker.formatter(daily.current)}
-                  </div>
-                ),
-              },
-            ]}
-          ></InlineDisplay>
-        )}
+        {!!list.length && <InlineDisplay className={"gap-0.5"} list={list} />}
       </CardContent>
     </Card>
   );
