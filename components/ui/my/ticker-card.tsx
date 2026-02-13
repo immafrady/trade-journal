@@ -3,6 +3,7 @@ import React from "react";
 import {
   formatMoney,
   formatPercent,
+  formatShares,
   getTickerChangeColorClass,
 } from "@/lib/market-utils";
 import { ArrowRight } from "lucide-react";
@@ -40,6 +41,10 @@ export const TickerCard = ({
             <span className={"text-xs"}>({formatPercent(weightPct)})</span>
           </div>
         ),
+      },
+      {
+        title: "持仓份额",
+        content: formatShares(profit.shares),
       },
       {
         title: "累计收益/率",
