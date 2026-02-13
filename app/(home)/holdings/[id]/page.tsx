@@ -25,16 +25,15 @@ export default function Page() {
     <AppContainer
       appBar={
         <AppBar bgGradient={moreInfo}>
-          {!!quote &&
-            (moreInfo ? (
-              <AppBarExtra
-                className={"px-2 -mb-6 relative z-50 pointer-events-auto"}
-              >
-                <BaseInfo />
-              </AppBarExtra>
-            ) : (
-              <AppBarExtra title={`${ticker.label} · 详情`}></AppBarExtra>
-            ))}
+          {!!quote && moreInfo ? (
+            <AppBarExtra
+              className={"px-2 -mb-6 relative z-50 pointer-events-auto"}
+            >
+              <BaseInfo />
+            </AppBarExtra>
+          ) : (
+            <AppBarExtra title={`${ticker.label} · 详情`}></AppBarExtra>
+          )}
         </AppBar>
       }
     >
