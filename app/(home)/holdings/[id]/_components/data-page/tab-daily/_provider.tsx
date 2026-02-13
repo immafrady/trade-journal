@@ -10,7 +10,11 @@ export const TabDailyContext = React.createContext<TabDailyProps>({
   setIndex: (i) => 0,
 });
 
-export const DailyProvider = ({ children }: { children: React.ReactNode }) => {
+export const TabDailyProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [index, setIndex] = React.useState(0);
   return (
     <TabDailyContext.Provider
