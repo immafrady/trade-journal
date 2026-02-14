@@ -3,17 +3,17 @@ import { BottomBarContainer } from "@/components/ui/my/bottom-bar-container";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DatePicker } from "@/components/ui/my/date-picker";
-import { TabDailyContext } from "./_provider";
+import { DataPageContext } from "@/app/(home)/holdings/[id]/_components/data-page/_provider";
 
 export const BottomBar = ({ dates }: { dates: number[] }) => {
-  const { index, setIndex } = React.useContext(TabDailyContext);
-  const currentDate = new Date(dates[index]);
+  const { tabDailyIndex, setIndex } = React.useContext(DataPageContext);
+  const currentDate = new Date(dates[tabDailyIndex]);
 
   return (
     <BottomBarContainer>
       <Button
         variant={"ghost"}
-        disabled={index >= dates.length - 1}
+        disabled={tabDailyIndex >= dates.length - 1}
         onClick={() => {
           setIndex((i) => i + 1);
         }}
@@ -30,7 +30,7 @@ export const BottomBar = ({ dates }: { dates: number[] }) => {
       ></DatePicker>
       <Button
         variant={"ghost"}
-        disabled={index === 0}
+        disabled={tabDailyIndex === 0}
         onClick={() => {
           setIndex((i) => i - 1);
         }}

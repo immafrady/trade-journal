@@ -25,7 +25,7 @@ import { Separator } from "@/components/ui/separator";
 import { DatePicker } from "@/components/ui/my/date-picker";
 
 export const DialogFilter = ({
-  columnFilters,
+  columnFilters = [],
   onColumnFiltersChange,
   filterCount,
 }: {
@@ -36,7 +36,7 @@ export const DialogFilter = ({
   const dialogRef = React.useRef<ResponsiveDialogRef>(null);
 
   const form = useForm({
-    defaultValues: getDefaultValue([]),
+    defaultValues: getDefaultValue(columnFilters),
     onSubmitInvalid: () => {
       toast.error(`校验失败，无法提交`);
     },
@@ -99,6 +99,11 @@ export const DialogFilter = ({
       onSubmit={async () => {
         await form.handleSubmit();
       }}
+      cancelText={"清除过滤项"}
+      submitText={"开始过滤"}
+      onCancel={() => {
+        onColumnFiltersChange([]);
+      }}
     >
       <form
         onSubmit={(e) => {
@@ -114,15 +119,15 @@ export const DialogFilter = ({
                 <div className={"flex gap-2"}>
                   <DatePicker
                     className={"flex-1"}
-                    date={field.state.value}
-                    defaultMonth={field.state.value}
-                    onChange={(v) => field.handleChange(v)}
+                    date={field.state.value!}
+                    defaultMonth={field.state.value!}
+                    onChange={(v) => field.handleChange(v ?? null)}
                   />
                   <Button
                     disabled={!field.state.value}
                     variant={"destructive"}
                     onClick={() => {
-                      form.setFieldValue("dateMin", undefined);
+                      form.setFieldValue("dateMin", () => null);
                     }}
                   >
                     <Eraser />
@@ -138,15 +143,15 @@ export const DialogFilter = ({
                 <div className={"flex gap-2"}>
                   <DatePicker
                     className={"flex-1"}
-                    date={field.state.value}
-                    defaultMonth={field.state.value}
-                    onChange={(v) => field.handleChange(v)}
+                    date={field.state.value!}
+                    defaultMonth={field.state.value!}
+                    onChange={(v) => field.handleChange(v ?? null)}
                   />
                   <Button
                     disabled={!field.state.value}
                     variant={"destructive"}
                     onClick={() => {
-                      form.setFieldValue("dateMax", undefined);
+                      form.setFieldValue("dateMax", () => null);
                     }}
                   >
                     <Eraser />
@@ -337,12 +342,12 @@ enum ActionType {
 function getDefaultValue(filters: ColumnFiltersState) {
   // 处理日期
   const dateFilter = filters[0];
-  let date: { dateMin?: Date; dateMax?: Date } = {
-    dateMin: undefined,
-    dateMax: undefined,
+  let date: { dateMin: Date | null; dateMax: Date | null } = {
+    dateMin: null,
+    dateMax: null,
   };
   if (dateFilter) {
-    const [dateMin, dateMax] = dateFilter.value as [Date?, Date?];
+    const [dateMin, dateMax] = dateFilter.value as [Date | null, Date | null];
     date = { dateMin, dateMax };
   }
 

@@ -14,6 +14,10 @@ import { SinaTicker } from "@/lib/services/sina";
 import { Separator } from "@/components/ui/separator";
 import { SelectedSummary } from "@/app/(home)/holdings/[id]/_components/data-page/selected-summary";
 import { TradeRecordConstants } from "@/lib/services/trade-records";
+import {
+  DataPageContext,
+  TabKey,
+} from "@/app/(home)/holdings/[id]/_components/data-page/_provider";
 
 export const DailyCard = ({
   daily,
@@ -22,6 +26,7 @@ export const DailyCard = ({
   daily: DailySummary;
   ticker: SinaTicker;
 }) => {
+  const { setTabKey, setColumnFilters } = React.useContext(DataPageContext);
   const records = daily.records.map((r) => r.record);
   const latest = records[0];
   const diff = latest.cumulative.marketValue - latest.cumulative.totalAmount;
@@ -41,7 +46,16 @@ export const DailyCard = ({
               <LoadingButton
                 variant={"ghost"}
                 icon={<ArrowRight />}
-                onClick={() => {}}
+                onClick={() => {
+                  const date = daily.date.toDate();
+                  setColumnFilters([
+                    {
+                      id: TradeRecordConstants.TradedAt,
+                      value: [date, date],
+                    },
+                  ]);
+                  setTabKey(TabKey.Table);
+                }}
               />
             </CardTitle>
           </CardHeader>
