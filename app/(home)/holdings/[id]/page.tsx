@@ -14,6 +14,7 @@ import {
   useHoldingQuoteById,
   useTradeRecordsById,
 } from "@/lib/services/composed/holding-detail-provider";
+import { DataPageProvider } from "@/app/(home)/holdings/[id]/_components/data-page/_provider";
 
 export default function Page() {
   const { id, ticker } = React.useContext(HoldingInfoContext)!;
@@ -39,7 +40,9 @@ export default function Page() {
     >
       <div className={cn("h-full common-layout", moreInfo && "pt-10")}>
         {records.length ? (
-          <DataPage onTabChange={setMoreInfo} />
+          <DataPageProvider>
+            <DataPage onTabChange={setMoreInfo} />
+          </DataPageProvider>
         ) : (
           <BlankPage />
         )}

@@ -18,6 +18,7 @@ export const computeHoldingProfit = (
   const totalProfit = realizedProfit + unrealizedProfit;
 
   return {
+    shares, // 持仓份额
     marketValue, // 市值
     /** 收益结果（核心） */
     unrealizedProfit, // 当前浮动盈亏（市值 - 当前持仓成本）

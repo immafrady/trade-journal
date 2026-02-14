@@ -7,7 +7,6 @@ import React from "react";
 import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
 import { DataTable } from "@/components/ui/my/data-table";
 import {
-  ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -23,16 +22,15 @@ import {
   HoldingDetailUpdaterContext,
   useTradeRecordsById,
 } from "@/lib/services/composed/holding-detail-provider";
+import { DataPageContext } from "@/app/(home)/holdings/[id]/_components/data-page/_provider";
 
 export const TabTable = () => {
   const { id, ticker } = React.useContext(HoldingInfoContext)!;
+  const { columnFilters, setColumnFilters } = React.useContext(DataPageContext);
   const records = useTradeRecordsById(id);
   const updater = React.useContext(HoldingDetailUpdaterContext);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>(baseVisibility);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
 
   const columns = React.useMemo(() => {
     return getColumns(ticker.formatter);

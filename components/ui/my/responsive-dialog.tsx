@@ -26,6 +26,9 @@ const ResponsiveDialogInner = (
     onSubmit,
     onClosed,
     onOpen,
+    onCancel,
+    cancelText = "取消",
+    submitText = "提交",
   }: {
     trigger?: React.ReactNode;
     children: React.ReactNode;
@@ -34,6 +37,9 @@ const ResponsiveDialogInner = (
     onSubmit?: () => Promise<void>;
     onClosed?: () => void;
     onOpen?: () => void;
+    onCancel?: () => void;
+    cancelText?: string;
+    submitText?: string;
   },
   ref: React.ForwardedRef<ResponsiveDialogRef>,
 ) => {
@@ -66,7 +72,9 @@ const ResponsiveDialogInner = (
         {onSubmit && (
           <DialogFooter className={"shrink-0"}>
             <DialogClose asChild>
-              <Button variant="outline">取消</Button>
+              <Button variant="outline" onClick={() => onCancel?.()}>
+                {cancelText}
+              </Button>
             </DialogClose>
             <LoadingButton
               loading={loading}
@@ -80,7 +88,7 @@ const ResponsiveDialogInner = (
                 }
               }}
             >
-              提交
+              {submitText}
             </LoadingButton>
           </DialogFooter>
         )}
