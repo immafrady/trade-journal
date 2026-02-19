@@ -1,10 +1,11 @@
 import React from "react";
 import { BottomBarContainer } from "@/components/ui/my/bottom-bar-container";
-import { FileDown } from "lucide-react";
+import { Eraser, FileDown } from "lucide-react";
 import { GroupInfoContext } from "@/app/(home)/groups/[id]/_providers/group-info";
 import { LoadingButton } from "@/components/ui/my/button";
 import { exportAsCSV } from "@/lib/utils";
 import { TradeRecordExtend } from "@/lib/services/group";
+import { Button } from "@/components/ui/button";
 
 export const BottomBar = ({ records }: { records: TradeRecordExtend[] }) => {
   const group = React.useContext(GroupInfoContext)!;
@@ -29,6 +30,10 @@ export const BottomBar = ({ records }: { records: TradeRecordExtend[] }) => {
       >
         导出CSV
       </LoadingButton>
+      <Button variant={"destructive"} size={"sm"} disabled>
+        <Eraser />
+        清除过滤
+      </Button>
     </BottomBarContainer>
   );
 };

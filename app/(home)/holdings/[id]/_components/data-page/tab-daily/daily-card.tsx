@@ -14,10 +14,7 @@ import { SinaTicker } from "@/lib/services/sina";
 import { Separator } from "@/components/ui/separator";
 import { SelectedSummary } from "@/app/(home)/holdings/[id]/_components/data-page/selected-summary";
 import { TradeRecordConstants } from "@/lib/services/trade-records";
-import {
-  DataPageContext,
-  TabKey,
-} from "@/app/(home)/holdings/[id]/_components/data-page/_provider";
+import { DataPageContext, TabKey } from "@/app/(home)/holdings/[id]/_providers";
 
 export const DailyCard = ({
   daily,

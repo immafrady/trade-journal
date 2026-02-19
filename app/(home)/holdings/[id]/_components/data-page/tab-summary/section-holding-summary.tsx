@@ -1,5 +1,5 @@
 import React from "react";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 import { useHoldingSummaryById } from "@/lib/services/composed/holding-detail-provider";
 import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
 import {

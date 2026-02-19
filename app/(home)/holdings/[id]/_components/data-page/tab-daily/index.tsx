@@ -1,9 +1,11 @@
 import React from "react";
 import { BottomBar } from "./bottom-bar";
 import { DailyCard } from "./daily-card";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import {
+  DataPageContext,
+  HoldingInfoContext,
+} from "@/app/(home)/holdings/[id]/_providers";
 import { useDailySummary } from "@/lib/services/composed/use-daily-summary";
-import { DataPageContext } from "@/app/(home)/holdings/[id]/_components/data-page/_provider";
 
 export const TabDaily = () => {
   const { tabDailyIndex } = React.useContext(DataPageContext);

@@ -6,14 +6,13 @@ import {
 import {
   genColumnDef,
   genNoColumnDef,
-  genSelectableColumn,
 } from "@/components/ui/my/data-table/selectable-column";
 import { Dayjs } from "dayjs";
 import { formatFund, formatMoney, formatShares } from "@/lib/market-utils";
 
 function getColumns(): ColumnDef<TradeRecordExtend>[] {
   return [
-    genSelectableColumn(),
+    // genSelectableColumn(),
     genNoColumnDef(),
     genColumnDef({
       id: TradeRecordExtendConstants.Label,

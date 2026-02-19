@@ -27,7 +27,7 @@ import { Badge } from "@/components/ui/badge";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { formatMoney, formatShares } from "@/lib/market-utils";
 import { Separator } from "@/components/ui/separator";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 import { LoadingButton } from "@/components/ui/my/button";
 
 export function StepPreviewData({

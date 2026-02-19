@@ -1,6 +1,6 @@
 import { TradeRecord, TradeRecordType } from "@/lib/services/trade-records";
 import React from "react";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import {
   formatMoney,

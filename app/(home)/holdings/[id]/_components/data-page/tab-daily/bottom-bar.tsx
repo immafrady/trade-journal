@@ -3,7 +3,7 @@ import { BottomBarContainer } from "@/components/ui/my/bottom-bar-container";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DatePicker } from "@/components/ui/my/date-picker";
-import { DataPageContext } from "@/app/(home)/holdings/[id]/_components/data-page/_provider";
+import { DataPageContext } from "@/app/(home)/holdings/[id]/_providers";
 
 export const BottomBar = ({ dates }: { dates: number[] }) => {
   const { tabDailyIndex, setIndex } = React.useContext(DataPageContext);

@@ -9,12 +9,14 @@ import {
   AppBarExtra,
   AppContainer,
 } from "@/components/layout/app-shell";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import {
+  DataPageProvider,
+  HoldingInfoContext,
+} from "@/app/(home)/holdings/[id]/_providers";
 import {
   useHoldingQuoteById,
   useTradeRecordsById,
 } from "@/lib/services/composed/holding-detail-provider";
-import { DataPageProvider } from "@/app/(home)/holdings/[id]/_components/data-page/_provider";
 
 export default function Page() {
   const { id, ticker } = React.useContext(HoldingInfoContext)!;
