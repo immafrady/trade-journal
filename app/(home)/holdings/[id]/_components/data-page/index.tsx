@@ -3,7 +3,8 @@ import { TabSummary } from "./tab-summary";
 import React from "react";
 import { TabTable } from "./tab-table";
 import { TabDaily } from "./tab-daily";
-import { DataPageContext, TabKey } from "@/app/(home)/holdings/[id]/_providers";
+import { DataPageContext } from "@/app/(home)/holdings/[id]/_providers";
+import { TabKey } from "@/app/(home)/holdings/[id]/_components/tab-key";
 
 export const DataPage = ({
   onTabChange,

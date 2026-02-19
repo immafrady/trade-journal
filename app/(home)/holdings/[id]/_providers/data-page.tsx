@@ -1,5 +1,6 @@
 import React from "react";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { TabKey } from "@/app/(home)/holdings/[id]/_components/tab-key";
 
 interface DataPageProps {
   tabDailyIndex: number;
@@ -44,10 +45,3 @@ export const DataPageProvider = ({
     </DataPageContext.Provider>
   );
 };
-
-export enum TabKey {
-  Summary = "summary",
-  Table = "table",
-  Daily = "daily",
-  Chart = "chart",
-}
