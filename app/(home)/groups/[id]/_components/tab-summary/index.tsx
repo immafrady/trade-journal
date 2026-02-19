@@ -1,6 +1,6 @@
 import { BottomBar } from "./bottom-bar";
 import React from "react";
-import { GroupInfoContext } from "@/app/(home)/groups/[id]/_providers/group-info";
+import { GroupInfoContext } from "@/app/(home)/groups/[id]/_providers";
 import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
 import {
   formatMoney,
