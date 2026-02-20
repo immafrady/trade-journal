@@ -20,7 +20,6 @@ export const HoldingSummary = ({
     <Card className={"py-4"}>
       <CardContent>
         <InlineDisplay
-          className={"gap-0.5"}
           list={[
             { title: "总市值", content: formatMoney(summary.totalMarketValue) },
             {
@@ -40,7 +39,6 @@ export const HoldingSummary = ({
         />
         {daily && (
           <InlineDisplay
-            className={"gap-0.5"}
             list={[
               {
                 title: "本日收益/率",

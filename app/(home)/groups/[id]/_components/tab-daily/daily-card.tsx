@@ -2,32 +2,33 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoadingButton } from "@/components/ui/my/button";
 import { ArrowRight } from "lucide-react";
+import { TradeRecordConstants } from "@/lib/services/trade-records";
+import {
+  DataPageContext,
+  GroupInfoContext,
+} from "@/app/(home)/groups/[id]/_providers";
+import { TabKey } from "../tab-key";
+import { DailySummary } from "@/lib/services/composed/use-daily-summary";
+import { useTickerMap } from "@/lib/services/holdings/use-ticker-map";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import {
   formatMoney,
-  formatPercent,
   formatShares,
   getTickerChangeColorClass,
 } from "@/lib/market-utils";
-import { TradeRecordConstants } from "@/lib/services/trade-records";
-import { DataPageContext } from "@/app/(home)/groups/[id]/_providers";
-import { TabKey } from "../tab-key";
-import { DailySummary } from "@/lib/services/composed/use-daily-summary";
+import { Separator } from "@/components/ui/separator";
+import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 
-export const DailyCard = ({
-  daily,
-  // ticker,
-}: {
-  daily: DailySummary;
-  // ticker: SinaTicker;
-}) => {
+export const DailyCard = ({ daily }: { daily: DailySummary }) => {
   const { setTabKey, setColumnFilters } = React.useContext(DataPageContext);
-  const records = daily.records.map((r) => r.record);
-  const latest = records[0];
-  const diff = latest.cumulative.marketValue - latest.cumulative.totalAmount;
-  const pct = latest.cumulative.totalAmount
-    ? (diff / latest.cumulative.totalAmount) * 100
-    : undefined;
+  const tickerMap = useTickerMap();
+  const { holdingIds = [] } = React.useContext(GroupInfoContext)!;
+  const latest = daily.records[0];
+
+  let totalAmount = 0;
+  daily.records.forEach((tre) => {
+    totalAmount += tre.record.adjusted.amount;
+  });
 
   return (
     <div className="relative common-layout flex flex-col items-center">
@@ -55,36 +56,62 @@ export const DailyCard = ({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <h3 className={"font-medium mb-2"}>当日操作完成后</h3>
             <InlineDisplay
               list={[
                 {
-                  title: TradeRecordConstants.CumulativeTotalShares,
-                  content: formatShares(latest.cumulative.totalShares),
-                },
-                // {
-                //   title: TradeRecordConstants.CumulativeCostPrice,
-                //   content: ticker.formatter(latest.cumulative.costPrice),
-                // },
-                {
-                  title: TradeRecordConstants.CumulativeMarketValue,
-                  content: formatMoney(latest.cumulative.marketValue),
-                },
-
-                {
                   title: TradeRecordConstants.CumulativeTotalAmount,
-                  content: formatMoney(latest.cumulative.totalAmount),
+                  content: formatMoney(latest.group.totalAmount),
                 },
                 {
-                  title: "收益率",
+                  title: "当日净投入",
                   content: (
-                    <span className={getTickerChangeColorClass(diff)}>
-                      {formatPercent(pct)}
+                    <span className={getTickerChangeColorClass(totalAmount)}>
+                      {formatMoney(totalAmount)}
                     </span>
                   ),
                 },
+                {
+                  title: "当日交易次数",
+                  content: daily.records.length,
+                },
               ]}
-            ></InlineDisplay>
+            />
+            <Separator className={"my-2"} />
+            {holdingIds.map((id, idx) => {
+              const ticker = tickerMap[id];
+              const prev = daily.prevShares[id];
+              const curr = daily.currentShares[id];
+              const diff = curr - prev;
+              return (
+                <div className={"not-last:mb-2"} key={id}>
+                  <h4 className={"font-medium flex items-center gap-1 mb-0.5"}>
+                    <SinaStockTypeBadge type={ticker.type} />
+                    {ticker.label}
+                  </h4>
+                  <InlineDisplay
+                    list={[
+                      {
+                        title: "前日份额",
+                        content: formatShares(prev),
+                      },
+                      {
+                        title: "当日份额",
+                        content: formatShares(curr),
+                      },
+                      {
+                        title: "份额变化",
+                        content: (
+                          <span className={getTickerChangeColorClass(diff)}>
+                            {diff > 0 ? "+" : ""}
+                            {formatShares(diff)}
+                          </span>
+                        ),
+                      },
+                    ]}
+                  />
+                </div>
+              );
+            })}
           </CardContent>
         </Card>
       </div>

@@ -28,6 +28,8 @@ export function buildDailySummary(
   );
   let records: TradeRecordExtend[] = [];
 
+  let prevLastRecord: TradeRecordExtend | null = null;
+
   for (const tre of list) {
     const d = tre.record.props.tradedAt;
 
@@ -38,8 +40,11 @@ export function buildDailySummary(
         prevShares,
         currentShares,
         records,
+        prevLastRecord,
       });
 
+      // 更新上一天的最后一条
+      prevLastRecord = records[records.length - 1];
       // 新一天开始：昨日收盘 = 昨天的 current
       prevShares = currentShares;
       currentShares = { ...currentShares }; // 新对象，防止污染
@@ -63,6 +68,7 @@ export function buildDailySummary(
       prevShares,
       currentShares,
       records,
+      prevLastRecord,
     });
   }
 
@@ -74,4 +80,5 @@ export interface DailySummary {
   prevShares: Record<string, number>;
   currentShares: Record<string, number>;
   records: TradeRecordExtend[];
+  prevLastRecord: TradeRecordExtend | null;
 }

@@ -11,7 +11,7 @@ export const InlineDisplay = ({
   return (
     <div
       className={cn(
-        "w-full grid gap-2 grid-cols-[auto_1fr] text-sm",
+        "w-full grid gap-0.5 grid-cols-[auto_1fr] text-sm",
         className,
       )}
     >

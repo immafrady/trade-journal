@@ -88,7 +88,7 @@ export const DailyCard = ({
                 },
               ]}
             ></InlineDisplay>
-            <Separator className={"my-4"}></Separator>
+            <Separator className={"my-2"}></Separator>
             <SelectedSummary records={records}></SelectedSummary>
           </CardContent>
         </Card>

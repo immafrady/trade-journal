@@ -100,7 +100,7 @@ export const TickerCard = ({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {!!list.length && <InlineDisplay className={"gap-0.5"} list={list} />}
+        {!!list.length && <InlineDisplay list={list} />}
       </CardContent>
     </Card>
   );
