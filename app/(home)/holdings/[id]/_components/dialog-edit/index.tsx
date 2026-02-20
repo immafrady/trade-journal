@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/my/responsive-dialog";
 import React from "react";
 import { useForm, useStore } from "@tanstack/react-form";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 import {
   addTradeRecords,
   TradeRecord,

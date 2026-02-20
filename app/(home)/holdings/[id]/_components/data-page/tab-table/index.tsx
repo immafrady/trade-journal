@@ -4,7 +4,10 @@ import {
   TradeRecordType,
 } from "@/lib/services/trade-records";
 import React from "react";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import {
+  DataPageContext,
+  HoldingInfoContext,
+} from "@/app/(home)/holdings/[id]/_providers";
 import { DataTable } from "@/components/ui/my/data-table";
 import {
   getCoreRowModel,
@@ -22,7 +25,6 @@ import {
   HoldingDetailUpdaterContext,
   useTradeRecordsById,
 } from "@/lib/services/composed/holding-detail-provider";
-import { DataPageContext } from "@/app/(home)/holdings/[id]/_components/data-page/_provider";
 
 export const TabTable = () => {
   const { id, ticker } = React.useContext(HoldingInfoContext)!;

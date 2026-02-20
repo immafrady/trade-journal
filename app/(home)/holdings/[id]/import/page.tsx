@@ -11,7 +11,7 @@ import {
   AppBarExtra,
   AppContainer,
 } from "@/components/layout/app-shell";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 import { HoldingDetailUpdaterContext } from "@/lib/services/composed/holding-detail-provider";
 
 export default function Page() {

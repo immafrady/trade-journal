@@ -25,7 +25,7 @@ import {
 import { motion } from "motion/react";
 import { SinaStockTypeBadge } from "@/components/ui/my/sina-stock-type-badge";
 import { TargetAndTransition } from "motion";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 import { useHoldingQuoteById } from "@/lib/services/composed/holding-detail-provider";
 
 export const BaseInfo = () => {

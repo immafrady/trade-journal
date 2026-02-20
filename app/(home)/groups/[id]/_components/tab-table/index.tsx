@@ -1,8 +1,7 @@
-import { GroupInfoContext } from "../../_providers/group-info";
+import { DataPageContext, GroupInfoContext } from "../../_providers";
 import React from "react";
 import { useGroupTradeRecords } from "@/lib/services/group";
 import {
-  ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -17,9 +16,8 @@ import { TradeRecordType } from "@/lib/services/trade-records";
 export const TabTable = () => {
   const group = React.useContext(GroupInfoContext)!;
   const records = useGroupTradeRecords(group.holdingIds ?? []);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
+  const { columnFilters, setColumnFilters } = React.useContext(DataPageContext);
+
   const [pagination, setPagination] = React.useState({
     pageIndex: 0, //initial page index
     pageSize: 15, //default page size

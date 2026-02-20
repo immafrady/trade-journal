@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { FragmentTemplate } from "@/app/(home)/holdings/[id]/import/_components/fragment-template";
 import { motion } from "motion/react";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 
 const schema = [
   {

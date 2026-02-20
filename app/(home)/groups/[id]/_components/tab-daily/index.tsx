@@ -3,24 +3,20 @@ import { BottomBar } from "./bottom-bar";
 import { DailyCard } from "./daily-card";
 import {
   DataPageContext,
-  HoldingInfoContext,
-} from "@/app/(home)/holdings/[id]/_providers";
+  GroupInfoContext,
+} from "@/app/(home)/groups/[id]/_providers";
 import { useDailySummary } from "@/lib/services/composed/use-daily-summary";
 
 export const TabDaily = () => {
   const { tabDailyIndex } = React.useContext(DataPageContext);
-  const { id, ticker } = React.useContext(HoldingInfoContext)!;
-  const ids = React.useMemo(() => [id], [id]);
-  const dailySummaries = useDailySummary(ids);
+  const model = React.useContext(GroupInfoContext)!;
+  const dailySummaries = useDailySummary(model.holdingIds!);
   const dates = React.useMemo(() => {
     return dailySummaries.map((daily) => daily.date.valueOf());
   }, [dailySummaries]);
   return (
     <>
-      <DailyCard
-        daily={dailySummaries[tabDailyIndex]}
-        ticker={ticker}
-      ></DailyCard>
+      <DailyCard daily={dailySummaries[tabDailyIndex]}></DailyCard>
       <BottomBar dates={dates}></BottomBar>
     </>
   );

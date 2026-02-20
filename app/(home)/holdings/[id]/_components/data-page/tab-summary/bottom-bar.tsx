@@ -6,7 +6,7 @@ import { MyAlertDialog } from "@/components/ui/my/alert-dialog";
 import { clearAllTradeRecords } from "@/lib/services/trade-records";
 import { toast } from "sonner";
 import React from "react";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 import { usePathname } from "next/navigation";
 import { BottomBarContainer } from "@/components/ui/my/bottom-bar-container";
 import { ClipboardPlus, FileUp, Trash } from "lucide-react";

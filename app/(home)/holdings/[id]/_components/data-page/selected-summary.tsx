@@ -1,6 +1,6 @@
 import { TradeRecord, TradeRecordType } from "@/lib/services/trade-records";
 import React from "react";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import {
   formatMoney,
@@ -205,7 +205,7 @@ export const SelectedSummary = ({ records }: { records: TradeRecord[] }) => {
   return displayList.map((item, index) => (
     <React.Fragment key={index}>
       {item}
-      {index < displayList.length - 1 && <Separator className="my-4" />}
+      {index < displayList.length - 1 && <Separator className="my-2" />}
     </React.Fragment>
   ));
 };

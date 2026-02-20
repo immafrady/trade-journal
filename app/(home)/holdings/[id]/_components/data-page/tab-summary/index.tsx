@@ -1,5 +1,5 @@
 import React from "react";
-import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers/holding-info";
+import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 import { SectionDailyProfit } from "./section-daily-profit";
 import { SectionHoldingSummary } from "./section-holding-summary";
 import { SectionProfitSwitcher } from "./section-profit-switcher";
