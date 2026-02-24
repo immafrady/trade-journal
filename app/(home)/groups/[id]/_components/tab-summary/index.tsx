@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { TickerCard } from "@/components/ui/my/ticker-card";
 import { useHoldingSummary } from "@/lib/services/composed/use-holdings-summary";
 import { useDailyProfit } from "@/lib/services/composed/use-daily-profit";
+import { CommonConstants } from "@/lib/constants";
 
 export const TabSummary = () => {
   const group = React.useContext(GroupInfoContext)!;
@@ -67,7 +68,7 @@ export const TabSummary = () => {
                 content:
                   summary.totalNetInvestment < 0 ? (
                     <span className={getTickerChangeColorClass(1)}>
-                      本金已回收
+                      {CommonConstants.InvestmentIsRecovered}
                     </span>
                   ) : (
                     <span
