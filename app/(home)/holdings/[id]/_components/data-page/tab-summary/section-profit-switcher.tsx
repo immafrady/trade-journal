@@ -17,6 +17,7 @@ import {
   formatPercent,
   getTickerChangeColorClass,
 } from "@/lib/market-utils";
+import { CommonConstants } from "@/lib/constants";
 
 export const SectionProfitSwitcher = React.memo(({ id }: { id: string }) => {
   const { ticker } = React.useContext(HoldingInfoContext)!;
@@ -84,11 +85,7 @@ export const SectionProfitSwitcher = React.memo(({ id }: { id: string }) => {
           <ChevronRight />
         </Button>
       </div>
-      <ProfitBlock
-        date={current.date}
-        profit={current.profit}
-        isRecovered={summary.isRecovered}
-      />
+      <ProfitBlock date={current.date} profit={current.profit} />
     </>
   );
 });
@@ -97,11 +94,9 @@ SectionProfitSwitcher.displayName = "SectionProfitSwitcher";
 const ProfitBlock = ({
   date,
   profit,
-  isRecovered,
 }: {
   date: string;
   profit: HoldingProfit;
-  isRecovered: boolean;
 }) => {
   return (
     <section
@@ -127,8 +122,10 @@ const ProfitBlock = ({
         </span>
       </SimpleDisplayVertical>
       <SimpleDisplayVertical title={"累计收益率"}>
-        {isRecovered ? (
-          <span className={getTickerChangeColorClass(1)}>本金已回收</span>
+        {profit.isRecovered ? (
+          <span className={getTickerChangeColorClass(1)}>
+            {CommonConstants.InvestmentIsRecovered}
+          </span>
         ) : (
           <span className={getTickerChangeColorClass(profit.totalProfit)}>
             {formatPercent(profit.totalReturnPct)}

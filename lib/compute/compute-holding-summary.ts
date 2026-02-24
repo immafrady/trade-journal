@@ -85,7 +85,6 @@ export const computeHoldingSummary = (records: TradeRecord[]) => {
     netInvestment, // 净投入资金 = 买入 - 卖出 + 手续费 - 分红
     costPrice: shares > 0 && remainingCost > 0 ? remainingCost / shares : 0, // 当前持仓成本价（仅当 shares > 0 且 netInvestment > 0 有意义）
     avgPrice: shares > 0 ? netInvestment / shares : 0, // 总和成本
-    isRecovered: netInvestment <= 0, // 是否已回本（净投入 <= 0）
     remainingCost, // 当前持仓真实成本
     /** 收益结果（核心） */
     realizedProfit, // 已实现盈亏（卖出部分）

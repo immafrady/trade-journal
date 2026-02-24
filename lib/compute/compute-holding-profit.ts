@@ -10,7 +10,7 @@ export const computeHoldingProfit = (
   const remainingCost = summary?.remainingCost ?? 0;
   const realizedProfit = summary?.realizedProfit ?? 0;
   const netInvestment = summary?.netInvestment ?? 0;
-  const isRecovered = summary?.isRecovered ?? false;
+  const isRecovered = netInvestment <= 0;
 
   const marketValue = price * shares;
   const unrealizedProfit = shares > 0 ? marketValue - remainingCost : 0;
@@ -25,6 +25,7 @@ export const computeHoldingProfit = (
     /** 收益率（只在合理时显示） */
     totalReturnPct: !isRecovered ? (totalProfit / netInvestment) * 100 : 0, // 总收益率（基于历史净投入）
     holdingReturnPct: (unrealizedProfit / remainingCost) * 100, // 持仓收益率（仅当未回本时显示）
+    isRecovered, // 是否已回本（净投入 <= 0）
   };
 };
 
