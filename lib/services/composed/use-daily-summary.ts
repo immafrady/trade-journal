@@ -67,7 +67,7 @@ export function buildDailySummary(
       date: currentDate,
       prevShares,
       currentShares,
-      records,
+      records, // warning: records是升序的！
       prevLastRecord,
     });
   }
