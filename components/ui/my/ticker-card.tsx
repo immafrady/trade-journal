@@ -13,7 +13,6 @@ import { InlineDisplay } from "@/components/ui/my/inline-display";
 import { useRouter } from "next/navigation";
 import { SinaTicker } from "@/lib/services/sina";
 import { HoldingDailyProfit, HoldingProfit } from "@/lib/compute";
-import { CommonConstants } from "@/lib/constants";
 
 export const TickerCard = ({
   id,
@@ -52,11 +51,7 @@ export const TickerCard = ({
         content: (
           <div className={getTickerChangeColorClass(profit.totalProfit)}>
             {formatMoney(profit?.totalProfit)}/
-            <span className={"text-xs"}>
-              {profit.isRecovered
-                ? CommonConstants.InvestmentIsRecovered
-                : formatPercent(profit.totalReturnPct)}
-            </span>
+            <span className={"text-xs"}>{profit.totalReturnPctStr}</span>
           </div>
         ),
       },

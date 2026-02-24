@@ -1,6 +1,8 @@
 // 计算市值
 
 import { HoldingSummary } from "@/lib/compute/compute-holding-summary";
+import { formatPercent } from "@/lib/market-utils";
+import { CommonConstants } from "@/lib/constants";
 
 export const computeHoldingProfit = (
   price: number,
@@ -23,7 +25,9 @@ export const computeHoldingProfit = (
     unrealizedProfit, // 当前浮动盈亏（市值 - 当前持仓成本）
     totalProfit, // 总盈亏 = realized + unrealized + 分红 - 手续费
     /** 收益率（只在合理时显示） */
-    totalReturnPct: !isRecovered ? (totalProfit / netInvestment) * 100 : 0, // 总收益率（基于历史净投入）
+    totalReturnPctStr: !isRecovered
+      ? formatPercent((totalProfit / netInvestment) * 100)
+      : CommonConstants.InvestmentIsRecovered, // 总收益率（基于历史净投入）
     holdingReturnPct: (unrealizedProfit / remainingCost) * 100, // 持仓收益率（仅当未回本时显示）
     isRecovered, // 是否已回本（净投入 <= 0）
   };

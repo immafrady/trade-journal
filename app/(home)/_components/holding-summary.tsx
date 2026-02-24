@@ -29,9 +29,7 @@ export const HoldingSummary = ({
                   className={getTickerChangeColorClass(summary.totalProfit)}
                 >
                   {formatMoney(summary.totalProfit)}/
-                  <span className={"text-xs"}>
-                    {formatPercent(summary.totalProfitPct)}
-                  </span>
+                  <span className={"text-xs"}>{summary.totalProfitPctStr}</span>
                 </span>
               ),
             },

@@ -23,7 +23,7 @@ export const DailyCard = ({ daily }: { daily: DailySummary }) => {
   const { setTabKey, setColumnFilters } = React.useContext(DataPageContext);
   const tickerMap = useTickerMap();
   const { holdingIds = [] } = React.useContext(GroupInfoContext)!;
-  const latest = daily.records[0];
+  const latest = daily.records.at(-1)!;
 
   let totalAmount = 0;
   daily.records.forEach((tre) => {

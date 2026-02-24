@@ -34,9 +34,7 @@ export const GroupCard = ({ group }: { group: GroupModel }) => {
         content: (
           <div className={getTickerChangeColorClass(summary.totalProfit!)}>
             {formatMoney(summary.totalProfit)}/
-            <span className={"text-xs"}>
-              {formatPercent(summary.totalProfitPct)}
-            </span>
+            <span className={"text-xs"}>{summary.totalProfitPctStr}</span>
           </div>
         ),
       },
@@ -57,7 +55,7 @@ export const GroupCard = ({ group }: { group: GroupModel }) => {
     summary.totalMarketValue,
     summary.totalNetInvestment,
     summary.totalProfit,
-    summary.totalProfitPct,
+    summary.totalProfitPctStr,
     group.budget,
     daily,
   ]);
