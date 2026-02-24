@@ -6,6 +6,7 @@ import {
 } from "@/lib/services/composed/holding-detail-provider";
 import { useShallow } from "zustand/react/shallow";
 import { useTickerMap } from "@/lib/services/holdings/use-ticker-map";
+import { TradeRecordType } from "@/lib/services/trade-records";
 
 export const useGroupTradeRecords = (holdingIds: string[]) => {
   const tickerMap = useTickerMap();
@@ -21,7 +22,9 @@ export const useGroupTradeRecords = (holdingIds: string[]) => {
     const timeline: TradeRecordExtend[] = [];
     for (let i = 0; i < holdingIds.length; i += 1) {
       const id = holdingIds[i];
-      const records = recordList[i];
+      const records = recordList[i].filter(
+        (r) => r.props.type !== TradeRecordType.Draft,
+      );
       const ticker = tickerMap[id];
       for (const record of records) {
         timeline.push(new TradeRecordExtend(id, ticker, record));

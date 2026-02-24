@@ -84,7 +84,11 @@ export const SectionProfitSwitcher = React.memo(({ id }: { id: string }) => {
           <ChevronRight />
         </Button>
       </div>
-      <ProfitBlock date={current.date} profit={current.profit} />
+      <ProfitBlock
+        date={current.date}
+        profit={current.profit}
+        isRecovered={summary.isRecovered}
+      />
     </>
   );
 });
@@ -93,9 +97,11 @@ SectionProfitSwitcher.displayName = "SectionProfitSwitcher";
 const ProfitBlock = ({
   date,
   profit,
+  isRecovered,
 }: {
   date: string;
   profit: HoldingProfit;
+  isRecovered: boolean;
 }) => {
   return (
     <section
@@ -115,15 +121,19 @@ const ProfitBlock = ({
           {formatMoney(profit.totalProfit)}
         </span>
       </SimpleDisplayVertical>
-      <SimpleDisplayVertical title={"剩余持仓浮动盈亏"}>
+      <SimpleDisplayVertical title={"持仓收益率"}>
         <span className={getTickerChangeColorClass(profit.unrealizedProfit)}>
           {formatPercent(profit.holdingReturnPct)}
         </span>
       </SimpleDisplayVertical>
-      <SimpleDisplayVertical title={"整体回报率"}>
-        <span className={getTickerChangeColorClass(profit.totalProfit)}>
-          {formatPercent(profit.totalReturnPct)}
-        </span>
+      <SimpleDisplayVertical title={"累计收益率"}>
+        {isRecovered ? (
+          <span className={getTickerChangeColorClass(1)}>本金已回收</span>
+        ) : (
+          <span className={getTickerChangeColorClass(profit.totalProfit)}>
+            {formatPercent(profit.totalReturnPct)}
+          </span>
+        )}
       </SimpleDisplayVertical>
     </section>
   );

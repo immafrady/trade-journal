@@ -107,6 +107,12 @@ export const DailyCard = ({ daily }: { daily: DailySummary }) => {
                           </span>
                         ),
                       },
+                      {
+                        title: "操作次数",
+                        content: daily.records.filter(
+                          (r) => r.ticker.code === ticker.code,
+                        ).length,
+                      },
                     ]}
                   />
                 </div>
