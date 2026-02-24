@@ -65,20 +65,17 @@ export const TabSummary = () => {
               },
               {
                 title: "收益率",
-                content:
-                  summary.totalNetInvestment < 0 ? (
-                    <span className={getTickerChangeColorClass(1)}>
-                      {CommonConstants.InvestmentIsRecovered}
-                    </span>
-                  ) : (
-                    <span
-                      className={getTickerChangeColorClass(
-                        summary.totalProfitPct,
-                      )}
-                    >
-                      {formatPercent(summary.totalProfitPct)}
-                    </span>
-                  ),
+                content: summary.isRecovered ? (
+                  <span className={getTickerChangeColorClass(1)}>
+                    {CommonConstants.InvestmentIsRecovered}
+                  </span>
+                ) : (
+                  <span
+                    className={getTickerChangeColorClass(summary.totalProfit)}
+                  >
+                    {summary.totalProfitPctStr}
+                  </span>
+                ),
               },
 
               {

@@ -2,6 +2,8 @@ import { SinaTicker } from "@/lib/services/sina";
 import { useHoldingDetailList } from "@/lib/services/composed/holding-detail-provider";
 import { useTickerMap } from "@/lib/services/holdings/use-ticker-map";
 import { HoldingProfit, HoldingSummary } from "@/lib/compute";
+import { formatPercent } from "@/lib/market-utils";
+import { CommonConstants } from "@/lib/constants";
 
 export const useHoldingSummary = (holdingIds: string[]) => {
   const map = useTickerMap();
@@ -38,6 +40,8 @@ export const useHoldingSummary = (holdingIds: string[]) => {
     });
   }
 
+  const isRecovered = totalNetInvestment <= 0;
+
   return {
     /** 市值（需要外部传入最新价格后再算） */
     totalMarketValue,
@@ -58,8 +62,9 @@ export const useHoldingSummary = (holdingIds: string[]) => {
     totalProfit,
 
     /** 收益率（按净投入算） */
-    totalProfitPct:
-      totalNetInvestment > 0 ? (totalProfit / totalNetInvestment) * 100 : 0,
+    totalProfitPctStr: !isRecovered
+      ? formatPercent((totalProfit / totalNetInvestment) * 100)
+      : CommonConstants.InvestmentIsRecovered,
 
     /** 历史最高资金占用 */
     historicalMaxCapitalOccupied,
@@ -73,6 +78,8 @@ export const useHoldingSummary = (holdingIds: string[]) => {
             : 0,
       }))
       .sort((a, b) => b.weightPct - a.weightPct),
+
+    isRecovered,
   };
 };
 
