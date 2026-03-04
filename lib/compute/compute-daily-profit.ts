@@ -59,9 +59,12 @@ export const computeDailyProfit = (
       }
     }
 
+    // quote.current === 0 的时候说明停牌，不参与计算
     const diff = currentMarketValue - prevMarketValue;
-    totalDiff += diff;
-    totalPrevMarketValue += prevMarketValue;
+    if (quote.current) {
+      totalDiff += diff;
+      totalPrevMarketValue += prevMarketValue;
+    }
 
     holdingMap[holdingId] = {
       currentMarketValue,
