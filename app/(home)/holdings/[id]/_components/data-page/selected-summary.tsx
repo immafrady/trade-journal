@@ -46,6 +46,7 @@ export const SelectedSummary = ({ records }: { records: TradeRecord[] }) => {
         TradeRecordType.Subscribe,
         TradeRecordType.Redeem,
         TradeRecordType.Dividend,
+        TradeRecordType.DividendTaxAdjust,
       ].includes(r.props.type),
     );
 

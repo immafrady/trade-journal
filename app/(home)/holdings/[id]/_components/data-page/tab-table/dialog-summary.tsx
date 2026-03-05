@@ -11,6 +11,7 @@ const description = `仅${[
   TradeRecordType.Subscribe,
   TradeRecordType.Redeem,
   TradeRecordType.Dividend,
+  TradeRecordType.DividendTaxAdjust,
 ]
   .map((t) => t.label)
   .join("、")}类型的交易参与汇总计算`;

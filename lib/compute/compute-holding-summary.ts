@@ -28,12 +28,18 @@ export const computeHoldingSummary = (records: TradeRecord[]) => {
     ) {
       // 🧩 拆股 / 合股（只影响份额和成本单价，不影响总成本）
       shares += record.adjusted.shares;
-    } else if (TradeRecordType.Dividend === record.props.type) {
-      // 💰 现金分红
+    } else if (
+      [TradeRecordType.DividendTaxAdjust, TradeRecordType.Dividend].includes(
+        record.props.type,
+      )
+    ) {
+      // 💰 现金分红 & 分红补税
       totalDividend -= record.adjusted.amount; // amount 是负数（现金流入）
-      totalDividendCount++;
       realizedProfit -= record.adjusted.amount;
       netInvestment += record.adjusted.amount; // amount负数 → 净投入减少
+      if (TradeRecordType.DividendTaxAdjust === record.props.type) {
+        totalDividendCount++;
+      }
     } else if (TradeRecordType.Draft !== record.props.type) {
       // 📈 普通交易（申购/赎回/买卖）
       totalFee += record.adjusted.fee;

@@ -8,6 +8,7 @@ export const requireAmount = (type?: TradeRecordType) =>
     TradeRecordType.Subscribe,
     TradeRecordType.Redeem,
     TradeRecordType.Dividend,
+    TradeRecordType.DividendTaxAdjust,
     TradeRecordType.Draft,
   ].includes(type);
 
@@ -49,6 +50,7 @@ export const inputPositive = (type?: TradeRecordType) =>
     TradeRecordType.Buy,
     TradeRecordType.Subscribe,
     TradeRecordType.Split,
+    TradeRecordType.DividendTaxAdjust,
   ].includes(type);
 
 // 计算份额

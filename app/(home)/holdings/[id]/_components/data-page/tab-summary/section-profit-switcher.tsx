@@ -12,11 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SimpleDisplayVertical } from "@/components/ui/my/quote-display";
-import {
-  formatMoney,
-  formatPercent,
-  getTickerChangeColorClass,
-} from "@/lib/market-utils";
+import { formatMoney, getTickerChangeColorClass } from "@/lib/market-utils";
 
 export const SectionProfitSwitcher = React.memo(({ id }: { id: string }) => {
   const { ticker } = React.useContext(HoldingInfoContext)!;
@@ -117,7 +113,7 @@ const ProfitBlock = ({
       </SimpleDisplayVertical>
       <SimpleDisplayVertical title={"持仓收益率"}>
         <span className={getTickerChangeColorClass(profit.unrealizedProfit)}>
-          {formatPercent(profit.holdingReturnPct)}
+          {profit.holdingReturnPct}
         </span>
       </SimpleDisplayVertical>
       <SimpleDisplayVertical title={"累计收益率"}>

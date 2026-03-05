@@ -49,7 +49,8 @@ export const computeDailyProfit = (
               prevMarketValue += tre.record.adjusted.amount;
               break;
             }
-            case TradeRecordType.Dividend: {
+            case TradeRecordType.Dividend:
+            case TradeRecordType.DividendTaxAdjust: {
               // 分红在现价里面已经体现，所以必须要在昨收的部分减掉对应的金额
               prevMarketValue += tre.record.adjusted.amount;
               break;

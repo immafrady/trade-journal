@@ -35,7 +35,8 @@ export class TradeRecord {
         }
         break;
       }
-      case TradeRecordType.Dividend: {
+      case TradeRecordType.Dividend:
+      case TradeRecordType.DividendTaxAdjust: {
         if (!this.props.amount) {
           throw new Error(
             `“${this.props.type.label}”类型必填字段：${TradeRecordConstants.Amount}`,
