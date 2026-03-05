@@ -4,6 +4,7 @@ import { HoldingInfoContext } from "@/app/(home)/holdings/[id]/_providers";
 import { InlineDisplay } from "@/components/ui/my/inline-display";
 import {
   formatMoney,
+  formatPercent,
   formatShares,
   getTickerChangeColorClass,
 } from "@/lib/market-utils";
@@ -28,7 +29,8 @@ interface SummaryData {
   };
   t: {
     shares: number;
-    gap: number;
+    diff: number;
+    pct: number;
     amount: number;
     className: string;
     netShares: number;
@@ -69,7 +71,8 @@ export const SelectedSummary = ({ records }: { records: TradeRecord[] }) => {
       },
       t: {
         shares: 0,
-        gap: 0,
+        diff: 0,
+        pct: 0,
         amount: 0,
         className: "",
         netShares: 0,
@@ -92,9 +95,10 @@ export const SelectedSummary = ({ records }: { records: TradeRecord[] }) => {
     result.buy.price = result.buy.amount / result.buy.shares;
     result.sell.price = result.sell.amount / result.sell.shares;
     result.t.shares = Math.min(result.buy.shares, Math.abs(result.sell.shares));
-    result.t.gap = result.sell.price - result.buy.price;
-    result.t.amount = result.t.gap * result.t.shares;
-    result.t.className = getTickerChangeColorClass(result.t.gap);
+    result.t.diff = result.sell.price - result.buy.price;
+    result.t.pct = (result.t.diff / result.buy.price) * 100;
+    result.t.amount = result.t.diff * result.t.shares;
+    result.t.className = getTickerChangeColorClass(result.t.diff);
     result.t.netShares = result.buy.shares + result.sell.shares;
 
     return result;
@@ -167,7 +171,15 @@ export const SelectedSummary = ({ records }: { records: TradeRecord[] }) => {
               title: "做T差价",
               content: (
                 <div className={summary.t.className}>
-                  {ticker.formatter(summary.t.gap)}
+                  {ticker.formatter(summary.t.diff)}
+                </div>
+              ),
+            },
+            {
+              title: "做T收益率",
+              content: (
+                <div className={summary.t.className}>
+                  {formatPercent(summary.t.pct)}
                 </div>
               ),
             },
