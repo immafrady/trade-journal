@@ -7,6 +7,7 @@ export enum TradeRecordTypeValue {
   Split,
   Merge,
   Draft,
+  DividendTaxAdjust,
 }
 
 export class TradeRecordType {
@@ -36,12 +37,17 @@ export class TradeRecordType {
     TradeRecordTypeValue.Draft,
     "草稿",
   );
+  static readonly DividendTaxAdjust = new TradeRecordType(
+    TradeRecordTypeValue.DividendTaxAdjust,
+    "分红补税",
+  );
   static readonly values = [
     TradeRecordType.Buy,
     TradeRecordType.Sell,
     TradeRecordType.Subscribe,
     TradeRecordType.Redeem,
     TradeRecordType.Dividend,
+    TradeRecordType.DividendTaxAdjust,
     TradeRecordType.Split,
     TradeRecordType.Merge,
     TradeRecordType.Draft,
