@@ -70,14 +70,25 @@ export const TickerCard = ({
         ),
       },
       {
-        title: "当前价格",
+        title: "价格/成本",
         content: (
-          <div className={getTickerChangeColorClass(daily.diff)}>
-            {ticker.formatter(daily.current)}
+          <div>
+            <span className={getTickerChangeColorClass(daily.diff)}>
+              {ticker.formatter(daily.current)}
+            </span>
+            /
+            <span className={"text-xs"}>
+              {ticker.formatter(profit?.avgPrice)}
+            </span>
           </div>
         ),
       },
     );
+  } else {
+    list.push({
+      title: "成本价",
+      content: ticker.formatter(profit?.avgPrice),
+    });
   }
 
   return (
