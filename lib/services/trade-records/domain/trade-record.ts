@@ -75,7 +75,9 @@ export class TradeRecord {
       shares: this.derived.shares * factor,
     };
     this.display.feeRate = formatPercent(
-      Math.abs((this.derived.fee / this.derived.amount) * 100),
+      this.derived.amount
+        ? Math.abs((this.derived.fee / this.derived.amount) * 100)
+        : 0,
       3,
     );
   }
