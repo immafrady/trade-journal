@@ -179,7 +179,6 @@ export function getColumns(
 }
 
 export const baseVisibility = {
-  [TradeRecordConstants.FeeRate]: false,
   [TradeRecordConstants.CumulativeTotalAmount]: false,
   [TradeRecordConstants.CumulativeTotalShares]: false,
   [TradeRecordConstants.CumulativeCostPrice]: false,

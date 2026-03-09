@@ -33,6 +33,7 @@ export const computeHoldingProfit = (
         ? formatPercent((unrealizedProfit / remainingCost) * 100)
         : CommonConstants.InvestmentIsLiquidated, // 持仓收益率（仅当未回本时显示）
     isRecovered, // 是否已回本（净投入 <= 0）
+    avgPrice: summary?.avgPrice, // 综合成本价
   };
 };
 
