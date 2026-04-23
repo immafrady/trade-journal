@@ -51,20 +51,27 @@ export const DialogFilter = ({
         });
       }
       if (form.id) {
-        const type = form.type as ActionType;
-        const num1 = +form.num1;
-        const num2 = +form.num2;
-        filters.push({
-          id: form.id,
-          value:
-            type === ActionType.Equal
-              ? [num1, num1]
-              : type === ActionType.InBetween
-                ? [num1, num2]
-                : type === ActionType.Less
-                  ? [null, num1]
-                  : [num1, null],
-        });
+        if (form.id === TradeRecordConstants.Comment) {
+          filters.push({
+            id: form.id,
+            value: form.comment,
+          });
+        } else {
+          const type = form.type as ActionType;
+          const num1 = +form.num1;
+          const num2 = +form.num2;
+          filters.push({
+            id: form.id,
+            value:
+              type === ActionType.Equal
+                ? [num1, num1]
+                : type === ActionType.InBetween
+                  ? [num1, num2]
+                  : type === ActionType.Less
+                    ? [null, num1]
+                    : [num1, null],
+          });
+        }
       }
       onColumnFiltersChange(filters);
       dialogRef.current?.setOpen(false);
@@ -163,6 +170,17 @@ export const DialogFilter = ({
           <Separator />
           <form.Field
             name={"id"}
+            listeners={{
+              onChange: ({ value }) => {
+                if (value === TradeRecordConstants.Comment) {
+                  form.setFieldValue("type", "");
+                  form.setFieldValue("num1", "");
+                  form.setFieldValue("num2", "");
+                } else {
+                  form.setFieldValue("comment", "");
+                }
+              },
+            }}
             children={(field) => (
               <FieldLayout label={"过滤字段"} field={field}>
                 <div className={"flex gap-2"}>
@@ -184,6 +202,8 @@ export const DialogFilter = ({
                         TradeRecordConstants.CumulativeTotalAmount,
                         TradeRecordConstants.CumulativeMarketValue,
                         TradeRecordConstants.CumulativeTotalShares,
+                        null,
+                        TradeRecordConstants.Comment,
                       ].map((value, idx) =>
                         value ? (
                           <SelectItem key={idx} value={value}>
@@ -203,6 +223,7 @@ export const DialogFilter = ({
                       form.setFieldValue("type", "");
                       form.setFieldValue("num1", "");
                       form.setFieldValue("num2", "");
+                      form.setFieldValue("comment", "");
                     }}
                   >
                     <Eraser />
@@ -211,17 +232,49 @@ export const DialogFilter = ({
               </FieldLayout>
             )}
           />
-          {id && (
+          {id && id === TradeRecordConstants.Comment && (
+            <>
+              <form.Field
+                name={"comment"}
+                validators={{
+                  onChangeListenTo: ["id"],
+                  onChange: ({ value, fieldApi }) => {
+                    const id = fieldApi.form.getFieldValue("id");
+
+                    // 👇 第一行就直接挡掉
+                    if (id !== TradeRecordConstants.Comment) return;
+
+                    if (value === "") {
+                      return "必填项";
+                    }
+                  },
+                }}
+                children={(field) => (
+                  <FieldLayout label={"模糊搜索"} field={field}>
+                    <Input
+                      value={field.state.value}
+                      placeholder={"请输入"}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                  </FieldLayout>
+                )}
+              />
+            </>
+          )}
+          {id && id !== TradeRecordConstants.Comment && (
             <>
               <form.Field
                 name={"type"}
                 validators={{
                   onChangeListenTo: ["id"],
                   onChange: ({ value, fieldApi }) => {
-                    if (fieldApi.form.getFieldValue("id")) {
-                      if (!value) {
-                        return "必选项";
-                      }
+                    const id = fieldApi.form.getFieldValue("id");
+
+                    // 👇 不满足直接退出
+                    if (!id || id === TradeRecordConstants.Comment) return;
+
+                    if (!value) {
+                      return "必选项";
                     }
                   },
                 }}
@@ -256,21 +309,19 @@ export const DialogFilter = ({
                   validators={{
                     onChangeListenTo: ["id", "type"],
                     onChange: ({ value, fieldApi }) => {
+                      const id = fieldApi.form.getFieldValue("id");
                       const type = fieldApi.form.getFieldValue(
                         "type",
                       ) as ActionType;
-                      if (
-                        fieldApi.form.getFieldValue("id") &&
-                        type &&
-                        type !== ActionType.More
-                      ) {
-                        if (value == "") {
-                          return "必填项";
-                        }
-                        if (Number.isNaN(+value)) {
-                          return "请输入数字";
-                        }
-                      }
+
+                      // 👇 核心：先排除所有“不该校验”的情况
+                      if (!id || id === TradeRecordConstants.Comment) return;
+                      if (!type) return;
+                      if (type === ActionType.More) return;
+
+                      // 👇 再写真正规则
+                      if (value === "") return "必填项";
+                      if (Number.isNaN(+value)) return "请输入数字";
                     },
                   }}
                   children={(field) => (
@@ -296,20 +347,19 @@ export const DialogFilter = ({
                   validators={{
                     onChangeListenTo: ["id", "type"],
                     onChange: ({ value, fieldApi }) => {
+                      const id = fieldApi.form.getFieldValue("id");
                       const type = fieldApi.form.getFieldValue(
                         "type",
                       ) as ActionType;
+
+                      if (!id || id === TradeRecordConstants.Comment) return;
                       if (
-                        fieldApi.form.getFieldValue("id") &&
-                        [ActionType.More, ActionType.InBetween].includes(type)
-                      ) {
-                        if (value == "") {
-                          return "必填项";
-                        }
-                        if (Number.isNaN(+value)) {
-                          return "请输入数字";
-                        }
-                      }
+                        ![ActionType.More, ActionType.InBetween].includes(type)
+                      )
+                        return;
+
+                      if (value === "") return "必填项";
+                      if (Number.isNaN(+value)) return "请输入数字";
                     },
                   }}
                   children={(field) => (
@@ -353,38 +403,32 @@ function getDefaultValue(filters: ColumnFiltersState) {
 
   // 处理别的
   const otherFilter = filters[1];
-  let other = {
+  const other = {
     id: "",
     type: "",
     num1: "",
     num2: "",
+    comment: "",
   };
   if (otherFilter) {
-    const id = otherFilter.id;
-    const value = otherFilter.value as [number, number];
-    const min = value[0] + "";
-    const max = value[1] + "";
-    if (min && max) {
-      other = {
-        id,
-        type: min === max ? ActionType.Equal : ActionType.InBetween,
-        num1: min,
-        num2: max,
-      };
-    } else if (min) {
-      other = {
-        id,
-        type: ActionType.More,
-        num1: min,
-        num2: "",
-      };
-    } else if (max) {
-      other = {
-        id,
-        type: ActionType.Less,
-        num1: max,
-        num2: "",
-      };
+    other.id = otherFilter.id;
+    if (other.id === TradeRecordConstants.Comment) {
+      other.comment = otherFilter.value as string;
+    } else {
+      const value = otherFilter.value as [number, number];
+      const min = value[0] + "";
+      const max = value[1] + "";
+      if (min && max) {
+        other.type = min === max ? ActionType.Equal : ActionType.InBetween;
+        other.num1 = min;
+        other.num2 = max;
+      } else if (min) {
+        other.type = ActionType.More;
+        other.num1 = min;
+      } else if (max) {
+        other.type = ActionType.Less;
+        other.num2 = max;
+      }
     }
   }
 

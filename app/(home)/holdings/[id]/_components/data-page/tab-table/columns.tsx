@@ -138,6 +138,7 @@ export function getColumns(
     genColumnDef({
       id: TradeRecordConstants.Comment,
       accessorFn: (row) => row.props.comment,
+      filterFn: "includesString",
       cell: (row) => (
         <span className="max-w-20 truncate">{row.getValue() as string}</span>
       ),
