@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { AppBarAvatar } from "../app-bar-element/avatar";
 import { AppBarSlogan } from "../app-bar-element/slogan";
 import { AppBarAlert } from "@/components/layout/app-shell/app-bar-element/alert";
+import { AppBarThemeToggler } from "@/components/layout/app-shell/app-bar-element/theme-toggler";
 
 export const AppBar = ({
   children,
@@ -40,6 +41,7 @@ export const AppBar = ({
         ) : (
           <div className={"flex items-center justify-end-safe gap-1"}>
             <AppBarAlert />
+            <AppBarThemeToggler />
             <AppBarAvatar isLargeAvatar={isLargeAvatar} />
           </div>
         )}
