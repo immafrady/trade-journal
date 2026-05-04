@@ -77,8 +77,9 @@ export const TabTable = () => {
         className={"bg-card"}
         getRowClassName={(row) => {
           if (TradeRecordType.Draft === row.original.props.type)
-            return "text-gray-400";
-          if (row.original.derived.shares < 0) return "bg-red-50 text-red-700";
+            return "bg-muted text-muted-foreground";
+          if (row.original.derived.shares < 0)
+            return "bg-accent text-accent-foreground";
           return "";
         }}
       />
