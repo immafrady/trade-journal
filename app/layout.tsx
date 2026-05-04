@@ -7,6 +7,7 @@ import { PwaProvider } from "@/providers/pwa";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import React from "react";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,16 +45,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-w-[370px]`}
       >
-        <Toaster richColors position={"top-center"} duration={1500} />
-        <ClientOnly>
-          <PwaProvider>{children}</PwaProvider>
-        </ClientOnly>
-        <Analytics />
-        <SpeedInsights />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Toaster richColors position={"top-center"} duration={1500} />
+          <ClientOnly>
+            <PwaProvider>{children}</PwaProvider>
+          </ClientOnly>
+          <Analytics />
+          <SpeedInsights />
+        </ThemeProvider>
       </body>
     </html>
   );
