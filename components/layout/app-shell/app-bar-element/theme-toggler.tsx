@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
+import { Circle, CircleDot, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { motion } from "motion/react";
 
-const isSelected = (b: boolean) => (b ? "●" : "○");
+const isSelected = (b: boolean) =>
+  b ? <CircleDot strokeWidth={3} /> : <Circle strokeWidth={3} />;
 
 export function AppBarThemeToggler() {
   const { setTheme, theme } = useTheme();
