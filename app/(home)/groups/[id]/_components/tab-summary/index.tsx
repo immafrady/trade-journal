@@ -65,7 +65,9 @@ export const TabSummary = () => {
               },
               {
                 title: "收益率",
-                content: summary.isRecovered ? (
+                content: summary.isNotStarted ? (
+                  <span>{CommonConstants.InvestmentNotStart}</span>
+                ) : summary.isRecovered ? (
                   <span className={getTickerChangeColorClass(1)}>
                     {CommonConstants.InvestmentIsRecovered}
                   </span>

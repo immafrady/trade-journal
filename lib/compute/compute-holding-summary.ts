@@ -96,6 +96,8 @@ export const computeHoldingSummary = (records: TradeRecord[]) => {
     realizedProfit, // 已实现盈亏（卖出部分）
     /** 杂项*/
     historicalMaxCapitalOccupied, // 最高资金占用
+    /** 状态标记 */
+    isNotStarted: records.length === 0, // 是否未开仓（无任何交易记录）
   };
 };
 

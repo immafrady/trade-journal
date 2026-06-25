@@ -13,6 +13,7 @@ export const computeHoldingProfit = (
   const realizedProfit = summary?.realizedProfit ?? 0;
   const netInvestment = summary?.netInvestment ?? 0;
   const isRecovered = netInvestment <= 0;
+  const isNotStarted = summary?.isNotStarted ?? true;
 
   const marketValue = price * shares;
   const unrealizedProfit = shares > 0 ? marketValue - remainingCost : 0;
@@ -25,14 +26,18 @@ export const computeHoldingProfit = (
     unrealizedProfit, // 当前浮动盈亏（市值 - 当前持仓成本）
     totalProfit, // 总盈亏 = realized + unrealized + 分红 - 手续费
     /** 收益率（只在合理时显示） */
-    totalReturnPctStr: !isRecovered
-      ? formatPercent((totalProfit / netInvestment) * 100)
-      : CommonConstants.InvestmentIsRecovered, // 总收益率（基于历史净投入）
-    holdingReturnPct:
-      remainingCost !== 0
+    totalReturnPctStr: isNotStarted
+      ? CommonConstants.InvestmentNotStart
+      : isRecovered
+        ? CommonConstants.InvestmentIsRecovered
+        : formatPercent((totalProfit / netInvestment) * 100), // 总收益率（基于历史净投入）
+    holdingReturnPct: isNotStarted
+      ? CommonConstants.InvestmentNotStart
+      : remainingCost !== 0
         ? formatPercent((unrealizedProfit / remainingCost) * 100)
         : CommonConstants.InvestmentIsLiquidated, // 持仓收益率（仅当未回本时显示）
     isRecovered, // 是否已回本（净投入 <= 0）
+    isNotStarted, // 是否未开仓（没有任何交易记录）
     avgPrice: summary?.avgPrice, // 综合成本价
   };
 };

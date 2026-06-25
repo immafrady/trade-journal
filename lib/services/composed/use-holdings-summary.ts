@@ -41,6 +41,7 @@ export const useHoldingSummary = (holdingIds: string[]) => {
   }
 
   const isRecovered = totalNetInvestment <= 0;
+  const isNotStarted = holdingDetails.every((d) => d.summary?.isNotStarted);
 
   return {
     /** 市值（需要外部传入最新价格后再算） */
@@ -62,9 +63,11 @@ export const useHoldingSummary = (holdingIds: string[]) => {
     totalProfit,
 
     /** 收益率（按净投入算） */
-    totalProfitPctStr: !isRecovered
-      ? formatPercent((totalProfit / totalNetInvestment) * 100)
-      : CommonConstants.InvestmentIsRecovered,
+    totalProfitPctStr: isNotStarted
+      ? CommonConstants.InvestmentNotStart
+      : isRecovered
+        ? CommonConstants.InvestmentIsRecovered
+        : formatPercent((totalProfit / totalNetInvestment) * 100),
 
     /** 历史最高资金占用 */
     historicalMaxCapitalOccupied,
@@ -80,6 +83,7 @@ export const useHoldingSummary = (holdingIds: string[]) => {
       .sort((a, b) => b.weightPct - a.weightPct),
 
     isRecovered,
+    isNotStarted,
   };
 };
 
